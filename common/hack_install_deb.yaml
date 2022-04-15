@@ -1,0 +1,19 @@
+{{- $name := .name -}}
+
+{{- $architecture := .architecture -}}
+architecture: {{ $architecture }}
+
+actions:
+  - action: overlay
+    description: Copy deb package
+    source: .packages/{{ $name }}
+    destination: /{{ $name }}
+  
+  - action: run
+    description: Install deb package
+    chroot: true
+    command: |
+      dpkg -i --force-overwrite /{{ $name }}
+      apt-get update
+      apt --fix-broken install -y
+      rm /{{ $name }}

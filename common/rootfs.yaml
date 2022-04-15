@@ -1,0 +1,133 @@
+{{- $board := .board -}}
+{{- $distro := .distro -}}
+{{- $suite := .suite -}}
+{{- $flavor := .flavor -}}
+
+{{- $architecture := .architecture -}}
+
+architecture: {{ $architecture }}
+
+actions:
+  - action: debootstrap
+    suite: {{ $suite }}
+    variant: minbase
+    components:
+      - main
+{{ if eq $distro "debian"}}
+      - contrib
+      - non-free
+    mirror: https://deb.debian.org/debian
+{{ else if eq $distro "ubuntu"}}
+      - restricted
+      - universe
+      - multiverse
+    mirror: http://ports.ubuntu.com/ubuntu-ports
+    check-gpg: false
+{{ end }}
+
+  - action: apt
+    description: Prepare for custom repo
+    packages:
+      - gpg
+      - apt-transport-https
+      - ca-certificates
+
+  - action: recipe
+    description: Add Radxa Repo
+    recipe: add_repo.yaml
+    variables:
+      origin: Radxa
+      suite: {{ $suite }}
+      base_url: https://radxa-repo.github.io/apt/
+      public_key: pubkey.gpg
+      priority: 100
+  
+  - action: recipe
+    description: Add Armbian Repo
+    recipe: add_repo.yaml
+    variables:
+      origin: Armbian
+      suite: {{ $suite }}
+      base_url: http://mirrors.tuna.tsinghua.edu.cn/armbian/
+      public_key: armbian.key
+      priority: 100
+
+  - action: apt
+    description: Install base packages
+    packages:
+      - bash-completion
+      - init
+      - initramfs-tools
+      - sudo
+      - u-boot-tools
+      - armbian-firmware
+  
+  - action: apt
+    description: Install system utilities
+    packages:
+      - less
+      - tmux
+      - nano
+      - xz-utils
+      - file
+      - iproute2
+      - ifupdown
+      - network-manager
+      - wpasupplicant
+      - iputils-ping
+      - ldnsutils
+      - python3
+      - python3-pip
+      - alsa-utils
+      - pulseaudio
+      - pulseaudio-module-bluetooth
+      - usbutils
+      - pciutils
+      - i2c-tools
+      - spi-tools
+      - ssh
+      - haveged
+      - curl
+      - whiptail
+      - locales
+      - systemd-timesyncd
+
+{{ if eq $flavor "desktop"}}
+
+  - action: apt
+    description: Install desktop packages
+    packages:
+      - xorg
+      - xdg-utils
+      - xserver-xorg-input-all
+      - xserver-xorg-video-all
+      - lightdm
+      - lightdm-gtk-greeter
+      - xfce4
+      - xfce4-terminal
+      - smplayer
+      - blueman
+{{ if eq $distro "debian"}}
+      - firefox-esr
+{{ else if eq $distro "ubuntu"}}
+      - firefox
+{{ end }}
+
+{{ end }}
+
+  - action: apt
+    description: Install Radxa packages
+    packages:
+      - rsetup
+      - libreelec-alsa-utils
+      - radxa-otgutils
+
+  - action: run
+    description: OEM system setup
+    chroot: true
+    script: rootfs.sh
+
+  - action: pack
+    description: Save rootfs
+    file: .rootfs/{{ $distro }}_{{ $suite }}_{{ $flavor }}.tar.xz
+    compression: xz

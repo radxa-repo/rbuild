@@ -1,0 +1,46 @@
+name: Build
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - .gitignore
+  pull_request:
+    paths-ignore:
+      - '**.md'
+      - .gitignore
+
+jobs:
+  query:
+    runs-on: ubuntu-latest
+    outputs:
+      boards: ${{ steps.query.outputs.boards }}
+      distros: ${{ steps.query.outputs.distros }}
+      flavors: ${{ steps.query.outputs.flavors }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Query available board configs
+        id: query
+        run: |
+          echo "::set-output name=boards::$(./rbuild --json boards)"
+          echo "::set-output name=distros::$(./rbuild --json distros)"
+          echo "::set-output name=flavors::$(./rbuild --json flavors)"
+
+  build:
+    needs: query
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        boards: ${{fromJSON(needs.query.outputs.boards)}}
+        distros: ${{fromJSON(needs.query.outputs.distros)}}
+        flavors: ${{fromJSON(needs.query.outputs.flavors)}}
+    steps:
+      - name: Build
+        uses: radxa-repo/rbuild@main
+        with:
+          board: ${{ matrix.boards }}
+          distro: ${{ matrix.distros }}
+          flavor: ${{ matrix.flavors }}

@@ -1,0 +1,8 @@
+#!/bin/sh -e
+
+version="$1"
+
+if echo "`file /boot/vmlinuz-$version`" | grep -qi "gzip"; then
+    mv /boot/vmlinuz-$version /boot/vmlinuz-$version.gz
+    gzip -d /boot/vmlinuz-$version.gz
+fi

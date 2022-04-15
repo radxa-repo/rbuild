@@ -1,0 +1,136 @@
+{{- $board := .board -}}
+{{- $distro := .distro -}}
+{{- $suite := .suite -}}
+{{- $flavor := .flavor -}}
+
+{{- $soc := .soc -}}
+{{- $soc_family := .soc_family -}}
+{{- $image := .image -}}
+{{- $boot_end := .boot_end -}}
+{{- $partition_type := .partition_type -}}
+
+{{- $kernel := .kernel -}}
+{{- $firmware := .firmware -}}
+
+{{- $architecture := .architecture -}}
+
+architecture: {{ $architecture }}
+
+actions:
+  - action: unpack
+    description: Unpack rootfs
+    file: .rootfs/{{ $distro }}_{{ $suite }}_{{ $flavor }}.tar.xz
+    
+  - action: image-partition
+    description: Set up on-disk layout
+    imagename: {{ $image }}
+    imagesize: 3GiB
+    partitiontype: {{ $partition_type }}
+    mountpoints:
+      - mountpoint: /
+        partition: rootfs
+      - mountpoint: /config
+        partition: config
+        options: [ x-systemd.automount ]
+{{ if eq $soc_family "efi" }}
+      - mountpoint: /boot/efi
+{{ else }}
+      - mountpoint: /boot
+{{ end }}
+        partition: boot
+        options: [ x-systemd.automount ]
+    partitions:
+      - name: config
+        fs: vfat
+        start: 16MiB
+        end: 32MiB
+      - name: boot
+        fs: vfat
+        start: 32MiB
+        end: {{ $boot_end }}
+        flags: [ boot, esp ]
+      - name: rootfs
+        fs: ext4
+        start: {{ $boot_end }}
+        end: 100%
+
+  - action: filesystem-deploy
+    description: Deploying filesystem onto image
+    setup-fstab: true
+    setup-kernel-cmdline: true
+
+{{ if eq $firmware "" }}
+
+  - action: apt
+    description: Install Radxa firmware
+    packages:
+      - u-boot-{{ $board }}
+
+{{ else }}
+
+  - action: recipe
+    description: Install custom firmware
+    recipe: hack_install_deb.yaml
+    variables:
+      name: {{ $firmware }}
+
+{{ end }}
+
+  - action: recipe
+    description: Update u-boot
+    recipe: hack_install_uboot.yaml
+    variables:
+      board: {{ $board }}
+      soc_family: {{ $soc_family }}
+
+  - action: run
+    description: Create .radxa
+    chroot: true
+    command: rsetup _create-systemconf
+  
+  - action: overlay
+    description: Install files for kernel and initramfs
+    source: overlays/common
+    destination: /
+
+{{ if eq $soc_family "efi" }}
+
+  - action: overlay
+    description: Install systemd-boot supporting file
+    source: overlays/efi
+    destination: /
+
+  - action: apt
+    description: Install upstream kernel
+    packages:
+{{ if eq $distro "debian" }}
+      - linux-image-arm64
+{{ else if eq $distro "ubuntu" }}
+      - linux-image-generic
+{{ end }}
+
+  - action: run
+    description: Set up systemd-boot boot entry
+    chroot: true
+    script: sdboot.sh
+
+{{ else }}
+
+{{ if eq $kernel "" }}
+
+  - action: apt
+    description: Install Radxa kernel
+    packages:
+      - linux-image-{{ $board }}
+
+{{ else }}
+
+  - action: recipe
+    description: Install custom kernel
+    recipe: hack_install_deb.yaml
+    variables:
+      name: {{ $kernel }}
+
+{{ end }}
+
+{{ end }}

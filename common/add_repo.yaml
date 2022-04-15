@@ -1,0 +1,29 @@
+{{- $origin := .origin -}}
+{{- $suite := .suite }}
+{{- $base_url := .base_url -}}
+{{- $public_key := .public_key -}}
+{{- $priority := or .priority 500 -}}
+
+{{- $architecture := .architecture -}}
+architecture: {{ $architecture }}
+
+actions:
+  - action: download
+    description: Download public key
+    url: {{ $base_url }}{{ $public_key }}
+    name: {{ $origin }}-archive-keyring
+  
+  - action: overlay
+    description: Copy public key to rootfs
+    origin: {{ $origin }}-archive-keyring
+    destination: /usr/share/keyrings/{{ $origin }}-archive-keyring
+  
+  - action: run
+    description: Set up repo
+    chroot: true
+    command: |
+      gpg --dearmor /usr/share/keyrings/{{ $origin }}-archive-keyring
+      rm /usr/share/keyrings/{{ $origin }}-archive-keyring
+      echo "deb [signed-by=/usr/share/keyrings/{{ $origin }}-archive-keyring.gpg] {{ $base_url }} {{ $suite }} main" | tee /etc/apt/sources.list.d/{{ $origin }}.list
+      bash -c "printf 'Package: *\nPin: origin {{ $origin }}\nPin-Priority: {{ $priority }}' | tee /etc/apt/preferences.d/{{ $origin }}"
+      apt update

@@ -1,0 +1,56 @@
+{{- $board := .board -}}
+{{- $soc_family := .soc_family -}}
+
+{{- $architecture := .architecture -}}
+architecture: {{ $architecture }}
+
+actions:
+{{ if eq $soc_family "amlogic" }}
+
+  - action: run
+    chroot: true
+    command: |
+      dd if=/usr/lib/u-boot-{{ $board }}/u-boot.bin.sd.bin of=/usr/lib/u-boot-{{ $board }}/u-boot.bin.sd.bin.1 bs=1 count=444
+      dd if=/usr/lib/u-boot-{{ $board }}/u-boot.bin.sd.bin of=/usr/lib/u-boot-{{ $board }}/u-boot.bin.sd.bin.2 bs=512 skip=1
+
+# Raw write u-boot images to filesystem
+  - action: raw
+    origin: filesystem
+    source: /usr/lib/u-boot-{{ $board }}/u-boot.bin.sd.bin.1
+    offset: '{{ sector 0 }}'
+
+  - action: raw
+    origin: filesystem
+    source: /usr/lib/u-boot-{{ $board }}/u-boot.bin.sd.bin.2
+    offset: '{{ sector 1 }}'
+
+# need this to gurantee the bootloader is properly flashed before we can delete temp files
+  - action: run
+    command: sync
+
+  - action: run
+    chroot: true
+    command: |
+      rm /usr/lib/u-boot-{{ $board }}/u-boot.bin.sd.bin.1
+      rm /usr/lib/u-boot-{{ $board }}/u-boot.bin.sd.bin.2
+
+{{ else if eq $soc_family "rockchip"}}
+
+# Raw write u-boot images to filesystem
+  - action: raw
+    origin: filesystem
+    source: /usr/lib/u-boot-{{$board}}/idbloader.img
+    offset: '{{ sector 64 }}'
+
+  - action: raw
+    origin: filesystem
+    source: /usr/lib/u-boot-{{$board}}/u-boot.itb
+    offset: '{{ sector 16384 }}'
+
+{{ else if eq $soc_family "efi" }}
+
+  - action: run
+    description: Skip
+    command: echo "EFI system do not use U-Boot"
+
+{{ end }}
