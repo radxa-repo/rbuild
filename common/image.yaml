@@ -59,14 +59,16 @@ actions:
     setup-fstab: true
     setup-kernel-cmdline: true
 
-{{ if eq $firmware "" }}
+{{ if ne $soc_family "efi" }}
+
+  {{ if eq $firmware "" }}
 
   - action: apt
     description: Install Radxa firmware
     packages:
       - u-boot-{{ $board }}
 
-{{ else }}
+  {{ else }}
 
   - action: recipe
     description: Install custom firmware
@@ -74,12 +76,14 @@ actions:
     variables:
       name: {{ $firmware }}
 
-{{ end }}
+  {{ end }}
+  
   - action: run
     description: Apply to disk
     chroot: true
     command: /usr/lib/u-boot-{{ $board }}/setup.sh update_bootloader /dev/vda {{ $soc_family }}
 
+{{ end }}
 
   - action: run
     description: Create .radxa
@@ -101,11 +105,11 @@ actions:
   - action: apt
     description: Install upstream kernel
     packages:
-{{ if eq $distro "debian" }}
+  {{ if eq $distro "debian" }}
       - linux-image-arm64
-{{ else if eq $distro "ubuntu" }}
+  {{ else if eq $distro "ubuntu" }}
       - linux-image-generic
-{{ end }}
+  {{ end }}
 
   - action: run
     description: Set up systemd-boot boot entry
@@ -114,14 +118,14 @@ actions:
 
 {{ else }}
 
-{{ if eq $kernel "" }}
+  {{ if eq $kernel "" }}
 
   - action: apt
     description: Install Radxa kernel
     packages:
       - linux-image-{{ $board }}
 
-{{ else }}
+  {{ else }}
 
   - action: recipe
     description: Install custom kernel
@@ -129,6 +133,7 @@ actions:
     variables:
       name: {{ $kernel }}
 
-{{ end }}
+  {{ end }}
 
 {{ end }}
+
