@@ -107,11 +107,11 @@ actions:
       - xfce4-terminal
       - smplayer
       - blueman
-{{ if eq $distro "debian"}}
+  {{ if eq $distro "debian"}}
       - firefox-esr
-{{ else if eq $distro "ubuntu"}}
+  {{ else if eq $distro "ubuntu"}}
       - firefox
-{{ end }}
+  {{ end }}
 
 {{ end }}
 
