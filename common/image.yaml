@@ -75,13 +75,11 @@ actions:
       name: {{ $firmware }}
 
 {{ end }}
+  - action: run
+    description: Apply to disk
+    chroot: true
+    command: /usr/lib/u-boot-{{ $board }}/setup.sh update_bootloader /dev/vda {{ $soc_family }}
 
-  - action: recipe
-    description: Update u-boot
-    recipe: hack_install_uboot.yaml
-    variables:
-      board: {{ $board }}
-      soc_family: {{ $soc_family }}
 
   - action: run
     description: Create .radxa
