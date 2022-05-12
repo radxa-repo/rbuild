@@ -127,13 +127,13 @@ get_supported_boards() {
     local BOARDS=()
     for f in $SCRIPT_DIR/configs/*.conf
     do
-        BOARDS+=($(basename "$f" .conf))
+        BOARDS+=("$(basename "$f" .conf)")
     done
     echo "${BOARDS[@]}"
 }
 
 get_supported_distros() {
-    local DISTROS=("debian" "ubuntu")
+    local DISTROS=("debian")
     echo "${DISTROS[@]}"
 }
 
@@ -278,6 +278,10 @@ build() {
     local BOARDS=($(get_supported_boards))
     local DISTROS=($(get_supported_distros))
     local FLAVORS=($(get_supported_flavors))
+
+    # Ubuntu is sorta supported
+    DISTROS+=("ubuntu")
+    
     if ! ( in_array "$BOARD" "${BOARDS[@]}" && \
            in_array "$DISTRO" "${DISTROS[@]}" && \
            in_array "$FLAVOR" "${FLAVORS[@]}" )
