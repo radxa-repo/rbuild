@@ -137,3 +137,6 @@ actions:
 
 {{ end }}
 
+  - action: recipe
+    description: Clean up rootfs
+    recipe: clean.yaml

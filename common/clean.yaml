@@ -1,0 +1,10 @@
+{{- $architecture := .architecture -}}
+architecture: {{ $architecture }}
+
+actions:
+  - action: run
+    description: Clean up rootfs
+    chroot: true
+    command: |
+      apt clean
+      rm -rf /var/lib/apt/lists/*

@@ -126,6 +126,10 @@ actions:
     description: OEM system setup
     chroot: true
     script: rootfs.sh
+  
+  - action: recipe
+    description: Clean up rootfs
+    recipe: clean.yaml
 
   - action: pack
     description: Save rootfs

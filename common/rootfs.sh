@@ -5,9 +5,6 @@ USER_NAME="radxa"
 USER_PASSWORD="$USER_NAME"
 USER_FULLNAME="Radxa"
 
-apt clean
-rm -rf /var/lib/apt/lists/*
-
 rm /etc/resolv.conf
 echo $HOST_NAME > /etc/hostname
 cat << EOF > /etc/hosts
