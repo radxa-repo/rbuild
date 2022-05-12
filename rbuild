@@ -305,8 +305,8 @@ build() {
     
     docker pull godebos/debos:latest
 
-    mkdir -p "$SCRIPT_DIR/.rootfs"
-    if [[ $DEBOS_ROOTFS != "yes" ]] || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar.xz" ]]
+    mkdir -p ".rootfs"
+    if [[ $DEBOS_ROOTFS != "yes" ]] || [[ ! -e ".rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar.xz" ]]
     then
         debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/rootfs.yaml" \
             -t architecture:"$ARCH" \
