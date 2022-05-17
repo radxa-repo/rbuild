@@ -8,7 +8,7 @@ Once you have both of them available, you can start building system image to tes
 
 Once you create the board config file (yes, it's that simple), run the following command:
 ```
-./rbuild -r -d -k linux-image-board-name.deb -f u-boot-board-name.deb board-name debian
+./rbuild -r -d -k linux-image-board-name.deb -f u-boot-board-name.deb board-name
 ```
 
 `-r` means reusing rootfs generated in previous run. This saves a lot of time when testing multiple devices or different kernels. `-d` means dropping into a debug shell if any step fails. `-k` and `-f` specify the custom kernel and **f**irmware (currently U-Boot) you are going to use. This will build a CLI image by default.

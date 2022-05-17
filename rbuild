@@ -78,7 +78,7 @@ EOF
 usage() {
     cat >&2 << EOF
 Radxa Image Builder
-usage: $(basename "$0") [options] <board> <distro> [flavor]
+usage: $(basename "$0") [options] <board> [distro] [flavor]
 
 Supported image generation options:
     -s, --shrink        Shrink root partition after image is generated
@@ -98,7 +98,7 @@ Alternative functionalities
 Supported board:
 $(printf_array "    %s\n" "$(get_supported_boards)")
 
-Supported distros:
+Supported distros (default to the first one):
 $(printf_array "    %s\n" "$(get_supported_distros)")
 
 Supported flavors (default to the first one):
@@ -215,6 +215,10 @@ build() {
     do
         case "$1" in
             -s | --shrink)
+                if ! sudo -n true 2>/dev/null && ! [[ -t 0 ]]
+                then
+                    error $EXIT_SHRINK_PERMISSION
+                fi
                 RBUILD_SHRINK="yes"
                 shift
                 ;;
@@ -253,40 +257,44 @@ build() {
         esac
     done
 
-    if (( $# < 2))
+    if (( $# < 1 ))
     then
         error $EXIT_TOO_FEW_ARGUMENTS
     fi
 
-    if [[ "$RBUILD_SHRINK" == "yes" ]] && ! sudo -n true 2>/dev/null && ! [[ -t 0 ]]
-    then
-        error $EXIT_SHRINK_PERMISSION
-    fi
-
-    local BOARD="$1"
-    local DISTRO="$2"
-    shift 2
-    if (( $# > 0 ))
-    then
-        local FLAVOR="$1"
-        shift
-    else
-        local FLAVOR=( $(get_supported_flavors) )
-        FLAVOR=${FLAVOR[0]}
-    fi
-
+    local DEBOS_TUPLE="$@"
     local BOARDS=($(get_supported_boards))
     local DISTROS=($(get_supported_distros))
     local FLAVORS=($(get_supported_flavors))
-
     # Ubuntu is sorta supported
     DISTROS+=("ubuntu")
+
+    local BOARD=
+    local DISTRO=${DISTROS[0]}
+    local FLAVOR=${FLAVORS[0]}
+
+    while (( $# > 0 ))
+    do
+        if in_array "$1" "${BOARDS[@]}"
+        then
+            BOARD="$1"
+        elif in_array "$1" "${DISTROS[@]}"
+        then
+            DISTRO="$1"
+        elif in_array "$1" "${FLAVORS[@]}"
+        then
+            FLAVOR="$1"
+        else
+            error $EXIT_UNKNOWN_OPTION "$1"
+        fi
+        shift
+    done
     
     if ! ( in_array "$BOARD" "${BOARDS[@]}" && \
            in_array "$DISTRO" "${DISTROS[@]}" && \
            in_array "$FLAVOR" "${FLAVORS[@]}" )
     then
-        error $EXIT_UNSUPPORTED_OPTION "$BOARD $DISTRO $FLAVOR"
+        error $EXIT_UNSUPPORTED_OPTION "$DEBOS_TUPLE"
     fi
 
     source "$SCRIPT_DIR/configs/$BOARD.conf"
