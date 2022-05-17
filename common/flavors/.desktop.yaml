@@ -1,0 +1,20 @@
+{{- $distro := .distro -}}
+
+{{- $architecture := .architecture -}}
+
+architecture: {{ $architecture }}
+
+actions:
+  - action: apt
+    description: Install common desktop packages
+    packages:
+      - xdg-utils
+      - lightdm
+      - lightdm-gtk-greeter
+      - smplayer
+      - blueman
+  {{ if eq $distro "debian"}}
+      - firefox-esr
+  {{ else if eq $distro "ubuntu"}}
+      - firefox
+  {{ end }}

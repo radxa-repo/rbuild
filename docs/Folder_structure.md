@@ -5,6 +5,7 @@
 
 common/             rbuild scripts
     .packages/      Untracked folder for soft linking local packages
+    flavors/        Package lists for various supported flavors
     overlays/       Various overlays for directly applying onto rootfs
     add_repo.yaml   Adding custom apt repo in rootfs
     clean.yaml      Common clean up script

@@ -138,7 +138,11 @@ get_supported_distros() {
 }
 
 get_supported_flavors() {
-    local FLAVORS=("cli" "desktop")
+    local FLAVORS=()
+    for f in $SCRIPT_DIR/common/flavors/*.yaml
+    do
+        FLAVORS+=("$(basename "$f" .yaml)")
+    done
     echo "${FLAVORS[@]}"
 }
 

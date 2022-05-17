@@ -52,68 +52,11 @@ actions:
       public_key: armbian.key
       priority: 100
 
-  - action: apt
-    description: Install base packages
-    packages:
-      - bash-completion
-      - init
-      - initramfs-tools
-      - sudo
-      - u-boot-tools
-      - armbian-firmware
-  
-  - action: apt
-    description: Install system utilities
-    packages:
-      - less
-      - tmux
-      - nano
-      - xz-utils
-      - file
-      - iproute2
-      - ifupdown
-      - network-manager
-      - wpasupplicant
-      - iputils-ping
-      - ldnsutils
-      - python3
-      - python3-pip
-      - alsa-utils
-      - pulseaudio
-      - pulseaudio-module-bluetooth
-      - usbutils
-      - pciutils
-      - i2c-tools
-      - spi-tools
-      - ssh
-      - haveged
-      - curl
-      - whiptail
-      - locales
-      - systemd-timesyncd
-
-{{ if eq $flavor "desktop"}}
-
-  - action: apt
-    description: Install desktop packages
-    packages:
-      - xorg
-      - xdg-utils
-      - xserver-xorg-input-all
-      - xserver-xorg-video-all
-      - lightdm
-      - lightdm-gtk-greeter
-      - xfce4
-      - xfce4-terminal
-      - smplayer
-      - blueman
-  {{ if eq $distro "debian"}}
-      - firefox-esr
-  {{ else if eq $distro "ubuntu"}}
-      - firefox
-  {{ end }}
-
-{{ end }}
+  - action: recipe
+    description: Install {{ $flavor }} packages
+    recipe: flavors/{{ $flavor }}.yaml
+    variables:
+      distro: {{ $distro }}
 
   - action: apt
     description: Install Radxa packages

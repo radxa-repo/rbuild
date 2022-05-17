@@ -1,0 +1,46 @@
+{{- $distro := .distro -}}
+
+{{- $architecture := .architecture -}}
+
+architecture: {{ $architecture }}
+
+actions:
+  - action: apt
+    description: Install base packages
+    packages:
+      - bash-completion
+      - init
+      - initramfs-tools
+      - sudo
+      - u-boot-tools
+      - armbian-firmware
+  
+  - action: apt
+    description: Install system utilities
+    packages:
+      - less
+      - tmux
+      - nano
+      - xz-utils
+      - file
+      - iproute2
+      - ifupdown
+      - network-manager
+      - wpasupplicant
+      - iputils-ping
+      - ldnsutils
+      - python3
+      - python3-pip
+      - alsa-utils
+      - pulseaudio
+      - pulseaudio-module-bluetooth
+      - usbutils
+      - pciutils
+      - i2c-tools
+      - spi-tools
+      - ssh
+      - haveged
+      - curl
+      - whiptail
+      - locales
+      - systemd-timesyncd

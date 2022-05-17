@@ -1,0 +1,11 @@
+{{- $architecture := .architecture -}}
+
+architecture: {{ $architecture }}
+
+actions:
+  - action: apt
+    description: Install Xorg
+    packages:
+      - xorg
+      - xserver-xorg-input-all
+      - xserver-xorg-video-all

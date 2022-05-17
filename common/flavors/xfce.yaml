@@ -1,0 +1,28 @@
+{{- $distro := .distro -}}
+
+{{- $architecture := .architecture -}}
+
+architecture: {{ $architecture }}
+
+actions:
+  - action: recipe
+    description: Install CLI packages
+    recipe: cli.yaml
+    variables:
+      distro: {{ $distro }}
+  
+  - action: recipe
+    description: Install Xorg
+    recipe: .xorg.yaml
+
+  - action: apt
+    description: Install Xfce
+    packages:
+      - xfce4
+      - xfce4-terminal
+
+  - action: recipe
+    description: Install common desktop packages
+    recipe: .desktop.yaml
+    variables:
+      distro: {{ $distro }}
