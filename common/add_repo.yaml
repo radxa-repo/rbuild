@@ -10,7 +10,7 @@ architecture: {{ $architecture }}
 actions:
   - action: download
     description: Download public key
-    url: {{ $base_url }}{{ $public_key }}
+    url: {{ $base_url }}/{{ $public_key }}
     name: {{ $origin }}-archive-keyring
   
   - action: overlay

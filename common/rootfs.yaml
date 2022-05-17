@@ -38,7 +38,7 @@ actions:
     variables:
       origin: Radxa
       suite: {{ $suite }}
-      base_url: https://radxa-repo.github.io/apt/
+      base_url: https://radxa-repo.github.io/apt
       public_key: pubkey.gpg
       priority: 100
   
@@ -48,7 +48,7 @@ actions:
     variables:
       origin: Armbian
       suite: {{ $suite }}
-      base_url: http://mirrors.tuna.tsinghua.edu.cn/armbian/
+      base_url: https://apt.armbian.com
       public_key: armbian.key
       priority: 100
 
