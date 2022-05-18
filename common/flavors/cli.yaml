@@ -19,16 +19,18 @@ actions:
     description: Install system utilities
     packages:
       - less
-      - tmux
-      - nano
-      - xz-utils
       - file
+      - nano
+      - tmux
+      - xz-utils
       - iproute2
       - ifupdown
       - network-manager
-      - wpasupplicant
       - iputils-ping
       - ldnsutils
+      - wpasupplicant
+      - rfkill
+      - bluez
       - python3
       - python3-pip
       - alsa-utils

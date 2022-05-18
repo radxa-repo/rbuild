@@ -10,9 +10,7 @@ actions:
     packages:
       - xdg-utils
       - lightdm
-      - lightdm-gtk-greeter
       - smplayer
-      - blueman
   {{ if eq $distro "debian"}}
       - firefox-esr
   {{ else if eq $distro "ubuntu"}}

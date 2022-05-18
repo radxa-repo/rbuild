@@ -10,16 +10,14 @@ actions:
     recipe: cli.yaml
     variables:
       distro: {{ $distro }}
-  
-  - action: recipe
-    description: Install Xorg
-    recipe: .xorg.yaml
 
   - action: apt
     description: Install Xfce
     packages:
+      - xorg
       - xfce4
       - xfce4-terminal
+      - blueman
 
   - action: recipe
     description: Install common desktop packages
