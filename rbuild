@@ -179,7 +179,7 @@ debos() {
     then
         local DEBOS_BACKEND="--device /dev/kvm"
     else
-        local DEBOS_BACKEND="--tmpfs /dev/shm:rw,nosuid,nodev,exec,size=4g"
+        local DEBOS_BACKEND="--tmpfs /dev/shm:exec"
     fi
     
     local DOCKER_OPTIONS=
@@ -196,7 +196,7 @@ debos() {
     docker run --rm $DEBOS_BACKEND --user $(id -u) \
         --security-opt label=disable \
         --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD" \
-        $DOCKER_OPTIONS godebos/debos $@
+        $DOCKER_OPTIONS godebos/debos --cpus=$(nproc) --memory=4G $@
 }
 
 build() {
@@ -231,7 +231,7 @@ build() {
                 shift
                 ;;
             -d | --debug)
-                DEBOS_OPTIONS="-v --debug-shell"
+                DEBOS_OPTIONS="-v --debug-shell --show-boot"
                 shift
                 ;;
             -r | --rootfs)
