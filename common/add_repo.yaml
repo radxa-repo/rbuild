@@ -26,4 +26,3 @@ actions:
       rm /usr/share/keyrings/{{ $origin }}-archive-keyring
       echo "deb [signed-by=/usr/share/keyrings/{{ $origin }}-archive-keyring.gpg] {{ $base_url }} {{ $suite }} main" | tee /etc/apt/sources.list.d/{{ $origin }}.list
       bash -c "printf 'Package: *\nPin: origin {{ $origin }}\nPin-Priority: {{ $priority }}' | tee /etc/apt/preferences.d/{{ $origin }}"
-      apt update
