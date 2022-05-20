@@ -28,6 +28,7 @@ actions:
       - network-manager
       - iputils-ping
       - ldnsutils
+      - iw
       - wpasupplicant
       - rfkill
       - bluez

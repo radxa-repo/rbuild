@@ -9,7 +9,6 @@ actions:
     description: Install common desktop packages
     packages:
       - xdg-utils
-      - lightdm
       - smplayer
   {{ if eq $distro "debian"}}
       - firefox-esr

@@ -12,11 +12,9 @@ actions:
       distro: {{ $distro }}
 
   - action: apt
-    description: Install Xfce
+    description: Install Xfce specific packages
     packages:
-      - xorg
-      - xfce4
-      - xfce4-terminal
+      - task-xfce-desktop
       - blueman
 
   - action: recipe
