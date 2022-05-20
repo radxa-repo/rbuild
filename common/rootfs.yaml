@@ -76,5 +76,4 @@ actions:
 
   - action: pack
     description: Save rootfs
-    file: .rootfs/{{ $distro }}_{{ $suite }}_{{ $flavor }}.tar.xz
-    compression: xz
+    file: .rootfs/{{ $distro }}_{{ $suite }}_{{ $flavor }}.tar

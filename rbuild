@@ -322,13 +322,13 @@ build() {
     docker pull godebos/debos:latest
 
     mkdir -p ".rootfs"
-    if [[ $DEBOS_ROOTFS != "yes" ]] || [[ ! -e ".rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar.xz" ]]
+    if [[ $DEBOS_ROOTFS != "yes" ]] || [[ ! -e ".rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar" ]]
     then
         debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/rootfs.yaml" \
             -t architecture:"$ARCH" \
             -t board:"$BOARD" -t distro:"$DISTRO" -t suite:"$SUITE" -t flavor:"$FLAVOR"
     else
-        echo "Using ${DISTRO}_${SUITE}_${FLAVOR}.tar.xz rootfs."
+        echo "Using ${DISTRO}_${SUITE}_${FLAVOR}.tar rootfs."
     fi
 
     debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/image.yaml" \
@@ -372,4 +372,8 @@ else
     NOTIFY_SEND=echo
 fi
 
+SECONDS=0
+
 build "$@"
+
+TZ=UTC0 printf 'Total execution time: %(%H:%M:%S)T\n' $SECONDS
