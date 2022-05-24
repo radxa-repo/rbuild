@@ -317,7 +317,7 @@ build() {
 
     local ARCH="arm64"
     local IMAGE="${BOARD}_${DISTRO}_${SUITE}_${FLAVOR}.img"
-    local BOOT_END="332MiB"
+    local EFI_END=${EFI_END:-"32MiB"}
     
     docker pull godebos/debos:latest
 
@@ -335,7 +335,7 @@ build() {
         -t architecture:"$ARCH" \
         -t board:"$BOARD" -t distro:"$DISTRO" -t suite:"$SUITE" -t flavor:"$FLAVOR" \
         -t soc:"$SOC" -t soc_family:"$SOC_FAMILY" \
-        -t image:"$IMAGE" -t boot_end:"$BOOT_END" -t partition_type:"$PARTITION_TYPE" \
+        -t image:"$IMAGE" -t efi_end:"$EFI_END" -t partition_type:"$PARTITION_TYPE" \
         -t kernel:"$RBUILD_KERNEL" -t firmware:"$RBUILD_FIRMWARE"
 
     if [[ "$RBUILD_SHRINK" == "yes" ]]

@@ -6,22 +6,22 @@ emit_kernel() {
   local NAME="$3"
 
   echo "label kernel-$VERSION$NAME"
-  echo "    kernel /vmlinuz-$VERSION"
+  echo "    kernel /boot/vmlinuz-$VERSION"
 
   if [[ -f "/etc/kernel/cmdline" ]]; then
     if [[ -f "/boot/initrd.img-$VERSION" ]]; then
-      echo "    initrd /initrd.img-$VERSION"
+      echo "    initrd /boot/initrd.img-$VERSION"
     fi
   fi
 
   if [[ -f "/boot/dtb-$VERSION" ]]; then
-    echo "    fdt /dtb-$VERSION"
+    echo "    fdt /boot/dtb-$VERSION"
   else
     if [[ ! -d "/boot/dtbs/$VERSION" ]]; then
       mkdir -p /boot/dtbs
       cp -au "/usr/lib/linux-image-$VERSION" "/boot/dtbs/$VERSION"
     fi
-    echo "    devicetreedir /dtbs/$VERSION"
+    echo "    devicetreedir /boot/dtbs/$VERSION"
   fi
 
   echo "    append $APPEND"

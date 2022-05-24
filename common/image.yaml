@@ -6,7 +6,7 @@
 {{- $soc := .soc -}}
 {{- $soc_family := .soc_family -}}
 {{- $image := .image -}}
-{{- $boot_end := .boot_end -}}
+{{- $efi_end := or .efi_end "32MiB" -}}
 {{- $partition_type := .partition_type -}}
 
 {{- $kernel := .kernel -}}
@@ -34,25 +34,26 @@ actions:
         options: [ x-systemd.automount ]
 {{ if eq $soc_family "efi" }}
       - mountpoint: /boot/efi
-{{ else }}
-      - mountpoint: /boot
-{{ end }}
         partition: boot
         options: [ x-systemd.automount ]
+{{ end }}
     partitions:
       - name: config
         fs: vfat
         start: 16MiB
         end: 32MiB
+{{ if eq $soc_family "efi" }}
       - name: boot
         fs: vfat
         start: 32MiB
-        end: {{ $boot_end }}
+        end: {{ $efi_end }}
         flags: [ boot, esp ]
+{{ end }}
       - name: rootfs
         fs: ext4
-        start: {{ $boot_end }}
+        start: {{ $efi_end }}
         end: 100%
+        flags: [ boot ]
 
   - action: filesystem-deploy
     description: Deploying filesystem onto image
