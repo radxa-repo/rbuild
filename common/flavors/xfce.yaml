@@ -15,6 +15,7 @@ actions:
     description: Install Xfce specific packages
     packages:
       - task-xfce-desktop
+      - xfce4-terminal
       - blueman
 
   - action: recipe
