@@ -59,6 +59,7 @@ shrink() {
     local SHRINK_SIZE="$(( (TOTAL_BLOCKS - TARGET_BLOCKS) * BLOCK_SIZE ))"
     sudo e2fsck -pf "$ROOT_DEV"
     sudo resize2fs -M "$ROOT_DEV"
+    sync
 
     sudo kpartx -d "$1"
 
