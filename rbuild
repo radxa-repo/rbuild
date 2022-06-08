@@ -305,7 +305,7 @@ build() {
     local BOARDS=($(get_supported_boards))
     local DISTROS=($(get_supported_distros))
     local FLAVORS=($(get_supported_flavors))
-    # Ubuntu is sorta supported
+    # Ubuntu is not officially supported but we will allow it for the time being
     DISTROS+=("ubuntu")
 
     local BOARD=
