@@ -6,5 +6,6 @@ actions:
     description: Clean up rootfs
     chroot: true
     command: |
+      set -e
       apt clean
       rm -rf /var/lib/apt/lists/*

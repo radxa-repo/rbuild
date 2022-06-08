@@ -13,6 +13,7 @@ actions:
     description: Install deb package
     chroot: true
     command: |
+      set -e
       dpkg -i --force-overwrite /{{ $name }}
       apt-get update
       apt --fix-broken install -y
