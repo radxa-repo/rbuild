@@ -275,12 +275,12 @@ build() {
                 ;;
             -k | --kernel)
                 ln "$2" "$SCRIPT_DIR/common/.packages/$(basename "$2")"
-                RBUILD_KERNEL="$2"
+                RBUILD_KERNEL="$(basename $2)"
                 shift 2
                 ;;
             -f | --firmware)
                 ln "$2" "$SCRIPT_DIR/common/.packages/$(basename "$2")"
-                RBUILD_FIRMWARE="$2"
+                RBUILD_FIRMWARE="$(basename $2)"
                 shift 2
                 ;;
             --json)
@@ -356,12 +356,14 @@ build() {
     
     docker pull godebos/debos:latest
 
-    mkdir -p ".rootfs"
-    if [[ $DEBOS_ROOTFS != "yes" ]] || [[ ! -e ".rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar" ]]
+    mkdir -p "$SCRIPT_DIR/.rootfs"
+    if [[ $DEBOS_ROOTFS != "yes" ]] || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar" ]]
     then
+        pushd "$SCRIPT_DIR"
         debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/rootfs.yaml" \
             -t architecture:"$ARCH" \
             -t board:"$BOARD" -t distro:"$DISTRO" -t suite:"$SUITE" -t flavor:"$FLAVOR"
+        popd
     else
         echo "Using ${DISTRO}_${SUITE}_${FLAVOR}.tar rootfs."
     fi
