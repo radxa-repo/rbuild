@@ -34,10 +34,29 @@ error() {
     exit "$1"
 }
 
+find_root_part() {
+    local ROOT_PART
+    ROOT_PART="$(sgdisk -p "$1" | grep "rootfs" | tail -n 1 | tr -s ' ' | cut -d ' ' -f 2)"
+    if [[ -z $ROOT_PART ]]
+    then
+        ROOT_PART="$(sgdisk -p "$1" | grep -e "8300" -e "EF00" | tail -n 1 | tr -s ' ' | cut -d ' ' -f 2)"
+    fi
+    echo $ROOT_PART
+}
+
 shrink() {
-    local ROOT_PART="$(sgdisk -p "$1" | grep 8300 | tail -n 1 | tr -s ' ' | cut -d ' ' -f 2)"
+    local ROOT_PART="$(find_root_part "$1")"
+    if [[ -z $ROOT_PART ]]
+    then
+        echo "Unable to locate root partition number." >&2
+        return
+    fi
+    
+    local SECTOR_SIZE="$(sgdisk -p "$1" | grep "Sector size (logical):" | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)"
+    local START_SECTOR="$(sgdisk -i "$ROOT_PART" "$1" | grep "First sector:" | cut -d ' ' -f 3)"
     local LOOP_DEV="$(basename $(sudo kpartx -l "$1" | head -n 1 | cut -d ' ' -f 5))"
     local ROOT_DEV="/dev/mapper/${LOOP_DEV}p${ROOT_PART}"
+    echo "Partition $ROOT_PART is root partition."
 
     sudo kpartx -a "$1"
     local i=0
@@ -54,26 +73,41 @@ shrink() {
     done
 
     local TOTAL_BLOCKS="$(sudo tune2fs -l "$ROOT_DEV" | grep '^Block count:' | tr -s ' ' | cut -d ' ' -f 3)"
-    local TARGET_BLOCKS="$(sudo resize2fs -P "$ROOT_DEV" | cut -d ' ' -f 7)"
+    local TARGET_BLOCKS="$(sudo resize2fs -P "$ROOT_DEV" 2> /dev/null | cut -d ' ' -f 7)"
     local BLOCK_SIZE="$(sudo tune2fs -l "$ROOT_DEV" | grep '^Block size:' | tr -s ' ' | cut -d ' ' -f 3)"
-    local SHRINK_SIZE="$(( (TOTAL_BLOCKS - TARGET_BLOCKS) * BLOCK_SIZE ))"
-    sudo e2fsck -pf "$ROOT_DEV"
-    sudo resize2fs -M "$ROOT_DEV"
-    sync
+    echo "$TARGET_BLOCKS of $TOTAL_BLOCKS blocks are in use."
+
+    if (( $TARGET_BLOCKS < $TOTAL_BLOCKS ))
+    then
+        sudo e2fsck -pf "$ROOT_DEV" > /dev/null
+        sudo resize2fs -M "$ROOT_DEV" > /dev/null 2>&1
+        sync
+        TARGET_BLOCKS="$(sudo tune2fs -l "$ROOT_DEV" | grep '^Block count:' | tr -s ' ' | cut -d ' ' -f 3)"
+        echo "Root filesystem has been shrinked to $TARGET_BLOCKS blocks."
+    fi
+
+    local NEW_SIZE="$(( $START_SECTOR * $SECTOR_SIZE + $TARGET_BLOCKS * $BLOCK_SIZE ))"
 
     sudo kpartx -d "$1"
 
-    cat << EOF | parted ---pretend-input-tty "$1"
+    cat << EOF | parted ---pretend-input-tty "$1" > /dev/null 2>&1
 resizepart $ROOT_PART 
--${SHRINK_SIZE}B
+${NEW_SIZE}B
 yes
 EOF
+    echo "Root partition has been shrinked to $NEW_SIZE."
 
     local TOTAL_SIZE="$(du -b "$1" | cut -f 1)"
+    local END_SECTOR="$(sgdisk -i "$ROOT_PART" "$1" | grep "Last sector:" | cut -d ' ' -f 3)"
     # leave some space for the secondary GPT header
-    truncate --size=$(( TOTAL_SIZE - SHRINK_SIZE + 34 * 512 )) "$1"
-    sgdisk -e "$1" || true
-    sgdisk -v "$1"
+    local FINAL_SIZE="$(( ($END_SECTOR + 34) * $SECTOR_SIZE ))"
+    truncate "--size=$FINAL_SIZE" "$1" > /dev/null
+    if [[ $2 == "gpt" ]]
+    then
+        sgdisk -ge "$1" > /dev/null || true
+        sgdisk -v "$1" > /dev/null
+    fi
+    echo "Image shrunked from $TOTAL_SIZE to $FINAL_SIZE."
 }
 
 usage() {
@@ -351,9 +385,9 @@ build() {
             $NOTIFY_SEND "rbuild is waiting for user input."
             echo "rbuild shrink needs root permission to perform partition operations."
             echo "The process is paused to prevent sudo timeout on asking for password."
-            read -p "Please press enter to continue: " i
+            read -p "Please press enter to continue..." i
         fi
-        shrink "$IMAGE"
+        shrink "$IMAGE" "$PARTITION_TYPE"
     fi
 
     sha512sum "$IMAGE" > "$IMAGE.sha512"
