@@ -332,6 +332,11 @@ build() {
         echo "Using ${DISTRO}_${SUITE}_${FLAVOR}.tar rootfs."
     fi
 
+    if [[ "$BOARD" == "rootfs" ]]
+    then
+        return
+    fi
+
     debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/image.yaml" \
         -t architecture:"$ARCH" \
         -t board:"$BOARD" -t distro:"$DISTRO" -t suite:"$SUITE" -t flavor:"$FLAVOR" \
