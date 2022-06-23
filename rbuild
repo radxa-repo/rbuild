@@ -210,12 +210,12 @@ json() {
 }
 
 debos() {
+    local DEBOS_BACKEND
     if [[ -e /dev/kvm ]]
     then
-        local DEBOS_BACKEND="--device /dev/kvm"
-    else
-        local DEBOS_BACKEND="--tmpfs /dev/shm:exec"
+        DEBOS_BACKEND="--device /dev/kvm "
     fi
+    DEBOS_BACKEND+="--tmpfs /dev/shm:exec"
     
     local DOCKER_OPTIONS=
     if [[ -t 0 ]]
