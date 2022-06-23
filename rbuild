@@ -274,12 +274,12 @@ build() {
                 shift
                 ;;
             -k | --kernel)
-                ln "$2" "$SCRIPT_DIR/common/.packages/$(basename "$2")"
+                cp "$2" "$SCRIPT_DIR/common/.packages/$(basename "$2")"
                 RBUILD_KERNEL="$(basename $2)"
                 shift 2
                 ;;
             -f | --firmware)
-                ln "$2" "$SCRIPT_DIR/common/.packages/$(basename "$2")"
+                cp "$2" "$SCRIPT_DIR/common/.packages/$(basename "$2")"
                 RBUILD_FIRMWARE="$(basename $2)"
                 shift 2
                 ;;
