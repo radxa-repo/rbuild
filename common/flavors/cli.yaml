@@ -31,7 +31,8 @@ actions:
       - iw
       - wpasupplicant
       - rfkill
-      - bluez
+      - wireless-regdb
+      - bluetooth
       - python3
       - python3-pip
       - alsa-utils
@@ -41,8 +42,10 @@ actions:
       - pciutils
       - i2c-tools
       - spi-tools
+      - mtd-utils
       - ssh
       - haveged
+      - wget
       - curl
       - whiptail
       - locales
