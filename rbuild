@@ -382,7 +382,7 @@ build() {
     docker pull godebos/debos:latest
 
     mkdir -p "$SCRIPT_DIR/.rootfs"
-    if [[ $DEBOS_ROOTFS != "yes" ]] || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar" ]]
+    if [[ "$DEBOS_ROOTFS" != "yes" ]] || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar" ]]
     then
         pushd "$SCRIPT_DIR"
         debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/rootfs.yaml" \
