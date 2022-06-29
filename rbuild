@@ -236,14 +236,14 @@ debos() {
     local DEV_SHM_REQUIRE=5
     if (( $(df -B 1 /dev/shm | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4) < $DEV_SHM_REQUIRE * 1024 * 1024 ))
     then
-        if sudo -n true 2>/dev/null
+        if ! sudo -n true 2>/dev/null && ! [[ -t 0 ]]
         then
+            error $EXIT_SUDO_PERMISSION "Remounting /dev/shm"
+        else
             if ! sudo mount -o remount,size=${DEV_SHM_REQUIRE}G /dev/shm
             then
                 error $EXIT_DEV_SHM_TOO_SMALL $DEV_SHM_CURRENT ${DEV_SHM_REQUIRE}G
             fi
-        else
-            error $EXIT_SUDO_PERMISSION "Remounting /dev/shm"
         fi
     fi
 
