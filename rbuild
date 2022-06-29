@@ -4,7 +4,7 @@ EXIT_SUCCESS=0
 EXIT_UNKNOWN_OPTION=1
 EXIT_TOO_FEW_ARGUMENTS=2
 EXIT_UNSUPPORTED_OPTION=3
-EXIT_SHRINK_PERMISSION=4
+EXIT_SUDO_PERMISSION=4
 EXIT_SHRINK_NO_ROOTDEV=5
 
 error() {
@@ -20,8 +20,8 @@ error() {
         $EXIT_UNSUPPORTED_OPTION)
             echo "Option '$2' is not supported." >&2
             ;;
-        $EXIT_SHRINK_PERMISSION)
-            echo "--shrink requires either passwordless sudo, or running in an interactive shell." >&2
+        $EXIT_SUDO_PERMISSION)
+            echo "'$2' requires either passwordless sudo, or running in an interactive shell." >&2
             ;;
         $EXIT_SHRINK_NO_ROOTDEV)
             echo "Unable to access loop device '$2' for shrinking." >&2
@@ -256,7 +256,7 @@ build() {
             -s | --shrink)
                 if ! sudo -n true 2>/dev/null && ! [[ -t 0 ]]
                 then
-                    error $EXIT_SHRINK_PERMISSION
+                    error $EXIT_SUDO_PERMISSION "--shrink"
                 fi
                 RBUILD_SHRINK="yes"
                 shift
