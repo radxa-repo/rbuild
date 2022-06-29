@@ -83,7 +83,7 @@ shrink() {
 
     if (( $TARGET_BLOCKS < $TOTAL_BLOCKS ))
     then
-        sudo e2fsck -pf "$ROOT_DEV" > /dev/null
+        sudo e2fsck -yf "$ROOT_DEV" > /dev/null
         sudo resize2fs -M "$ROOT_DEV" > /dev/null 2>&1
         sync
         TARGET_BLOCKS="$(sudo tune2fs -l "$ROOT_DEV" | grep '^Block count:' | tr -s ' ' | cut -d ' ' -f 3)"
@@ -376,7 +376,7 @@ build() {
     # Release targeting image in case previous shrink failed
     if [[ "$RBUILD_SHRINK" == "yes" ]]
     then
-        sudo kpartx -d "$IMAGE" || true
+        sudo kpartx -d "$IMAGE"
     fi
 
     docker pull godebos/debos:latest
