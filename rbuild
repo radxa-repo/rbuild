@@ -373,6 +373,12 @@ build() {
     local IMAGE="${BOARD}_${DISTRO}_${SUITE}_${FLAVOR}.img"
     local EFI_END=${EFI_END:-"32MiB"}
     
+    # Release targeting image in case previous shrink failed
+    if [[ "$RBUILD_SHRINK" == "yes" ]]
+    then
+        sudo kpartx -d "$IMAGE" || true
+    fi
+
     docker pull godebos/debos:latest
 
     mkdir -p "$SCRIPT_DIR/.rootfs"
