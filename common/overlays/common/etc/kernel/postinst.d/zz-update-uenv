@@ -1,3 +1,0 @@
-#!/bin/bash
-
-[ -f "/usr/sbin/update_uenv.sh" ] && . /usr/sbin/update_uenv.sh
