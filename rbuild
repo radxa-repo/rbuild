@@ -6,6 +6,7 @@ EXIT_TOO_FEW_ARGUMENTS=2
 EXIT_UNSUPPORTED_OPTION=3
 EXIT_SUDO_PERMISSION=4
 EXIT_SHRINK_NO_ROOTDEV=5
+EXIT_DEV_SHM_TOO_SMALL=6
 
 error() {
     case "$1" in
@@ -25,6 +26,9 @@ error() {
             ;;
         $EXIT_SHRINK_NO_ROOTDEV)
             echo "Unable to access loop device '$2' for shrinking." >&2
+            ;;
+        $EXIT_DEV_SHM_TOO_SMALL)
+            echo "Your /dev/shm is too small. Current '$2', require '$3'." >&2
             ;;
         *)
             echo "Unknown exit code." >&2
@@ -228,10 +232,25 @@ debos() {
         DOCKER_OPTIONS="$DOCKER_OPTIONS --mount type=bind,source=$SCRIPT_DIR,destination=$SCRIPT_DIR"
     fi
     
+    local DEV_SHM_CURRENT=$(df -h /dev/shm | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)
+    local DEV_SHM_REQUIRE=5
+    if (( $(df -B 1 /dev/shm | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4) < $DEV_SHM_REQUIRE * 1024 * 1024 ))
+    then
+        if sudo -n true 2>/dev/null
+        then
+            if ! sudo mount -o remount,size=${DEV_SHM_REQUIRE}G /dev/shm
+            then
+                error $EXIT_DEV_SHM_TOO_SMALL $DEV_SHM_CURRENT ${DEV_SHM_REQUIRE}G
+            fi
+        else
+            error $EXIT_SUDO_PERMISSION "Remounting /dev/shm"
+        fi
+    fi
+
     docker run --rm $DEBOS_BACKEND --user $(id -u) \
         --security-opt label=disable \
         --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD" \
-        $DOCKER_OPTIONS godebos/debos --cpus=$(nproc) --memory=4G $@
+        $DOCKER_OPTIONS godebos/debos --cpus=$(nproc) --memory=$(( DEV_SHM_REQUIRE - 1 ))G $@
 }
 
 build() {
