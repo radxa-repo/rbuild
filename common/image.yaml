@@ -82,7 +82,7 @@ actions:
   - action: run
     description: Apply to disk
     chroot: true
-    command: /usr/lib/u-boot-{{ $board }}/setup.sh update_bootloader /dev/vda {{ $soc_family }}
+    command: /usr/lib/u-boot-{{ $board }}/setup.sh update_bootloader $(mount | grep " on / " | cut -d ' ' -f 1 | sed "s/[0-9]$//") {{ $soc_family }}
 
 {{ end }}
 
