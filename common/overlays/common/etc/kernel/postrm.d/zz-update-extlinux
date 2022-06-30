@@ -1,1 +1,1 @@
-../postinst.d/zz-update-extlinux
+../../../usr/sbin/update_extlinux.sh
