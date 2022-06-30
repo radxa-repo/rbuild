@@ -374,7 +374,7 @@ build() {
     local EFI_END=${EFI_END:-"32MiB"}
     
     # Release targeting image in case previous shrink failed
-    if [[ "$RBUILD_SHRINK" == "yes" ]]
+    if [[ "$RBUILD_SHRINK" == "yes" ]] && [[ -e /dev/mapper/loop* ]]
     then
         sudo kpartx -d "$IMAGE"
     fi
