@@ -135,6 +135,8 @@ Alternative functionalities
                         Available catagories: $(get_supported_infos)
     --shrink-image [image]
                         Shrink generated image
+    --write-image [image] [/dev/block]
+                        Write image to block device
     -h, --help          Show this help message
 
 Supported board:
@@ -214,6 +216,44 @@ json() {
 
     printf_array "json" $(get_supported_$1)
     exit 0
+}
+
+write-image() {
+    if (( $# < 2 ))
+    then
+        error $EXIT_TOO_FEW_ARGUMENTS
+    fi
+
+    local IMAGE="$1"
+    local BLOCKDEV="$2"
+
+    if ! [[ -f $IMAGE ]]
+    then
+        echo "$IMAGE does not exist."
+        exit 1
+    elif ! [[ -b $BLOCKDEV ]]
+    then
+        echo "$BLOCKDEV is not block device."
+        exit 1
+    fi
+
+    if file $IMAGE | grep -q "XZ compressed"
+    then
+        echo "Writting xz image..."
+        xzcat $IMAGE | sudo dd of=$2 bs=16M conv=fsync status=progress
+    elif file $IMAGE | grep -q "gzip compressed data"
+    then
+        echo "Writting gz image..."
+        zcat $IMAGE | sudo dd of=$2 bs=16M conv=fsync status=progress
+    elif file $IMAGE | grep -q "Zip archive"
+    then
+        echo "Writting zip image..."
+        unzip -p $IMAGE | sudo dd of=$2 bs=16M conv=fsync status=progress
+    else
+        echo "Writting raw image..."
+        sudo dd if=$1 of=$2 bs=16M conv=fsync status=progress
+    fi
+    exit
 }
 
 debos() {
@@ -308,6 +348,9 @@ build() {
             --shrink-image)
                 shrink "$2"
                 exit
+                ;;
+            --write-image)
+                write-image "$2" "$3"
                 ;;
             --json)
                 json "$2"
