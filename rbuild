@@ -123,7 +123,8 @@ usage: $(basename "$0") [options] <board> [distro] [flavor]
 Supported image generation options:
     -s, --shrink        Shrink root partition after image is generated
                         Require root permission and additional dependencies
-    --no-compression    Do not compress the final image                        
+    --no-compression    Do not compress the final image
+    --native-debos      Use locally installed debos instead of docker
     -d, --debug         Drop into a debug shell when build failed
     -r, --rootfs        Use already generated rootfs if available
     -k, --kernel [deb]  Use custom Linux kernel package
@@ -290,10 +291,17 @@ debos() {
         fi
     fi
 
-    docker run --rm $DEBOS_BACKEND --user $(id -u) \
-        --security-opt label=disable \
-        --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD" \
-        $DOCKER_OPTIONS godebos/debos --cpus=$(nproc) --memory=$(( DEV_SHM_REQUIRE - 1 ))G $@
+    local DEBOS_OPTIONS="--cpus=$(nproc) --memory=$(( DEV_SHM_REQUIRE - 1 ))G"
+
+    if [[ "$RBUILD_NATIVE_DEBOS" == "yes" ]]
+    then
+        env debos $DEBOS_OPTIONS "$@"
+    else
+        docker run --rm $DEBOS_BACKEND --user $(id -u) \
+            --security-opt label=disable \
+            --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD" \
+            $DOCKER_OPTIONS godebos/debos $DEBOS_OPTIONS "$@"
+    fi
 }
 
 build() {
@@ -344,6 +352,10 @@ build() {
                 cp "$2" "$SCRIPT_DIR/common/.packages/$(basename "$2")"
                 RBUILD_FIRMWARE="$(basename $2)"
                 shift 2
+                ;;
+            --native-debos)
+                RBUILD_NATIVE_DEBOS="yes"
+                shift
                 ;;
             --shrink-image)
                 shrink "$2"
@@ -429,7 +441,10 @@ build() {
         sudo kpartx -d "$IMAGE"
     fi
 
-    docker pull godebos/debos:latest
+    if [[ "$RBUILD_NATIVE_DEBOS" != "yes" ]]
+    then
+        docker pull godebos/debos:latest
+    fi
 
     mkdir -p "$SCRIPT_DIR/.rootfs"
     if [[ "$DEBOS_ROOTFS" != "yes" ]] || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar" ]]
