@@ -21,9 +21,14 @@ runs:
     - name: Build
       shell: bash
       run: |
+        sudo apt install -y debos
+    - name: Build
+      shell: bash
+      run: |
         mkdir .output
         cd .output
-        ../rbuild -s ${{ inputs.board }} ${{ inputs.distro }} ${{ inputs.flavor }}
+        sudo ../rbuild --native-debos -s ${{ inputs.board }} ${{ inputs.distro }} ${{ inputs.flavor }}
+        sudo chown $USER ./*
     - name: Upload
       if: inputs.release-id != '' && inputs.github-token != ''
       uses: xresloader/upload-to-github-release@v1
