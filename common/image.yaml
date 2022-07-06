@@ -85,11 +85,6 @@ actions:
     command: /usr/lib/u-boot-{{ $board }}/setup.sh update_bootloader $(mount | grep " on / " | cut -d ' ' -f 1 | sed "s/[0-9]*$//") {{ $soc_family }}
 
 {{ end }}
-
-  - action: run
-    description: Create .radxa
-    chroot: true
-    command: rsetup _create-systemconf
   
   - action: overlay
     description: Install files for kernel and initramfs
