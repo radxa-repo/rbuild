@@ -495,6 +495,10 @@ build() {
 
 set -e
 
+LC_ALL="C"
+LANG="C"
+LANGUAGE="C"
+
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
 if which notify-send >/dev/null 2>&1
