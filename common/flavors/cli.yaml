@@ -8,45 +8,59 @@ actions:
   - action: apt
     description: Install base packages
     packages:
+      - armbian-firmware
       - bash-completion
       - init
       - initramfs-tools
       - sudo
       - u-boot-tools
-      - armbian-firmware
   
   - action: apt
     description: Install system utilities
     packages:
-      - less
+      - curl
       - file
+      - haveged
+      - less
+      - locales
+      - man-db
       - nano
-      - tmux
-      - xz-utils
-      - iproute2
-      - ifupdown
-      - network-manager
-      - iputils-ping
-      - ldnsutils
-      - iw
-      - wpasupplicant
-      - rfkill
-      - wireless-regdb
-      - bluetooth
       - python3
       - python3-pip
+      - ssh
+      - systemd-timesyncd
+      - tmux
+      - wget
+      - whiptail
+      - xz-utils
+
+  - action: apt
+    description: Install network utilities
+    packages:
+      - bluetooth
+      - ldnsutils
+      - ifupdown
+      - iproute2
+      - iputils-ping
+      - iw
+      - network-manager
+      - wireless-regdb
+      - wpasupplicant
+
+  - action: apt
+    description: Install audio utilities
+    packages:
       - alsa-utils
       - pulseaudio
       - pulseaudio-module-bluetooth
-      - usbutils
-      - pciutils
+
+  - action: apt
+    description: Install hardware utilities
+    packages:
+      - gpiod
       - i2c-tools
-      - spi-tools
       - mtd-utils
-      - ssh
-      - haveged
-      - wget
-      - curl
-      - whiptail
-      - locales
-      - systemd-timesyncd
+      - pciutils
+      - rfkill
+      - spi-tools
+      - usbutils
