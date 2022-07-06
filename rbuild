@@ -125,6 +125,8 @@ Supported image generation options:
                         Require root permission and additional dependencies
     --no-compression    Do not compress the final image
     --native-debos      Use locally installed debos instead of docker
+                        This is a workaround for building Ubuntu image on Ubuntu host
+                        Require running rbuild with sudo
     -d, --debug         Drop into a debug shell when build failed
     -r, --rootfs        Use already generated rootfs if available
     -k, --kernel [deb]  Use custom Linux kernel package
@@ -295,7 +297,7 @@ debos() {
 
     if [[ "$RBUILD_NATIVE_DEBOS" == "yes" ]]
     then
-        env debos $DEBOS_OPTIONS "$@"
+        env debos --disable-fakemachine $DEBOS_OPTIONS "$@"
     else
         docker run --rm $DEBOS_BACKEND --user $(id -u) \
             --security-opt label=disable \
@@ -427,7 +429,7 @@ build() {
             local SUITE="bullseye"
             ;;
         ubuntu)
-            local SUITE="focal"
+            local SUITE="jammy"
             ;;
     esac
 
