@@ -56,6 +56,7 @@ shrink() {
         return
     fi
     
+    local PARTITION_TYPE="$(blkid -o value -s PTTYPE $1)"
     local SECTOR_SIZE="$(sgdisk -p "$1" | grep "Sector size (logical):" | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)"
     local START_SECTOR="$(sgdisk -i "$ROOT_PART" "$1" | grep "First sector:" | cut -d ' ' -f 3)"
     local LOOP_DEV="$(basename $(sudo kpartx -l "$1" | head -n 1 | cut -d ' ' -f 5))"
@@ -106,7 +107,7 @@ EOF
     # leave some space for the secondary GPT header
     local FINAL_SIZE="$(( ($END_SECTOR + 34) * $SECTOR_SIZE ))"
     truncate "--size=$FINAL_SIZE" "$1" > /dev/null
-    if [[ $2 == "gpt" ]]
+    if [[ $PARTITION_TYPE == "gpt" ]]
     then
         sgdisk -ge "$1" > /dev/null || true
         sgdisk -v "$1" > /dev/null
@@ -132,6 +133,8 @@ Supported image generation options:
 Alternative functionalities
     --json [catagory]   Print supported options in json format
                         Available catagories: $(get_supported_infos)
+    --shrink-image [image]
+                        Shrink generated image
     -h, --help          Show this help message
 
 Supported board:
@@ -302,6 +305,10 @@ build() {
                 RBUILD_FIRMWARE="$(basename $2)"
                 shift 2
                 ;;
+            --shrink-image)
+                shrink "$2"
+                exit
+                ;;
             --json)
                 json "$2"
                 ;;
@@ -414,7 +421,7 @@ build() {
             echo "The process is paused to prevent sudo timeout on asking for password."
             read -p "Please press enter to continue..." i
         fi
-        shrink "$IMAGE" "$PARTITION_TYPE"
+        shrink "$IMAGE"
     fi
 
     sha512sum "$IMAGE" > "$IMAGE.sha512"
