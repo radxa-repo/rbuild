@@ -9,15 +9,16 @@ actions:
     description: Install base packages
     packages:
       - armbian-firmware
-      - bash-completion
       - init
       - initramfs-tools
       - sudo
-      - u-boot-tools
   
   - action: apt
     description: Install system utilities
     packages:
+      - bash-completion
+      - bc
+      - cloud-initramfs-growroot
       - curl
       - file
       - haveged
@@ -30,6 +31,7 @@ actions:
       - ssh
       - systemd-timesyncd
       - tmux
+      - u-boot-tools
       - wget
       - whiptail
       - xz-utils
@@ -58,6 +60,7 @@ actions:
     description: Install hardware utilities
     packages:
       - gpiod
+      - hdparm
       - i2c-tools
       - mtd-utils
       - pciutils
