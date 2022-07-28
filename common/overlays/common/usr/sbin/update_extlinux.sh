@@ -14,23 +14,24 @@ emit_kernel() {
     fi
   fi
 
-  if [[ -f "/boot/dtb-$VERSION" ]]; then
-    echo "    fdt /boot/dtb-$VERSION"
-  else
-    if [[ ! -d "/boot/dtbs/$VERSION" ]]; then
-      mkdir -p /boot/dtbs
-      cp -au "/usr/lib/linux-image-$VERSION" "/boot/dtbs/$VERSION"
-    fi
-    echo "    devicetreedir /boot/dtbs/$VERSION"
+  if [[ ! -d "/boot/dtbs/$VERSION" ]]; then
+    mkdir -p /boot/dtbs
+    cp -au "/usr/lib/linux-image-$VERSION" "/boot/dtbs/$VERSION"
+  fi
+  echo "    devicetreedir /boot/dtbs/$VERSION"
+
+  if [[ -n "$FDTOVERLAYS" ]]
+  then
+    echo "    fdtoverlays $FDTOVERLAYS"
   fi
 
   echo "    append $APPEND"
-  echo ""
 }
 
 TIMEOUT=""
 DEFAULT=""
 APPEND=""
+FDTOVERLAYS=""
 
 set -eo pipefail
 
@@ -55,7 +56,7 @@ mkdir -p /boot/extlinux/
 exec 1> /boot/extlinux/extlinux.conf.new
 
 echo "timeout ${TIMEOUT:-10}"
-echo "menu title select kernel"
+echo "menu title Radxa Boot Selection"
 [[ -n "$DEFAULT" ]] && echo "default $DEFAULT"
 echo ""
 rm -rf /boot/dtbs
