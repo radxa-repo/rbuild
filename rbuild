@@ -139,7 +139,7 @@ Alternative functionalities
     --shrink-image [image]
                         Shrink generated image
     --write-image [image] [/dev/block]
-                        Write image to block device
+                        Write image to block device, support --shrink flag
     -h, --help          Show this help message
 
 Supported board:
@@ -236,25 +236,29 @@ write-image() {
         exit 1
     elif ! [[ -b $BLOCKDEV ]]
     then
-        echo "$BLOCKDEV is not block device."
+        echo "$BLOCKDEV is not a block device."
         exit 1
     fi
 
     if file $IMAGE | grep -q "XZ compressed"
     then
         echo "Writting xz image..."
-        xzcat $IMAGE | sudo dd of=$2 bs=16M conv=fsync status=progress
+        xzcat $IMAGE | sudo dd of=$BLOCKDEV bs=16M conv=fsync status=progress
     elif file $IMAGE | grep -q "gzip compressed data"
     then
         echo "Writting gz image..."
-        zcat $IMAGE | sudo dd of=$2 bs=16M conv=fsync status=progress
+        zcat $IMAGE | sudo dd of=$BLOCKDEV bs=16M conv=fsync status=progress
     elif file $IMAGE | grep -q "Zip archive"
     then
         echo "Writting zip image..."
-        unzip -p $IMAGE | sudo dd of=$2 bs=16M conv=fsync status=progress
+        unzip -p $IMAGE | sudo dd of=$BLOCKDEV bs=16M conv=fsync status=progress
     else
+        if [[ $RBUILD_SHRINK == "yes" ]]
+        then
+            shrink "$IMAGE"
+        fi
         echo "Writting raw image..."
-        sudo dd if=$1 of=$2 bs=16M conv=fsync status=progress
+        sudo dd if=$IMAGE of=$BLOCKDEV bs=16M conv=fsync status=progress
     fi
     exit
 }
