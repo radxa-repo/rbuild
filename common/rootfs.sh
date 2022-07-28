@@ -19,7 +19,8 @@ cat << EOF > /etc/hosts
 #ff02::2 ip6-allrouters
 EOF
 
-useradd -c $USER_FULLNAME -G audio,video,sudo -m -s "$(which bash)" $USER_NAME
+adduser --gecos $USER_FULLNAME --disabled-password $USER_NAME
+adduser $USER_NAME sudo
 echo "$USER_NAME:$USER_PASSWORD" | chpasswd
 
 echo locales locales/default_environment_locale select en_US.UTF-8 | debconf-set-selections
