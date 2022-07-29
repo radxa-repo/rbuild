@@ -271,15 +271,16 @@ debos() {
     fi
     DEBOS_BACKEND+="--tmpfs /dev/shm:exec"
     
-    local DOCKER_OPTIONS=
+    local DOCKER_OPTIONS=()
     if [[ -t 0 ]]
     then
-        DOCKER_OPTIONS="$DOCKER_OPTIONS -it"
+        DOCKER_OPTIONS+=( "-it" )
     fi
 
     if [[ $SCRIPT_DIR != $PWD ]]
     then
-        DOCKER_OPTIONS="$DOCKER_OPTIONS --mount type=bind,source=$SCRIPT_DIR,destination=$SCRIPT_DIR"
+        DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR,destination=$SCRIPT_DIR" )
+        DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR/.rootfs,destination=$PWD/.rootfs" )
     fi
     
     local DEV_SHM_CURRENT=$(df -h /dev/shm | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)
@@ -306,7 +307,7 @@ debos() {
         docker run --rm $DEBOS_BACKEND --user $(id -u) \
             --security-opt label=disable \
             --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD" \
-            $DOCKER_OPTIONS godebos/debos $DEBOS_OPTIONS "$@"
+            "${DOCKER_OPTIONS[@]}" godebos/debos $DEBOS_OPTIONS "$@"
     fi
 }
 
