@@ -10,3 +10,15 @@ actions:
     recipe: cli.yaml
     variables:
       distro: {{ $distro }}
+
+  - action: apt
+    description: Install Budgie specific packages
+    packages:
+      - gnome-core
+      - network-manager-gnome
+
+  - action: recipe
+    description: Install common desktop packages
+    recipe: .desktop.yaml
+    variables:
+      distro: {{ $distro }}
