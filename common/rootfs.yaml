@@ -67,7 +67,10 @@ actions:
   - action: run
     description: OEM system setup
     chroot: true
-    script: rootfs.sh
+    command: |
+      set -e
+      rm -f /etc/resolv.conf
+      systemctl enable haveged rsetup
   
   - action: recipe
     description: Clean up rootfs

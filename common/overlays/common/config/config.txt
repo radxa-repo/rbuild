@@ -1,0 +1,6 @@
+# rsetup config file
+# Configurations here will be applied on every boot.
+#
+# Additionally you can create `before.txt` and `after.txt` in this folder.
+# They will run before and after this file, and will be deleted in the end.
+# This makes them suitable for one-time setup.

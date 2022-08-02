@@ -1,0 +1,19 @@
+# Radxa First Boot Configuration
+# ==============================
+#
+# Disable SSH since our default account uses a weak password
+#
+disable_service ssh
+#
+# Generate unique hardware fingerprint
+#
+regenerate_ssh_hostkey
+regenerate_machine_id
+#
+# Basic system settings
+#
+add_user radxa radxa
+user_append_group radxa sudo
+update_hostname radxa
+update_locale en_US.UTF-8
+request_reboot
