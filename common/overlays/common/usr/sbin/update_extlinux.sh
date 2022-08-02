@@ -23,6 +23,8 @@ emit_kernel() {
   if [[ -n "$FDTOVERLAYS" ]]
   then
     echo "    fdtoverlays $FDTOVERLAYS"
+  else
+    echo "    #fdtoverlays"
   fi
 
   echo "    append $APPEND"
