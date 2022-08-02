@@ -199,15 +199,9 @@ get_supported_infos() {
 }
 
 in_array() {
-    local ITEM="$1"
+    local item="$1"
     shift
-    local ARRAY=("$@")
-    if [[ " ${ARRAY[*]} " =~ " $ITEM " ]]
-    then
-        true
-    else
-        false
-    fi
+    [[ " $* " =~ " $item " ]]
 }
 
 json() {
