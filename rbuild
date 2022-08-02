@@ -314,7 +314,7 @@ build() {
     local RBUILD_FIRMWARE=
 
     rm -rf "$SCRIPT_DIR/common/.packages"
-    mkdir "$SCRIPT_DIR/common/.packages"
+    mkdir -p "$SCRIPT_DIR/common/.packages"
 
     if (( $# == 0 ))
     then
