@@ -40,16 +40,6 @@ actions:
       base_url: https://radxa-repo.github.io/apt
       public_key: pubkey.gpg
       priority: 100
-  
-  - action: recipe
-    description: Add Armbian Repo
-    recipe: add_repo.yaml
-    variables:
-      origin: Armbian
-      suite: {{ $suite }}
-      base_url: https://apt.armbian.com
-      public_key: armbian.key
-      priority: 100
 
   - action: recipe
     description: Install {{ $flavor }} packages
@@ -60,6 +50,7 @@ actions:
   - action: apt
     description: Install Radxa packages
     packages:
+      - radxa-firmware
       - rsetup
       - libreelec-alsa-utils
       - radxa-otgutils

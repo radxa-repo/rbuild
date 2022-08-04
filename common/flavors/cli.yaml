@@ -8,7 +8,6 @@ actions:
   - action: apt
     description: Install base packages
     packages:
-      - armbian-firmware
       - init
       - initramfs-tools
       - sudo
