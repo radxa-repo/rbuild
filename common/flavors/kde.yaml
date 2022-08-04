@@ -12,11 +12,9 @@ actions:
       distro: {{ $distro }}
 
   - action: apt
-    description: Install Xfce specific packages
+    description: Install KDE specific packages
     packages:
-      - task-xfce-desktop
-      - xfce4-terminal
-      - blueman
+      - task-kde-desktop
 
   - action: recipe
     description: Install common desktop packages
