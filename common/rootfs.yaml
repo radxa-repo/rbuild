@@ -64,6 +64,18 @@ actions:
       rm -f /etc/resolv.conf
       rsetup update_hostname radxa
 
+      if [[ -f /usr/share/foot/foot.ini ]]
+      then
+        mkdir -p /etc/skel/.config/foot
+        cp /usr/share/foot/foot.ini /etc/skel/.config/foot/foot.ini
+      fi
+
+      if [[ -f /etc/sway/config ]]
+      then
+          mkdir -p /etc/skel/.config/sway
+        cp /etc/sway/config /etc/skel/.config/sway/config
+      fi
+
       systemctl enable haveged rsetup
   
   - action: recipe
