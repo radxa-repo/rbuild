@@ -60,7 +60,10 @@ actions:
     chroot: true
     command: |
       set -e
+
       rm -f /etc/resolv.conf
+      rsetup update_hostname radxa
+
       systemctl enable haveged rsetup
   
   - action: recipe
