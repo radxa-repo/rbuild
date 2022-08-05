@@ -274,7 +274,12 @@ debos() {
     if [[ $SCRIPT_DIR != $PWD ]]
     then
         DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR,destination=$SCRIPT_DIR" )
-        DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR/.rootfs,destination=$PWD/.rootfs" )
+        if [[ "$RBUILD_NATIVE_DEBOS" == "yes" ]]
+        then
+            ln -s "$(realpath "--relative-to=$PWD" "$SCRIPT_DIR/.rootfs")" .rootfs
+        else
+            DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR/.rootfs,destination=$PWD/.rootfs" )
+        fi
     fi
     
     local DEV_SHM_CURRENT=$(df -h /dev/shm | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)
