@@ -128,7 +128,7 @@ Supported image generation options:
                         This is a workaround for building Ubuntu image on Ubuntu host
                         Require running rbuild with sudo
     -d, --debug         Drop into a debug shell when build failed
-    -r, --rootfs        Use already generated rootfs if available
+    -r, --rootfs        Do not use saved rootfs and regenerate it
     -k, --kernel [deb]  Use custom Linux kernel package
     -f, --firmware [deb]
                         Use custom firmware package
@@ -446,7 +446,7 @@ build() {
     fi
 
     mkdir -p "$SCRIPT_DIR/.rootfs"
-    if [[ "$DEBOS_ROOTFS" != "yes" ]] || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar" ]]
+    if [[ "$DEBOS_ROOTFS" == "yes" ]] || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar" ]]
     then
         pushd "$SCRIPT_DIR"
         debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/rootfs.yaml" \
