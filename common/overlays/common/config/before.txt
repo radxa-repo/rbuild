@@ -1,5 +1,11 @@
 # Radxa First Boot Configuration
 # ==============================
+log "Running before.txt"
+#
+# Basic system settings
+#
+add_user radxa radxa
+user_append_group radxa sudo
 #
 # Disable SSH since our default account uses a weak password
 #
@@ -10,10 +16,6 @@ disable_service ssh
 regenerate_ssh_hostkey
 regenerate_machine_id
 #
-# Basic system settings
+# Update locale
 #
-add_user radxa radxa
-user_append_group radxa sudo
-update_hostname radxa
 update_locale en_US.UTF-8
-request_reboot
