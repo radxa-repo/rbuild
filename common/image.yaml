@@ -24,7 +24,7 @@ actions:
   - action: image-partition
     description: Set up on-disk layout
     imagename: {{ $image }}
-    imagesize: 3GiB
+    imagesize: 4GiB
     partitiontype: {{ $partition_type }}
     mountpoints:
       - mountpoint: /
