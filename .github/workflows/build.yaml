@@ -46,7 +46,7 @@ jobs:
           flavor: ${{ matrix.flavors }}
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
-        if: matrix.flavors == 'xfce'
+        if: matrix.flavors == 'kde'
         with:
           name: rbuild
           path: .output
