@@ -123,7 +123,7 @@ usage: $(basename "$0") [options] <board> [distro] [flavor]
 Supported image generation options:
     -s, --shrink        Shrink root partition after image is generated
                         Require root permission and additional dependencies
-    --no-compression    Do not compress the final image
+    --compression       Compress the final image with xz
     --native-debos      Use locally installed debos instead of docker
                         This is a workaround for building Ubuntu image on Ubuntu host
                         Require running rbuild with sudo
@@ -307,7 +307,7 @@ debos() {
 
 build() {
     local RBUILD_SHRINK=
-    local RBUILD_NO_COMPRESSION=
+    local RBUILD_COMPRESSION=
     local DEBOS_OPTIONS=
     local DEBOS_ROOTFS=
     local RBUILD_KERNEL=
@@ -332,8 +332,8 @@ build() {
                 RBUILD_SHRINK="yes"
                 shift
                 ;;
-            --no-compression)
-                RBUILD_NO_COMPRESSION="yes"
+            --compression)
+                RBUILD_COMPRESSION="yes"
                 shift
                 ;;
             -d | --debug)
@@ -484,7 +484,7 @@ build() {
     sha512sum "$IMAGE" > "$IMAGE.sha512"
     chown $USER: "$IMAGE"
     
-    if [[ "$RBUILD_NO_COMPRESSION" != "yes" ]]
+    if [[ "$RBUILD_COMPRESSION" == "yes" ]]
     then
         xz -fT 0 "$IMAGE"
     fi

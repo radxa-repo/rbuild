@@ -27,7 +27,7 @@ runs:
       run: |
         mkdir .output
         cd .output
-        sudo ../rbuild --native-debos -s ${{ inputs.board }} ${{ inputs.distro }} ${{ inputs.flavor }}
+        sudo ../rbuild --compression --native-debos -s ${{ inputs.board }} ${{ inputs.distro }} ${{ inputs.flavor }}
         sudo chown $USER ./*
     - name: Upload
       if: inputs.release-id != '' && inputs.github-token != ''
