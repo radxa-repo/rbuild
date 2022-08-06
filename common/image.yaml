@@ -32,7 +32,7 @@ actions:
       - mountpoint: /config
         partition: config
         options: [ x-systemd.automount ]
-{{ if eq $soc_family "efi" }}
+{{ if eq $soc_family "generic" }}
       - mountpoint: /boot/efi
         partition: boot
         options: [ x-systemd.automount ]
@@ -42,7 +42,7 @@ actions:
         fs: vfat
         start: 16MiB
         end: 32MiB
-{{ if eq $soc_family "efi" }}
+{{ if eq $soc_family "generic" }}
       - name: boot
         fs: vfat
         start: 32MiB
@@ -60,7 +60,7 @@ actions:
     setup-fstab: true
     setup-kernel-cmdline: true
 
-{{ if ne $soc_family "efi" }}
+{{ if ne $soc_family "generic" }}
 
   {{ if eq $firmware "" }}
 
@@ -97,7 +97,7 @@ actions:
     source: overlays/common
     destination: /
 
-{{ if eq $soc_family "efi" }}
+{{ if eq $soc_family "generic" }}
 
   - action: overlay
     description: Install systemd-boot supporting file
