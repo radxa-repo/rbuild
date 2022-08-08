@@ -33,7 +33,7 @@ runs:
           sudo chown $USER ./*
         fi
     - name: Upload
-      if: inputs.release-id != '' && inputs.github-token != '' && board != 'rootfs'
+      if: inputs.release-id != '' && inputs.github-token != '' && inputs.board != 'rootfs'
       uses: xresloader/upload-to-github-release@v1
       env:
           GITHUB_TOKEN: ${{ inputs.github-token }}
