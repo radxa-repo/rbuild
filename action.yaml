@@ -28,9 +28,12 @@ runs:
         mkdir .output
         cd .output
         sudo ../rbuild --compression --native-debos -s ${{ inputs.board }} ${{ inputs.distro }} ${{ inputs.flavor }}
-        sudo chown $USER ./*
+        if [ -n "$(ls -A ./* 2>/dev/null)" ]
+        then
+          sudo chown $USER ./*
+        fi
     - name: Upload
-      if: inputs.release-id != '' && inputs.github-token != ''
+      if: inputs.release-id != '' && inputs.github-token != '' && board != 'rootfs'
       uses: xresloader/upload-to-github-release@v1
       env:
           GITHUB_TOKEN: ${{ inputs.github-token }}
