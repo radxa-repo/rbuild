@@ -64,6 +64,8 @@ shrink() {
     echo "Partition $ROOT_PART is root partition."
 
     sudo kpartx -a "$1"
+    trap "sudo kpartx -d '$1'" SIGINT SIGQUIT SIGTSTP EXIT
+
     local i=0
     until [[ -e "$ROOT_DEV" ]]
     do
@@ -72,7 +74,6 @@ shrink() {
             echo "Waiting for device to be ready: $i"
             sleep 1
         else
-            sudo kpartx -d "$1"
             error $EXIT_SHRINK_NO_ROOTDEV "$ROOT_DEV"
         fi
     done
@@ -94,6 +95,7 @@ shrink() {
     local NEW_SIZE="$(( $START_SECTOR * $SECTOR_SIZE + $TARGET_BLOCKS * $BLOCK_SIZE ))"
 
     sudo kpartx -d "$1"
+    trap - SIGINT SIGQUIT SIGTSTP EXIT
 
     cat << EOF | parted ---pretend-input-tty "$1" > /dev/null 2>&1
 resizepart $ROOT_PART 
