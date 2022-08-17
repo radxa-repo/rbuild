@@ -139,6 +139,15 @@ actions:
 
 {{ end }}
 
+{{ if eq $soc_family "rockchip" }}
+
+  - action: apt
+    description: Install {{ $soc_family }} packages
+    packages:
+      - librockchip-mpp1
+      - librockchip-vpu0
+
+{{ end }}
 
   - action: run
     description: Product specific setup
