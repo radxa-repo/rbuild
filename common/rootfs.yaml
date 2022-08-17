@@ -47,14 +47,6 @@ actions:
     variables:
       distro: {{ $distro }}
 
-  - action: apt
-    description: Install Radxa packages
-    packages:
-      - radxa-firmware
-      - rsetup
-      - libreelec-alsa-utils
-      - radxa-otgutils
-
   - action: run
     description: OEM system setup
     chroot: true
