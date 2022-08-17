@@ -139,14 +139,14 @@ actions:
 
 {{ end }}
 
-  - action: recipe
-    description: Clean up rootfs
-    recipe: clean.yaml
 
   - action: run
-    description: OEM system setup
+    description: Product specific setup
     chroot: true
     command: |
       set -e
-
       rsetup update_hostname {{ $board }}
+
+  - action: recipe
+    description: Clean up rootfs
+    recipe: clean.yaml
