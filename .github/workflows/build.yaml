@@ -32,11 +32,10 @@ jobs:
       matrix:
         boards: ${{fromJSON(needs.query.outputs.boards)}}
         distros: ${{fromJSON(needs.query.outputs.distros)}}
-        flavors: ${{fromJSON(needs.query.outputs.flavors)}}
     steps:
       - name: Build
         uses: radxa-repo/rbuild@main
         with:
           board: ${{ matrix.boards }}
           distro: ${{ matrix.distros }}
-          flavor: ${{ matrix.flavors }}
+          flavor: kde
