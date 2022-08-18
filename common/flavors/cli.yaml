@@ -15,6 +15,7 @@ actions:
   - action: apt
     description: Install system utilities
     packages:
+      - apt-utils
       - bash-completion
       - bc
       - cloud-initramfs-growroot

@@ -14,7 +14,15 @@ actions:
   - action: apt
     description: Install KDE specific packages
     packages:
+      - kde-config-sddm
+      - kscreen
+      - kwin-x11
+      - plasma-nm
+      - qml-module-org-kde-newstuff
+      - sddm-theme-debian-breeze
+      - systemsettings
       - task-kde-desktop
+      - yakuake
 
   - action: recipe
     description: Install common desktop packages
