@@ -27,7 +27,7 @@ runs:
       run: |
         mkdir .output
         cd .output
-        sudo ../rbuild --compression --native-debos -s ${{ inputs.board }} ${{ inputs.distro }} ${{ inputs.flavor }}
+        sudo ../rbuild --compress --native-debos -s ${{ inputs.board }} ${{ inputs.distro }} ${{ inputs.flavor }}
         if [ -n "$(ls -A ./* 2>/dev/null)" ]
         then
           sudo chown $USER ./*

@@ -125,7 +125,7 @@ usage: $(basename "$0") [options] <board> [distro] [flavor]
 Supported image generation options:
     -s, --shrink        Shrink root partition after image is generated
                         Require root permission and additional dependencies
-    --compression       Compress the final image with xz
+    --compress          Compress the final image with xz
     --native-debos      Use locally installed debos instead of docker
                         This is a workaround for building Ubuntu image on Ubuntu host
                         Require running rbuild with sudo
@@ -339,7 +339,7 @@ build() {
                 RBUILD_SHRINK="yes"
                 shift
                 ;;
-            --compression)
+            --compress)
                 RBUILD_COMPRESSION="yes"
                 shift
                 ;;
