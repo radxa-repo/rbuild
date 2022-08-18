@@ -7,10 +7,6 @@ on:
     paths-ignore:
       - '**.md'
       - .gitignore
-  pull_request:
-    paths-ignore:
-      - '**.md'
-      - .gitignore
 
 jobs:
   query:
