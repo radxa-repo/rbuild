@@ -91,11 +91,6 @@ actions:
       /usr/lib/u-boot-{{ $board }}/setup.sh update_bootloader "$TARGET" {{ $soc_family }}
 
 {{ end }}
-  
-  - action: overlay
-    description: Install files for kernel and initramfs
-    source: overlays/common
-    destination: /
 
 {{ if eq $soc_family "generic" }}
 

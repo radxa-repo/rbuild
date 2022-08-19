@@ -46,6 +46,11 @@ actions:
     recipe: flavors/{{ $flavor }}.yaml
     variables:
       distro: {{ $distro }}
+  
+  - action: overlay
+    description: Install common system configs
+    source: overlays/common
+    destination: /
 
   - action: run
     description: OEM system setup
