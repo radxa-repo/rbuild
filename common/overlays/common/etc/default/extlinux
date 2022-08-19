@@ -1,11 +1,12 @@
 # Configure timeout to choose the kernel
-TIMEOUT="10"
+#TIMEOUT="3"
 
 # Configure default kernel to boot: check all kernels in `/boot/extlinux/extlinux.conf`
-#DEFAULT="kernel-5.10"
+#DEFAULT=""
 
 # Configure additional kernel configuration options in addition to `/etc/kernel/cmdline`
 #APPEND=""
 
 # Configure Device Tree overlays
-#FDTOVERLAYS=""
+# This is an array, and only file path after `/boot/dtbs/$VERSION/` is needed
+#FDTOVERLAYS=("")
