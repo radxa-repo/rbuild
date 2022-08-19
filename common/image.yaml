@@ -99,11 +99,6 @@ actions:
 
 {{ if eq $soc_family "generic" }}
 
-  - action: overlay
-    description: Install systemd-boot supporting file
-    source: overlays/efi
-    destination: /
-
   - action: apt
     description: Install upstream kernel
     packages:

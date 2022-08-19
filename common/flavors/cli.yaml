@@ -75,3 +75,4 @@ actions:
       - rsetup
       - libreelec-alsa-utils
       - radxa-otgutils
+      - radxa-bootutils

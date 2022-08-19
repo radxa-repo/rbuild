@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-
-/usr/bin/kernel-install add "$1" "$2"
-
-exit 0
