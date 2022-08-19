@@ -92,40 +92,35 @@ actions:
 
 {{ end }}
 
-{{ if eq $soc_family "generic" }}
+{{ if eq $kernel "" }}
 
-  - action: apt
-    description: Install upstream kernel
-    packages:
-  {{ if eq $distro "debian" }}
-      - linux-image-arm64
-  {{ else if eq $distro "ubuntu" }}
-      - linux-image-generic
-  {{ end }}
+  {{ if eq $soc_family "generic" }}
 
-  - action: run
-    description: Set up systemd-boot boot entry
-    chroot: true
-    script: sdboot.sh
+    - action: apt
+      description: Install upstream kernel
+      packages:
+    {{ if eq $distro "debian" }}
+        - linux-image-{{ $architecture }}
+    {{ else if eq $distro "ubuntu" }}
+        - linux-image-generic
+    {{ end }}
 
-{{ else }}
-
-  {{ if eq $kernel "" }}
+  {{ else }}
 
   - action: apt
     description: Install Radxa kernel
     packages:
       - linux-image-{{ $board }}
 
-  {{ else }}
+  {{ end }}
+
+{{ else }}
 
   - action: recipe
     description: Install custom kernel
     recipe: hack_install_deb.yaml
     variables:
       name: {{ $kernel }}
-
-  {{ end }}
 
 {{ end }}
 
