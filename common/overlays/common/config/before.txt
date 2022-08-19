@@ -15,10 +15,9 @@ resize_root
 #
 disable_service ssh
 #
-# Generate unique hardware fingerprint
+# Generate ssh hostkey
 #
 regenerate_ssh_hostkey
-regenerate_machine_id
 #
 # Update locale
 #
