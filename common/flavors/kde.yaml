@@ -19,7 +19,7 @@ actions:
       - kwin-x11
       - plasma-nm
       - qml-module-org-kde-newstuff
-      - sddm-theme-debian-breeze
+      - sddm-theme-breeze
       - systemsettings
       - task-kde-desktop
       - yakuake
