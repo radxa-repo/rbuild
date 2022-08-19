@@ -73,6 +73,12 @@ actions:
         cp /etc/sway/config /etc/skel/.config/sway/config
       fi
 
+      if command -v efibootmgr >/dev/null
+      then
+        mkdir -p /boot/efi/$(cat /etc/machine-id)
+        bootctl install
+      fi
+
       systemctl enable haveged rsetup
   
   - action: recipe
