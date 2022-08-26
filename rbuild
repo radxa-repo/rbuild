@@ -256,6 +256,8 @@ write-image() {
         echo "Writting raw image..."
         sudo dd if=$IMAGE of=$BLOCKDEV bs=16M conv=fsync status=progress
     fi
+
+    finish
     exit
 }
 
@@ -495,8 +497,11 @@ build() {
     then
         xz -fT 0 "$IMAGE"
     fi
-    
+}
+
+finish() {
     $NOTIFY_SEND "rbuild is finished."
+    TZ=UTC0 printf 'Total execution time: %(%H:%M:%S)T\n' $SECONDS
 }
 
 set -e
@@ -507,7 +512,7 @@ LANGUAGE="C"
 
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
-if which notify-send >/dev/null 2>&1
+if command -v notify-send >/dev/null
 then
     NOTIFY_SEND=notify-send
 else
@@ -518,4 +523,4 @@ SECONDS=0
 
 build "$@"
 
-TZ=UTC0 printf 'Total execution time: %(%H:%M:%S)T\n' $SECONDS
+finish
