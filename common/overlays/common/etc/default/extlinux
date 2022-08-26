@@ -8,5 +8,5 @@
 #APPEND=""
 
 # Configure Device Tree overlays
-# This is an array, and only file path after `/boot/dtbs/$VERSION/` is needed
-#FDTOVERLAYS=("")
+# It is ok to include non existing overlays here, as U-Boot will skip those
+FDTOVERLAYS=("rockchip/overlay/rk3568-fiq-debugger-uart2m0.dtbo")
