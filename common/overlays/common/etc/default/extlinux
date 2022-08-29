@@ -1,10 +1,15 @@
-# Configure timeout to choose the kernel
-#TIMEOUT="3"
+# Configure timeout to choose the kernel. Unit is 0.1s.
+# U-Boot's implementation will round up to nearest second
+# A special case is 0, which will wait indefinitely
+# The default timeout is 10
+#TIMEOUT="10"
 
-# Configure default kernel to boot: check all kernels in `/boot/extlinux/extlinux.conf`
+# Configure default kernel to boot
+# Check all kernel labels in `/boot/extlinux/extlinux.conf`
 #DEFAULT=""
 
-# Configure additional kernel configuration options in addition to `/etc/kernel/cmdline`
+# Configure additional kernel configuration options
+# This is in addition to `/etc/kernel/cmdline` options
 #APPEND=""
 
 # Configure Device Tree overlays
