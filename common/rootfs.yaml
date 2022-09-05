@@ -2,6 +2,12 @@
 {{- $suite := .suite -}}
 {{- $flavor := .flavor -}}
 
+{{- $debian_mirror := "https://deb.debian.org" -}}
+{{- $debian_area := "main contrib non-free" -}}
+{{- $ubuntu_mirror := "http://ports.ubuntu.com" -}}
+{{- $ubuntu_area := "main restricted universe multiverse" -}}
+{{- $radxa_mirror := "https://radxa-repo.github.io/apt" -}}
+
 {{- $architecture := .architecture -}}
 
 architecture: {{ $architecture }}
@@ -12,16 +18,42 @@ actions:
     variant: minbase
     components:
       - main
-{{ if eq $distro "debian"}}
+{{ if eq $distro "debian" }}
       - contrib
       - non-free
-    mirror: https://deb.debian.org/debian
-{{ else if eq $distro "ubuntu"}}
+    mirror: {{ $debian_mirror }}/debian
+{{ else if eq $distro "ubuntu" }}
       - restricted
       - universe
       - multiverse
-    mirror: http://ports.ubuntu.com/ubuntu-ports
+    mirror: {{ $ubuntu_mirror }}/ubuntu-ports
     check-gpg: false
+{{ end }}
+
+  - action: recipe
+    description: Add {{ $suite }}-updates Repo
+    recipe: add_repo.yaml
+    variables:
+      suite: {{ $suite }}-updates
+{{ if eq $distro "debian" }}
+      base_url: {{ $debian_mirror }}/debian
+      area: {{ $debian_area }}
+{{ else if eq $distro "ubuntu" }}
+      base_url: {{ $ubuntu_mirror }}/ubuntu-ports
+      area: {{ $ubuntu_area }}
+{{ end }}
+
+  - action: recipe
+    description: Add {{ $suite }}-security Repo
+    recipe: add_repo.yaml
+    variables:
+      suite: {{ $suite }}-security
+{{ if eq $distro "debian" }}
+      base_url: {{ $debian_mirror }}/debian-security
+      area: {{ $debian_area }}
+{{ else if eq $distro "ubuntu" }}
+      base_url: {{ $ubuntu_mirror }}/ubuntu-ports
+      area: {{ $ubuntu_area }}
 {{ end }}
 
   - action: apt
@@ -37,7 +69,7 @@ actions:
     variables:
       origin: Radxa
       suite: {{ $suite }}
-      base_url: https://radxa-repo.github.io/apt
+      base_url: {{ $radxa_mirror }}
       public_key: pubkey.gpg
       priority: 100
 

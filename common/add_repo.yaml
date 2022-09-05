@@ -1,14 +1,15 @@
-{{- $origin := .origin -}}
-{{- $suite := .suite }}
+{{- $suite := .suite -}}
 {{- $base_url := .base_url -}}
-{{- $public_key := .public_key -}}
-{{- $priority := or .priority 500 -}}
+{{- $origin := or .origin .suite -}}
+{{- $public_key := or .public_key "" -}}
+{{- $priority := or .priority "500" -}}
 {{- $area := or .area "main" -}}
 
 {{- $architecture := .architecture -}}
 architecture: {{ $architecture }}
 
 actions:
+{{ if ne $public_key "" }}
   - action: download
     description: Download public key
     url: {{ $base_url }}/{{ $public_key }}
@@ -17,14 +18,29 @@ actions:
   - action: overlay
     description: Copy public key to rootfs
     origin: {{ $origin }}-archive-keyring
-    destination: /usr/share/keyrings/{{ $origin }}-archive-keyring
+    destination: /etc/apt/trusted.gpg.d/{{ $origin }}-archive-keyring
   
+  - action: run
+    description: Dearmor key
+    chroot: true
+    command: |
+      set -e
+      gpg --dearmor /etc/apt/trusted.gpg.d/{{ $origin }}-archive-keyring
+      rm /etc/apt/trusted.gpg.d/{{ $origin }}-archive-keyring
+{{ end }}
+
   - action: run
     description: Set up repo
     chroot: true
     command: |
       set -e
-      gpg --dearmor /usr/share/keyrings/{{ $origin }}-archive-keyring
-      rm /usr/share/keyrings/{{ $origin }}-archive-keyring
-      echo "deb [signed-by=/usr/share/keyrings/{{ $origin }}-archive-keyring.gpg] {{ $base_url }} {{ $suite }} {{ $area }}" | tee /etc/apt/sources.list.d/{{ $origin }}.list
-      bash -c "printf 'Package: *\nPin: origin {{ $origin }}\nPin-Priority: {{ $priority }}' | tee /etc/apt/preferences.d/{{ $origin }}"
+      echo "deb {{ $base_url }} {{ $suite }} {{ $area }}" > /etc/apt/sources.list.d/{{ $origin }}.list
+
+{{ if ne $priority "500" }}
+  - action: run
+    description: Update repo priority
+    chroot: true
+    command: |
+      set -e
+      bash -c "printf 'Package: *\nPin: origin {{ $origin }}\nPin-Priority: {{ $priority }}' > /etc/apt/preferences.d/{{ $origin }}"
+{{ end }}
