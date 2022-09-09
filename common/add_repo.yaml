@@ -2,7 +2,7 @@
 {{- $base_url := .base_url -}}
 {{- $origin := or .origin .suite -}}
 {{- $public_key := or .public_key "" -}}
-{{- $priority := or .priority "500" -}}
+{{- $priority := or .priority "" -}}
 {{- $area := or .area "main" -}}
 
 {{- $architecture := .architecture -}}
@@ -36,7 +36,7 @@ actions:
       set -e
       echo "deb {{ $base_url }} {{ $suite }} {{ $area }}" > /etc/apt/sources.list.d/{{ $origin }}.list
 
-{{ if ne $priority "500" }}
+{{ if ne $priority "" }}
   - action: run
     description: Update repo priority
     chroot: true
