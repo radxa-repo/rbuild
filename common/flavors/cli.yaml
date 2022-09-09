@@ -69,6 +69,11 @@ actions:
       - usbutils
 
   - action: apt
+    description: Install Radxa backported packages
+    packages:
+      - u-boot-menu
+
+  - action: apt
     description: Install Radxa packages
     packages:
       - radxa-firmware
