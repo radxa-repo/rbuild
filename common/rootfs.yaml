@@ -44,6 +44,19 @@ actions:
 {{ end }}
 
   - action: recipe
+    description: Add {{ $suite }}-backports Repo
+    recipe: add_repo.yaml
+    variables:
+      suite: {{ $suite }}-backports
+{{ if eq $distro "debian" }}
+      base_url: {{ $debian_mirror }}/debian
+      area: {{ $debian_area }}
+{{ else if eq $distro "ubuntu" }}
+      base_url: {{ $ubuntu_mirror }}/ubuntu-ports
+      area: {{ $ubuntu_area }}
+{{ end }}
+
+  - action: recipe
     description: Add {{ $suite }}-security Repo
     recipe: add_repo.yaml
     variables:
