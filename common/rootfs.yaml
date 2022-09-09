@@ -84,7 +84,6 @@ actions:
       suite: {{ $suite }}
       base_url: {{ $radxa_mirror }}
       public_key: pubkey.gpg
-      priority: 100
 
   - action: recipe
     description: Install {{ $flavor }} packages
