@@ -105,19 +105,19 @@ actions:
       rm -f /etc/resolv.conf
       rsetup update_hostname radxa
 
-      if [ -f /usr/share/foot/foot.ini ]
+      if grep -q "installed" <<< "$(apt list --installed foot 2>/dev/null)"
       then
         mkdir -p /etc/skel/.config/foot
         cp /usr/share/foot/foot.ini /etc/skel/.config/foot/foot.ini
       fi
 
-      if [ -f /etc/sway/config ]
+      if grep -q "installed" <<< "$(apt list --installed sway 2>/dev/null)"
       then
           mkdir -p /etc/skel/.config/sway
         cp /etc/sway/config /etc/skel/.config/sway/config
       fi
 
-      if command -v efibootmgr >/dev/null
+      if grep -q "installed" <<< "$(apt list --installed efibootmgr 2>/dev/null)"
       then
         mkdir -p /boot/efi/$(cat /etc/machine-id)
         bootctl install
