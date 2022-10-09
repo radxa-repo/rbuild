@@ -131,6 +131,8 @@ actions:
     packages:
       - librockchip-mpp1
       - librockchip-vpu0
+      - libdrm-cursor
+      - libkms1
 
 {{ end }}
 
