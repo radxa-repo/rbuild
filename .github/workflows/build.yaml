@@ -39,3 +39,7 @@ jobs:
           board: ${{ matrix.boards }}
           distro: ${{ matrix.distros }}
           flavor: kde
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          path: ${{ matrix.boards }}*
