@@ -42,4 +42,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
+          name: ${{ matrix.boards }}_${{ matrix.distros }}_kde
           path: .output
