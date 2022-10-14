@@ -39,8 +39,15 @@ jobs:
           board: ${{ matrix.boards }}
           distro: ${{ matrix.distros }}
           flavor: kde
-      - name: Upload artifacts
+      - name: Upload image artifacts
+        if: ${{ matrix.boards }} != 'rootfs'
         uses: actions/upload-artifact@v3
         with:
           name: ${{ matrix.boards }}_${{ matrix.distros }}_kde
           path: .output
+      - name: Upload rootfs artifacts
+        if: ${{ matrix.boards }} == 'rootfs'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.boards }}_${{ matrix.distros }}_kde
+          path: .rootfs

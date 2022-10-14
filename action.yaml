@@ -32,7 +32,7 @@ runs:
         then
           sudo chown $USER ./*
         fi
-    - name: Upload
+    - name: Upload image
       if: inputs.release-id != '' && inputs.github-token != '' && inputs.board != 'rootfs'
       uses: xresloader/upload-to-github-release@v1
       env:
@@ -40,6 +40,15 @@ runs:
       with:
         release_id: ${{ inputs.release-id }}
         file: .output/*
+        draft: false
+    - name: Upload rootfs
+      if: inputs.release-id != '' && inputs.github-token != '' && inputs.board == 'rootfs'
+      uses: xresloader/upload-to-github-release@v1
+      env:
+          GITHUB_TOKEN: ${{ inputs.github-token }}
+      with:
+        release_id: ${{ inputs.release-id }}
+        file: .rootfs/*
         draft: false
     - name: Rollback release
       if: failure() && inputs.release-id != '' && inputs.github-token != ''
