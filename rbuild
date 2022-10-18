@@ -31,7 +31,7 @@ error() {
             echo "Your /dev/shm is too small. Current '$2', require '$3'." >&2
             ;;
         *)
-            echo "Unknown exit code." >&2
+            echo "Unknown error code $1." >&2
             ;;
     esac
     
