@@ -33,7 +33,7 @@ error() {
             ;;
         $EXIT_RBUILD_AS_ROOT)
             cat << EOF >&2
-You are running $(basename "$0") with root permission, which is not supported.
+You are running $(basename "$0") with root permission, which is not recommended for normal development.
 If you need root permission to run docker, please add your account to docker group, reboot, and try again.
 EOF
             ;;
@@ -328,6 +328,7 @@ build() {
     local DEBOS_ROOTFS=
     local RBUILD_KERNEL=
     local RBUILD_FIRMWARE=
+    local RBUILD_AS_ROOT="false"
 
     rm -rf "$SCRIPT_DIR/common/.packages"
     mkdir -p "$SCRIPT_DIR/common/.packages"
@@ -387,12 +388,21 @@ build() {
             -h | --help)
                 usage 0
                 ;;
+            --root)
+                RBUILD_AS_ROOT="true"
+                shift
+                ;;
             -*)
                 error $EXIT_UNKNOWN_OPTION "$1"
                 ;;
             *) break ;;
         esac
     done
+
+    if (( EUID == 0 )) && ! "$RBUILD_AS_ROOT"
+    then
+        error $EXIT_RBUILD_AS_ROOT
+    fi
 
     if (( $# < 1 ))
     then
@@ -518,11 +528,6 @@ LANG="C"
 LANGUAGE="C"
 
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
-
-if (( EUID == 0 ))
-then
-    error $EXIT_RBUILD_AS_ROOT
-fi
 
 if command -v notify-send >/dev/null
 then
