@@ -30,24 +30,25 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        boards: ${{fromJSON(needs.query.outputs.boards)}}
-        distros: ${{fromJSON(needs.query.outputs.distros)}}
+        boards: ${{ fromJSON(needs.query.outputs.boards) }}
+        distros: ${{ fromJSON(needs.query.outputs.distros )}}
+        flavors: [ kde ]
     steps:
       - name: Build
         uses: radxa-repo/rbuild@main
         with:
           board: ${{ matrix.boards }}
           distro: ${{ matrix.distros }}
-          flavor: kde
+          flavor: ${{ matrix.flavors }}
       - name: Upload image artifacts
         if: ${{ matrix.boards }} != 'rootfs'
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.boards }}_${{ matrix.distros }}_kde
+          name: ${{ matrix.boards }}_${{ matrix.distros }}_${{ matrix.flavors }}
           path: .output
       - name: Upload rootfs artifacts
         if: ${{ matrix.boards }} == 'rootfs'
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ matrix.boards }}_${{ matrix.distros }}_kde
+          name: ${{ matrix.boards }}_${{ matrix.distros }}_${{ matrix.flavors }}
           path: .rootfs
