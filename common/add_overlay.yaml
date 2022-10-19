@@ -1,0 +1,15 @@
+{{- $soc_family := .soc_family -}}
+{{- $overlay := .overlay -}}
+
+{{- $architecture := .architecture -}}
+architecture: {{ $architecture }}
+
+actions:
+  - action: run
+    description: Add device tree overlay
+    chroot: true
+    command: |
+      set -e
+      mkdir -p /boot/dtbo
+      cp /usr/lib/linux-image-*/{{ $soc_family }}/overlays/{{ $overlay }}.dtbo /boot/dtbo
+      u-boot-update
