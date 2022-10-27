@@ -12,6 +12,8 @@
 {{- $kernel := .kernel -}}
 {{- $firmware := .firmware -}}
 
+{{- $radxa_mirror := "https://radxa-repo.github.io/apt" -}}
+
 {{- $architecture := .architecture -}}
 
 architecture: {{ $architecture }}
@@ -124,15 +126,21 @@ actions:
 
 {{ end }}
 
-{{ if eq $soc_family "rockchip" }}
+  - action: recipe
+    description: Add {{ $soc_family }}-{{ $suite }} Repo
+    recipe: add_repo.yaml
+    variables:
+      origin: Radxa
+      suite: {{ $soc_family }}-{{ $suite }}
+      base_url: {{ $radxa_mirror }}
+      priority: 1001
+
+{{ if eq $flavor "kde" }}
 
   - action: apt
-    description: Install {{ $soc_family }} packages
+    description: Install {{ $board }} packages
     packages:
-      - librockchip-mpp1
-      - librockchip-vpu0
-      - libdrm-cursor
-      - libkms1
+      - task-{{ $board }}
 
 {{ end }}
 
