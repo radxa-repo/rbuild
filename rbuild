@@ -66,12 +66,12 @@ shrink() {
     local PARTITION_TYPE="$(blkid -o value -s PTTYPE $1)"
     local SECTOR_SIZE="$(sgdisk -p "$1" | grep "Sector size (logical):" | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)"
     local START_SECTOR="$(sgdisk -i "$ROOT_PART" "$1" | grep "First sector:" | cut -d ' ' -f 3)"
-    local LOOP_DEV="$(basename $(sudo kpartx -l "$1" | head -n 1 | cut -d ' ' -f 5))"
-    local ROOT_DEV="/dev/mapper/${LOOP_DEV}p${ROOT_PART}"
     echo "Partition $ROOT_PART is root partition."
 
     sudo kpartx -a "$1"
     trap "sudo kpartx -d '$1'" SIGINT SIGQUIT SIGTSTP EXIT
+    local LOOP_DEV="$(basename $(sudo kpartx -l "$1" | head -n 1 | cut -d ' ' -f 5))"
+    local ROOT_DEV="/dev/mapper/${LOOP_DEV}p${ROOT_PART}"
 
     local i=0
     until [[ -e "$ROOT_DEV" ]]
