@@ -128,7 +128,7 @@ actions:
 
       sed -i 's/\${_BOOT_DIRECTORY}\${U_BOOT_FDT_OVERLAYS_DIR}/\${U_BOOT_FDT_OVERLAYS_DIR}/g' /usr/sbin/u-boot-update
 
-      systemctl enable haveged rsetup
+      systemctl enable haveged
   
   - action: recipe
     description: Clean up rootfs
