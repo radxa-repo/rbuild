@@ -4,3 +4,4 @@
 *.deb
 .rootfs
 common/.packages
+/.vscode*
