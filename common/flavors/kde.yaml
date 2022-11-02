@@ -15,6 +15,7 @@ actions:
     description: Install KDE specific packages
     packages:
       - kde-config-sddm
+      - kinfocenter
       - kscreen
       - kwin-x11
       - plasma-nm
