@@ -6,6 +6,9 @@ log "Running before.txt"
 #
 add_user radxa radxa
 user_append_group radxa sudo
+user_append_group radxa audio
+user_append_group radxa video
+user_append_group radxa render
 #
 # Resize root partition
 #
