@@ -135,10 +135,10 @@ actions:
       base_url: {{ $radxa_mirror }}
       priority: 1001
 
-{{ if eq $flavor "kde" }}
+{{ if and (eq $flavor "kde") (eq $distro "debian") }}
 
   - action: apt
-    description: Install {{ $board }} packages
+    description: Install task-{{ $board }} package
     packages:
       - task-{{ $board }}
 
