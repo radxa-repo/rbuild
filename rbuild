@@ -70,20 +70,21 @@ shrink() {
 
     sudo kpartx -a "$1"
     trap "sudo kpartx -d '$1'" SIGINT SIGQUIT SIGTSTP EXIT
-    local LOOP_DEV="$(basename $(sudo kpartx -l "$1" | head -n 1 | cut -d ' ' -f 5))"
-    local ROOT_DEV="/dev/mapper/${LOOP_DEV}p${ROOT_PART}"
-
-    local i=0
-    until [[ -e "$ROOT_DEV" ]]
+    local LOOP_DEV=
+    for i in /sys/class/block/*/loop/backing_file
     do
-        if (( i++ < 5))
+        if grep -q "$1" "$i"
         then
-            echo "Waiting for device to be ready: $i"
-            sleep 1
-        else
-            error $EXIT_SHRINK_NO_ROOTDEV "$ROOT_DEV"
+            LOOP_DEV="$(basename "$(dirname "$(dirname "$i")")")"
+            break
         fi
     done
+    local ROOT_DEV="/dev/mapper/${LOOP_DEV}p${ROOT_PART}"
+
+    if [[ ! -e "$ROOT_DEV" ]]
+    then
+        error $EXIT_SHRINK_NO_ROOTDEV "$ROOT_DEV"
+    fi
 
     local TOTAL_BLOCKS="$(sudo tune2fs -l "$ROOT_DEV" | grep '^Block count:' | tr -s ' ' | cut -d ' ' -f 3)"
     local TARGET_BLOCKS="$(sudo resize2fs -P "$ROOT_DEV" 2> /dev/null | cut -d ' ' -f 7)"
