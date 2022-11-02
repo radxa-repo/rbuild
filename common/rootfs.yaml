@@ -80,7 +80,7 @@ actions:
     description: Add Radxa Repo
     recipe: add_repo.yaml
     variables:
-      origin: Radxa
+      origin: radxa
       suite: {{ $suite }}
       base_url: {{ $radxa_mirror }}
       public_key: pubkey.gpg

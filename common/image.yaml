@@ -130,7 +130,7 @@ actions:
     description: Add {{ $soc_family }}-{{ $suite }} Repo
     recipe: add_repo.yaml
     variables:
-      origin: Radxa
+      origin: radxa-{{ $soc_family }}
       suite: {{ $soc_family }}-{{ $suite }}
       base_url: {{ $radxa_mirror }}
       priority: 1001
