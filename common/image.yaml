@@ -60,7 +60,8 @@ actions:
   - action: filesystem-deploy
     description: Deploying filesystem onto image
     setup-fstab: true
-    setup-kernel-cmdline: true
+    # u-boot-menu will add root= in append for us
+    setup-kernel-cmdline: false
 
 {{ if ne $soc_family "generic" }}
 
