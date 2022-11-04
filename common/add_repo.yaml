@@ -42,5 +42,5 @@ actions:
     chroot: true
     command: |
       set -e
-      bash -c "printf 'Package: *\nPin: origin {{ $origin }}\nPin-Priority: {{ $priority }}' > /etc/apt/preferences.d/{{ $origin }}"
+      bash -c "printf 'Package: *\nPin: release a={{ $suite }}\nPin-Priority: {{ $priority }}\n' > /etc/apt/preferences.d/{{ $origin }}"
 {{ end }}
