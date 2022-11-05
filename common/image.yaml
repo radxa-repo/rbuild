@@ -11,6 +11,7 @@
 
 {{- $kernel := .kernel -}}
 {{- $firmware := .firmware -}}
+{{- $install_vendor_package := or .install_vendor_package "true" -}}
 
 {{- $radxa_mirror := "https://radxa-repo.github.io/apt" -}}
 
@@ -127,6 +128,8 @@ actions:
 
 {{ end }}
 
+{{ if eq $install_vendor_package "true" }}
+
   - action: recipe
     description: Add {{ $soc_family }}-{{ $suite }} Repo
     recipe: add_repo.yaml
@@ -136,7 +139,7 @@ actions:
       base_url: {{ $radxa_mirror }}
       priority: 1001
 
-{{ if and (eq $flavor "kde") (eq $distro "debian") }}
+  {{ if and (eq $flavor "kde") (eq $distro "debian") }}
 
   - action: run
     description: Downgrade to vendor packages
@@ -150,6 +153,8 @@ actions:
     description: Install task-{{ $board }} package
     packages:
       - task-{{ $board }}
+
+  {{ end }}
 
 {{ end }}
 
