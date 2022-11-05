@@ -154,6 +154,11 @@ actions:
     packages:
       - task-{{ $board }}
 
+  - action: overlay
+    description: Install vendor overlays
+    source: overlays/{{ $soc_family }}
+    destination: /
+
   {{ end }}
 
 {{ end }}
