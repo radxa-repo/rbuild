@@ -7,6 +7,9 @@ inputs:
     required: true
   flavor:
     required: false
+  artifacts:
+    required: false
+    default: 'false'
   release-id:
     required: false
   github-token:
@@ -32,6 +35,18 @@ runs:
         then
           sudo chown $USER ./*
         fi
+    - name: Upload image artifacts
+      if: inputs.artifacts == 'true' && inputs.boards != 'rootfs'
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.boards }}_${{ matrix.distros }}_${{ matrix.flavors }}
+        path: .output
+    - name: Upload rootfs artifacts
+      if: inputs.artifacts == 'true' && inputs.boards == 'rootfs'
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ matrix.boards }}_${{ matrix.distros }}_${{ matrix.flavors }}
+        path: .rootfs
     - name: Upload image
       if: inputs.release-id != '' && inputs.github-token != '' && inputs.board != 'rootfs'
       uses: xresloader/upload-to-github-release@v1

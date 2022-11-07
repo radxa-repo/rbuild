@@ -40,15 +40,4 @@ jobs:
           board: ${{ matrix.boards }}
           distro: ${{ matrix.distros }}
           flavor: ${{ matrix.flavors }}
-      - name: Upload image artifacts
-        if: matrix.boards != 'rootfs'
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.boards }}_${{ matrix.distros }}_${{ matrix.flavors }}
-          path: .output
-      - name: Upload rootfs artifacts
-        if: matrix.boards == 'rootfs'
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.boards }}_${{ matrix.distros }}_${{ matrix.flavors }}
-          path: .rootfs
+          artifacts: true
