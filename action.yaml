@@ -6,7 +6,7 @@ inputs:
   distro:
     required: true
   flavor:
-    required: false
+    required: true
   artifacts:
     required: false
     default: 'false'
@@ -21,7 +21,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: radxa-repo/rbuild
-    - name: Build
+    - name: Install dependencies
       shell: bash
       run: |
         sudo apt install -y debos
@@ -30,22 +30,22 @@ runs:
       run: |
         mkdir .output
         cd .output
-        sudo ../rbuild --compress --native-debos -s --root ${{ inputs.board }} ${{ inputs.distro }} ${{ inputs.flavor }}
+        sudo ../rbuild --compress --native-debos --shrink --rootfs ${{ inputs.board }} ${{ inputs.distro }} ${{ inputs.flavor }}
         if [ -n "$(ls -A ./* 2>/dev/null)" ]
         then
           sudo chown $USER ./*
         fi
     - name: Upload image artifacts
-      if: inputs.artifacts == 'true' && inputs.boards != 'rootfs'
+      if: inputs.artifacts == 'true' && inputs.board != 'rootfs'
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.boards }}_${{ matrix.distros }}_${{ matrix.flavors }}
+        name: ${{ inputs.board }}_${{ inputs.distro }}_${{ inputs.flavor }}
         path: .output
     - name: Upload rootfs artifacts
-      if: inputs.artifacts == 'true' && inputs.boards == 'rootfs'
+      if: inputs.artifacts == 'true' && inputs.board == 'rootfs'
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ matrix.boards }}_${{ matrix.distros }}_${{ matrix.flavors }}
+        name: ${{ inputs.board }}_${{ inputs.distro }}_${{ inputs.flavor }}
         path: .rootfs
     - name: Upload image
       if: inputs.release-id != '' && inputs.github-token != '' && inputs.board != 'rootfs'
