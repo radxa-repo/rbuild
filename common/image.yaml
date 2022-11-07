@@ -128,7 +128,7 @@ actions:
 
 {{ end }}
 
-{{ if eq $install_vendor_package "true" }}
+{{ if and (eq $install_vendor_package "true") (eq $flavor "kde") (eq $distro "debian") }}
 
   - action: recipe
     description: Add {{ $soc_family }}-{{ $suite }} Repo
@@ -138,8 +138,6 @@ actions:
       suite: {{ $soc_family }}-{{ $suite }}
       base_url: {{ $radxa_mirror }}
       priority: 1001
-
-  {{ if and (eq $flavor "kde") (eq $distro "debian") }}
 
   - action: run
     description: Downgrade to vendor packages
@@ -158,8 +156,6 @@ actions:
     description: Install vendor overlays
     source: overlays/{{ $soc_family }}
     destination: /
-
-  {{ end }}
 
 {{ end }}
 
