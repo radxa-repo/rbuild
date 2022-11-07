@@ -30,7 +30,9 @@ runs:
       run: |
         mkdir .output
         cd .output
-        sudo ../rbuild --compress --native-debos --shrink --rootfs ${{ inputs.board }} ${{ inputs.distro }} ${{ inputs.flavor }}
+        # --root is a hidden argument so we can build as root.
+        # DO NOT CONFUSE WITH --rootfs!
+        sudo ../rbuild --compress --native-debos --shrink --root ${{ inputs.board }} ${{ inputs.distro }} ${{ inputs.flavor }}
         if [ -n "$(ls -A ./* 2>/dev/null)" ]
         then
           sudo chown $USER ./*
