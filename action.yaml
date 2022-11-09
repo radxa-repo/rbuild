@@ -14,6 +14,9 @@ inputs:
     required: false
   github-token:
     required: false
+  prebuilt-rootfs:
+    required: false
+    default: 'false'
 runs:
   using: "composite"
   steps:
@@ -24,7 +27,14 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
+        sudo apt update
         sudo apt install -y debos
+    - name: Fetch prebuilt rootfs
+      if: inputs.prebuilt-rootfs == 'true'
+      uses: actions/download-artifact@v3
+      with:
+        name: rootfs_${{ inputs.distro }}_${{ inputs.flavor }}
+        path: .rootfs
     - name: Build
       shell: bash
       run: |
