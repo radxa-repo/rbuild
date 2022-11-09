@@ -57,7 +57,6 @@ runs:
       with:
         release_id: ${{ inputs.release-id }}
         file: .output/*
-        draft: false
     - name: Upload rootfs
       if: inputs.release-id != '' && inputs.github-token != '' && inputs.board == 'rootfs'
       uses: xresloader/upload-to-github-release@v1
