@@ -27,8 +27,8 @@ runs:
     - name: Install dependencies
       shell: bash
       run: |
-        sudo apt update
-        sudo apt install -y debos
+        sudo apt-get update
+        sudo apt-get install -y debos
     - name: Fetch prebuilt rootfs
       if: inputs.prebuilt-rootfs == 'true'
       uses: actions/download-artifact@v3
