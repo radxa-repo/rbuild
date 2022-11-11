@@ -43,7 +43,7 @@ jobs:
           artifacts: true
 
   build-images:
-    needs: build-rootfs
+    needs: [ query, build-rootfs ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
