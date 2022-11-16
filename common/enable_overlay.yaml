@@ -1,4 +1,3 @@
-{{- $soc_family := .soc_family -}}
 {{- $overlay := .overlay -}}
 
 {{- $architecture := .architecture -}}
@@ -10,6 +9,5 @@ actions:
     chroot: true
     command: |
       set -e
-      mkdir -p /boot/dtbo
-      cp /usr/lib/linux-image-*/{{ $soc_family }}/overlays/{{ $overlay }}.dtbo /boot/dtbo
+      mv /boot/dtbo/{{ $overlay }}.dtbo.disabled /boot/dtbo/{{ $overlay }}.dtbo
       u-boot-update
