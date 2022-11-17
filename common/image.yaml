@@ -160,9 +160,9 @@ actions:
 {{ end }}
 
   - action: run
-    description: Add device tree overlay
+    description: Preload device tree overlay from default kernel
     chroot: true
-    script: copy_overlay.bash
+    script: copy_overlay.bash {{ $soc_family }}
 
   - action: run
     description: Product specific setup
