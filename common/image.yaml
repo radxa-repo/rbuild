@@ -162,14 +162,7 @@ actions:
   - action: run
     description: Add device tree overlay
     chroot: true
-    command: |
-      set -e
-      shopt -s nullglob
-      mkdir -p /boot/dtbo
-      for i in /usr/lib/linux-image-*/{{ $soc_family }}/overlays/*.dtbo
-      do
-        cp "$i" /boot/dtbo/$(basename "$i").disabled
-      done
+    script: copy_overlay.bash
 
   - action: run
     description: Product specific setup
