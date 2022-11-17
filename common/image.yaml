@@ -64,6 +64,37 @@ actions:
     # u-boot-menu will add root= in append for us
     setup-kernel-cmdline: false
 
+{{ if and (eq $install_vendor_package "true") (eq $flavor "kde") (eq $distro "debian") }}
+
+  - action: recipe
+    description: Add {{ $soc_family }}-{{ $suite }} Repo
+    recipe: add_repo.yaml
+    variables:
+      origin: radxa-{{ $soc_family }}
+      suite: {{ $soc_family }}-{{ $suite }}
+      base_url: {{ $radxa_mirror }}
+      priority: 1001
+
+  - action: run
+    description: Downgrade to vendor packages
+    chroot: true
+    command: |
+      set -e
+      apt update
+      apt full-upgrade -y --allow-downgrades
+
+  - action: apt
+    description: Install task-{{ $board }} package
+    packages:
+      - task-{{ $board }}
+
+  - action: overlay
+    description: Install vendor overlays
+    source: overlays/{{ $soc_family }}
+    destination: /
+
+{{ end }}
+
 {{ if ne $soc_family "generic" }}
 
   {{ if eq $firmware "" }}
@@ -125,37 +156,6 @@ actions:
     recipe: hack_install_deb.yaml
     variables:
       name: {{ $kernel }}
-
-{{ end }}
-
-{{ if and (eq $install_vendor_package "true") (eq $flavor "kde") (eq $distro "debian") }}
-
-  - action: recipe
-    description: Add {{ $soc_family }}-{{ $suite }} Repo
-    recipe: add_repo.yaml
-    variables:
-      origin: radxa-{{ $soc_family }}
-      suite: {{ $soc_family }}-{{ $suite }}
-      base_url: {{ $radxa_mirror }}
-      priority: 1001
-
-  - action: run
-    description: Downgrade to vendor packages
-    chroot: true
-    command: |
-      set -e
-      apt update
-      apt full-upgrade -y --allow-downgrades
-
-  - action: apt
-    description: Install task-{{ $board }} package
-    packages:
-      - task-{{ $board }}
-
-  - action: overlay
-    description: Install vendor overlays
-    source: overlays/{{ $soc_family }}
-    destination: /
 
 {{ end }}
 
