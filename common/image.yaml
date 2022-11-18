@@ -10,6 +10,7 @@
 {{- $partition_type := .partition_type -}}
 
 {{- $kernel := .kernel -}}
+{{- $header := .header -}}
 {{- $firmware := .firmware -}}
 {{- $install_vendor_package := or .install_vendor_package "true" -}}
 
@@ -156,6 +157,38 @@ actions:
     recipe: hack_install_deb.yaml
     variables:
       name: {{ $kernel }}
+
+{{ end }}
+
+{{ if eq $header "" }}
+
+  {{ if eq $soc_family "generic" }}
+
+    - action: apt
+      description: Install upstream kernel header
+      packages:
+    {{ if eq $distro "debian" }}
+        - linux-headers-{{ $architecture }}
+    {{ else if eq $distro "ubuntu" }}
+        - linux-headers-generic
+    {{ end }}
+
+  {{ else }}
+
+  - action: apt
+    description: Install Radxa kernel header
+    packages:
+      - linux-headers-{{ $board }}
+
+  {{ end }}
+
+{{ else }}
+
+  - action: recipe
+    description: Install custom kernel header
+    recipe: hack_install_deb.yaml
+    variables:
+      name: {{ $header }}
 
 {{ end }}
 

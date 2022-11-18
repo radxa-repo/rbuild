@@ -140,6 +140,8 @@ Supported image generation options:
     -d, --debug             Drop into a debug shell when build failed
     -r, --rootfs            Do not use saved rootfs and regenerate it
     -k, --kernel [deb]      Use custom Linux kernel package
+                            This option also requires the matching kernel header package
+                            under the same folder
     -f, --firmware [deb]    Use custom firmware package
     -v, --no-vendor-package Do not install vendor packages
 
@@ -368,8 +370,10 @@ build() {
                 shift
                 ;;
             -k | --kernel)
-                cp "$2" "$SCRIPT_DIR/common/.packages/$(basename "$2")"
                 RBUILD_KERNEL="$(basename $2)"
+                cp "$2" "$SCRIPT_DIR/common/.packages/$RBUILD_KERNEL"
+                RBUILD_HEADER="linux-headers-${RBUILD_KERNEL#linux-image-}"
+                cp "$(dirname $2)/$RBUILD_HEADER" "$SCRIPT_DIR/common/.packages/$RBUILD_HEADER"
                 shift 2
                 ;;
             -f | --firmware)
@@ -499,7 +503,7 @@ build() {
         -t board:"$BOARD" -t distro:"$DISTRO" -t suite:"$SUITE" -t flavor:"$FLAVOR" \
         -t soc:"$SOC" -t soc_family:"$SOC_FAMILY" \
         -t image:"$IMAGE" -t efi_end:"$EFI_END" -t partition_type:"$PARTITION_TYPE" \
-        -t kernel:"$RBUILD_KERNEL" -t firmware:"$RBUILD_FIRMWARE" \
+        -t kernel:"$RBUILD_KERNEL" -t header:"$RBUILD_HEADER" -t firmware:"$RBUILD_FIRMWARE" \
         -t install_vendor_package:"$INSTALL_VENDOR_PACKAGE"
 
     if [[ "$RBUILD_SHRINK" == "yes" ]]
