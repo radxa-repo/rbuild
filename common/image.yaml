@@ -192,6 +192,13 @@ actions:
 
 {{ end }}
 
+  - action: recipe
+    description: Install dkms packages
+    recipe: flavors/.dkms.yaml
+    variables:
+      distro: {{ $distro }}
+      board: {{ $board }}
+
   - action: run
     description: Preload device tree overlay from default kernel
     chroot: true

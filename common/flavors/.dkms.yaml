@@ -1,0 +1,16 @@
+{{- $distro := .distro -}}
+{{- $board := .board -}}
+
+{{- $architecture := .architecture -}}
+
+architecture: {{ $architecture }}
+
+actions:
+{{ if eq $board "rock-5b" }}
+
+  - action: apt
+    description: Install {{ $board }} dkms packages
+    packages:
+      - r8125-dkms
+
+{{ end }}
