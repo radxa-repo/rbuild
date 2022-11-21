@@ -134,7 +134,7 @@ Supported image generation options:
     -s, --shrink            Shrink root partition after image is generated
                             Require root permission and additional dependencies
     --compress              Compress the final image with xz
-    --native-debos          Use locally installed debos instead of docker
+    -n, --native-build      Use locally installed debos instead of docker
                             This is a workaround for building Ubuntu image on Ubuntu host
                             Require running rbuild with sudo
     -d, --debug             Drop into a debug shell when build failed
@@ -309,7 +309,7 @@ debos() {
     if [[ $SCRIPT_DIR != $PWD ]]
     then
         DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR,destination=$SCRIPT_DIR" )
-        if [[ "$RBUILD_NATIVE_DEBOS" == "yes" ]]
+        if $NATIVE_BUILD
         then
             ln -s "$(realpath "--relative-to=$PWD" "$SCRIPT_DIR/.rootfs")" .rootfs
         else
@@ -334,7 +334,7 @@ debos() {
 
     local DEBOS_OPTIONS="--cpus=$(nproc) --memory=$(( DEV_SHM_REQUIRE - 1 ))G"
 
-    if [[ "$RBUILD_NATIVE_DEBOS" == "yes" ]]
+    if $NATIVE_BUILD
     then
         env debos --disable-fakemachine $DEBOS_OPTIONS "$@"
     else
@@ -361,7 +361,7 @@ main() {
     mkdir -p "$SCRIPT_DIR/common/.packages"
 
     local ARGV=("$@")
-    if ! local TEMP="$(getopt -o "sdrk:f:vh" -l "shrink,compress,native-debos,debug,rootfs,kernel:,firmware:,no-vendor-package,json:shrink-image:,write-image:,help" -n "$0" -- "$@")"
+    if ! local TEMP="$(getopt -o "sdrk:f:vhn" -l "shrink,compress,native-build,debug,rootfs,kernel:,firmware:,no-vendor-package,json:shrink-image:,write-image:,help" -n "$0" -- "$@")"
     then
         usage
         return 1
@@ -376,6 +376,7 @@ main() {
     local RBUILD_FIRMWARE=
     local INSTALL_VENDOR_PACKAGE="true"
     local RBUILD_AS_ROOT="false"
+    local NATIVE_BUILD="false"
 
     while true
     do
@@ -413,8 +414,8 @@ main() {
                 RBUILD_FIRMWARE="$(basename $1)"
                 shift
                 ;;
-            --native-debos)
-                RBUILD_NATIVE_DEBOS="yes"
+            -n|--native-build)
+                NATIVE_BUILD="true"
                 ;;
             --shrink-image)
                 shrink "$1"
@@ -512,7 +513,7 @@ main() {
         sudo kpartx -d "$IMAGE"
     fi
 
-    if [[ "$RBUILD_NATIVE_DEBOS" != "yes" ]]
+    if ! $NATIVE_BUILD
     then
         docker pull godebos/debos:latest
     fi
