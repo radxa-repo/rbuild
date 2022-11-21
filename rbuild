@@ -283,7 +283,7 @@ write-image() {
         echo "Writting zip image..."
         unzip -p $IMAGE | sudo dd of=$BLOCKDEV bs=16M conv=fsync status=progress
     else
-        if [[ $RBUILD_SHRINK == "yes" ]]
+        if $RBUILD_SHRINK
         then
             shrink "$IMAGE"
         fi
@@ -368,10 +368,10 @@ main() {
     fi
     eval set -- "$TEMP"
 
-    local RBUILD_SHRINK=
-    local RBUILD_COMPRESSION=
+    local RBUILD_SHRINK="false"
+    local RBUILD_COMPRESSION="false"
     local DEBOS_OPTIONS=
-    local DEBOS_ROOTFS=
+    local DEBOS_ROOTFS="false"
     local RBUILD_KERNEL=
     local RBUILD_FIRMWARE=
     local INSTALL_VENDOR_PACKAGE="true"
@@ -388,16 +388,16 @@ main() {
                 then
                     error $EXIT_SUDO_PERMISSION "--shrink"
                 fi
-                RBUILD_SHRINK="yes"
+                RBUILD_SHRINK="true"
                 ;;
             --compress)
-                RBUILD_COMPRESSION="yes"
+                RBUILD_COMPRESSION="true"
                 ;;
             -d|--debug)
                 DEBOS_OPTIONS="-v --debug-shell --show-boot"
                 ;;
             -r|--rootfs)
-                DEBOS_ROOTFS="yes"
+                DEBOS_ROOTFS="true"
                 ;;
             -v|--no-vendor-package)
                 INSTALL_VENDOR_PACKAGE="false"
@@ -508,7 +508,7 @@ main() {
     local EFI_END=${EFI_END:-"32MiB"}
     
     # Release targeting image in case previous shrink failed
-    if [[ "$RBUILD_SHRINK" == "yes" ]] && [[ -e /dev/mapper/loop* ]]
+    if $RBUILD_SHRINK && [[ -e /dev/mapper/loop* ]]
     then
         sudo kpartx -d "$IMAGE"
     fi
@@ -519,7 +519,7 @@ main() {
     fi
 
     mkdir -p "$SCRIPT_DIR/.rootfs"
-    if [[ "$DEBOS_ROOTFS" == "yes" ]] || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar" ]]
+    if $DEBOS_ROOTFS || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar" ]]
     then
         pushd "$SCRIPT_DIR"
         debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/rootfs.yaml" \
@@ -543,7 +543,7 @@ main() {
         -t kernel:"$RBUILD_KERNEL" -t header:"$RBUILD_HEADER" -t firmware:"$RBUILD_FIRMWARE" \
         -t install_vendor_package:"$INSTALL_VENDOR_PACKAGE"
 
-    if [[ "$RBUILD_SHRINK" == "yes" ]]
+    if $RBUILD_SHRINK
     then
         if ! sudo -n true 2>/dev/null
         then
@@ -558,7 +558,7 @@ main() {
     sha512sum "$IMAGE" > "$IMAGE.sha512"
     chown $USER: "$IMAGE"
     
-    if [[ "$RBUILD_COMPRESSION" == "yes" ]]
+    if $RBUILD_COMPRESSION
     then
         xz -fT 0 "$IMAGE"
     fi
