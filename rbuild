@@ -163,7 +163,6 @@ $(printf_array "    %s\n" "$(get_supported_distros)")
 Supported flavors (default to the first one):
 $(printf_array "    %s\n" "$(get_supported_flavors)")
 EOF
-    exit "$1"
 }
 
 printf_array() {
@@ -183,6 +182,11 @@ printf_array() {
 }
 
 get_supported_boards() {
+    while (( $# > 0 )) && [[ "$1" == "--" ]]
+    do
+        shift
+    done
+
     local BOARDS=()
     for f in $SCRIPT_DIR/configs/*.conf
     do
@@ -192,11 +196,21 @@ get_supported_boards() {
 }
 
 get_supported_distros() {
+    while (( $# > 0 )) && [[ "$1" == "--" ]]
+    do
+        shift
+    done
+
     local DISTROS=("debian" "ubuntu")
     echo "${DISTROS[@]}"
 }
 
 get_supported_flavors() {
+    while (( $# > 0 )) && [[ "$1" == "--" ]]
+    do
+        shift
+    done
+
     local FLAVORS=()
     for f in $SCRIPT_DIR/common/flavors/*.yaml
     do
@@ -206,6 +220,11 @@ get_supported_flavors() {
 }
 
 get_supported_infos() {
+    while (( $# > 0 )) && [[ "$1" == "--" ]]
+    do
+        shift
+    done
+
     local INFOS=("boards" "distros" "flavors")
     echo "${INFOS[@]}"
 }
@@ -218,13 +237,18 @@ in_array() {
 
 json() {
     local ARRAY=($(get_supported_infos))
-    if ! in_array "$1" "${ARRAY[@]}"
+    if ! in_array "$@" "${ARRAY[@]}"
     then
         error $EXIT_UNKNOWN_OPTION "$1"
     fi
 
-    printf_array "json" $(get_supported_$1)
-    exit 0
+    local output
+    output=( $(get_supported_$@) )
+    if (( $? != 0 ))
+    then
+        return 1
+    fi
+    printf_array "json" "${output[@]}"
 }
 
 write-image() {
@@ -239,11 +263,11 @@ write-image() {
     if ! [[ -f $IMAGE ]]
     then
         echo "$IMAGE does not exist."
-        exit 1
+        return 1
     elif ! [[ -b $BLOCKDEV ]]
     then
         echo "$BLOCKDEV is not a block device."
-        exit 1
+        return 1
     fi
 
     if file $IMAGE | grep -q "XZ compressed"
@@ -266,9 +290,6 @@ write-image() {
         echo "Writting raw image..."
         sudo dd if=$IMAGE of=$BLOCKDEV bs=16M conv=fsync status=progress
     fi
-
-    finish
-    exit
 }
 
 debos() {
@@ -324,7 +345,29 @@ debos() {
     fi
 }
 
-build() {
+main() {
+    if command -v notify-send >/dev/null
+    then
+        local NOTIFY_SEND=notify-send
+    else
+        local NOTIFY_SEND=echo
+    fi
+
+    SECONDS=0
+
+    local SCRIPT_DIR="$(dirname "$(realpath "$0")")"
+
+    rm -rf "$SCRIPT_DIR/common/.packages"
+    mkdir -p "$SCRIPT_DIR/common/.packages"
+
+    local ARGV=("$@")
+    if ! local TEMP="$(getopt -o "sdrk:f:vh" -l "shrink,compress,native-debos,debug,rootfs,kernel:,firmware:,no-vendor-package,json:shrink-image:,write-image:,help" -n "$0" -- "$@")"
+    then
+        usage
+        return 1
+    fi
+    eval set -- "$TEMP"
+
     local RBUILD_SHRINK=
     local RBUILD_COMPRESSION=
     local DEBOS_OPTIONS=
@@ -334,78 +377,70 @@ build() {
     local INSTALL_VENDOR_PACKAGE="true"
     local RBUILD_AS_ROOT="false"
 
-    rm -rf "$SCRIPT_DIR/common/.packages"
-    mkdir -p "$SCRIPT_DIR/common/.packages"
-
-    if (( $# == 0 ))
-    then
-        usage 0
-    fi
-
-    while (( $# > 0 ))
+    while true
     do
-        case "$1" in
-            -s | --shrink)
+        TEMP="$1"
+        shift
+        case "$TEMP" in
+            -s|--shrink)
                 if ! sudo -n true 2>/dev/null && ! [[ -t 0 ]]
                 then
                     error $EXIT_SUDO_PERMISSION "--shrink"
                 fi
                 RBUILD_SHRINK="yes"
-                shift
                 ;;
             --compress)
                 RBUILD_COMPRESSION="yes"
-                shift
                 ;;
-            -d | --debug)
+            -d|--debug)
                 DEBOS_OPTIONS="-v --debug-shell --show-boot"
-                shift
                 ;;
-            -r | --rootfs)
+            -r|--rootfs)
                 DEBOS_ROOTFS="yes"
-                shift
                 ;;
-            -v | --no-vendor-package)
+            -v|--no-vendor-package)
                 INSTALL_VENDOR_PACKAGE="false"
+                ;;
+            -k|--kernel)
+                RBUILD_KERNEL="$(basename $1)"
+                cp "$1" "$SCRIPT_DIR/common/.packages/$RBUILD_KERNEL"
+                RBUILD_HEADER="linux-headers-${RBUILD_KERNEL#linux-image-}"
+                cp "$(dirname $1)/$RBUILD_HEADER" "$SCRIPT_DIR/common/.packages/$RBUILD_HEADER"
                 shift
                 ;;
-            -k | --kernel)
-                RBUILD_KERNEL="$(basename $2)"
-                cp "$2" "$SCRIPT_DIR/common/.packages/$RBUILD_KERNEL"
-                RBUILD_HEADER="linux-headers-${RBUILD_KERNEL#linux-image-}"
-                cp "$(dirname $2)/$RBUILD_HEADER" "$SCRIPT_DIR/common/.packages/$RBUILD_HEADER"
-                shift 2
-                ;;
-            -f | --firmware)
-                cp "$2" "$SCRIPT_DIR/common/.packages/$(basename "$2")"
-                RBUILD_FIRMWARE="$(basename $2)"
-                shift 2
+            -f|--firmware)
+                cp "$1" "$SCRIPT_DIR/common/.packages/$(basename "$1")"
+                RBUILD_FIRMWARE="$(basename $1)"
+                shift
                 ;;
             --native-debos)
                 RBUILD_NATIVE_DEBOS="yes"
-                shift
                 ;;
             --shrink-image)
-                shrink "$2"
-                exit
+                shrink "$1"
+                return
                 ;;
             --write-image)
-                write-image "$2" "$3"
+                write-image "$@"
+                return
                 ;;
             --json)
-                json "$2"
+                json "$1"
+                return
                 ;;
-            -h | --help)
-                usage 0
+            -h|--help)
+                usage
+                return
+                ;;
+            --)
+                break
                 ;;
             --root)
                 RBUILD_AS_ROOT="true"
-                shift
                 ;;
-            -*)
-                error $EXIT_UNKNOWN_OPTION "$1"
+            *)
+                error $EXIT_UNKNOWN_OPTION "$TEMP"
                 ;;
-            *) break ;;
         esac
     done
 
@@ -414,9 +449,10 @@ build() {
         error $EXIT_RBUILD_AS_ROOT
     fi
 
-    if (( $# < 1 ))
+    if (( $# == 0))
     then
-        error $EXIT_TOO_FEW_ARGUMENTS
+        usage
+        return
     fi
 
     local DEBOS_TUPLE="$@"
@@ -525,30 +561,15 @@ build() {
     then
         xz -fT 0 "$IMAGE"
     fi
-}
 
-finish() {
     $NOTIFY_SEND "rbuild is finished."
     TZ=UTC0 printf 'Total execution time: %(%H:%M:%S)T\n' $SECONDS
 }
 
-set -e
+set -euo pipefail
 
 LC_ALL="C"
 LANG="C"
 LANGUAGE="C"
 
-SCRIPT_DIR="$(dirname "$(realpath "$0")")"
-
-if command -v notify-send >/dev/null
-then
-    NOTIFY_SEND=notify-send
-else
-    NOTIFY_SEND=echo
-fi
-
-SECONDS=0
-
-build "$@"
-
-finish
+main "$@"
