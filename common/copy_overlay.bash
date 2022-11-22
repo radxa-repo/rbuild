@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -euo pipefail
 shopt -s nullglob
 mkdir -p /boot/dtbo
 for i in /usr/lib/linux-image-*/$1/overlays/*.dtbo

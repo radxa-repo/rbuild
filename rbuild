@@ -568,6 +568,7 @@ main() {
 }
 
 set -euo pipefail
+shopt -s nullglob
 
 LC_ALL="C"
 LANG="C"
