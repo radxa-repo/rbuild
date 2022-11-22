@@ -148,9 +148,9 @@ Supported image generation options:
 Alternative functionalities
     --json [catagory]   Print supported options in json format
                         Available catagories: $(get_supported_infos)
-    --shrink-image [image]
+    shrink-image [image]
                         Shrink generated image
-    --write-image [image] [/dev/block]
+    write-image [image] [/dev/block]
                         Write image to block device, support --shrink flag
     -h, --help          Show this help message
 
@@ -417,14 +417,6 @@ main() {
             -n|--native-build)
                 NATIVE_BUILD="true"
                 ;;
-            --shrink-image)
-                shrink "$1"
-                return
-                ;;
-            --write-image)
-                write-image "$@"
-                return
-                ;;
             --json)
                 json "$1"
                 return
@@ -455,6 +447,19 @@ main() {
         usage
         return
     fi
+
+    TEMP="$1"
+    case "$TEMP" in
+        shrink-image)
+            shrink "$2"
+            return
+            ;;
+        write-image)
+            shift
+            write-image "$@"
+            return
+            ;;
+    esac
 
     local DEBOS_TUPLE="$@"
     local BOARDS=($(get_supported_boards))
