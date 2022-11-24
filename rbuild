@@ -55,7 +55,7 @@ find_root_part() {
     echo $ROOT_PART
 }
 
-shrink() {
+shrink-image() {
     local ROOT_PART="$(find_root_part "$1")"
     if [[ -z $ROOT_PART ]]
     then
@@ -144,15 +144,14 @@ Supported image generation options:
                             under the same folder
     -f, --firmware [deb]    Use custom firmware package
     -v, --no-vendor-package Do not install vendor packages
+    -h, --help              Show this help message
 
-Alternative functionalities
-    --json [catagory]   Print supported options in json format
-                        Available catagories: $(get_supported_infos)
-    shrink-image [image]
-                        Shrink generated image
+Alternative commands
+    json [catagory]         Print supported options in json format
+                            Available catagories: $(get_supported_infos)
+    shrink-image [image]    Shrink generated image
     write-image [image] [/dev/block]
-                        Write image to block device, support --shrink flag
-    -h, --help          Show this help message
+                            Write image to block device, support --shrink flag
 
 Supported board:
 $(printf_array "    %s\n" "$(get_supported_boards)")
@@ -285,7 +284,7 @@ write-image() {
     else
         if $RBUILD_SHRINK
         then
-            shrink "$IMAGE"
+            shrink-image "$IMAGE"
         fi
         echo "Writting raw image..."
         sudo dd if=$IMAGE of=$BLOCKDEV bs=16M conv=fsync status=progress
@@ -361,7 +360,7 @@ main() {
     mkdir -p "$SCRIPT_DIR/common/.packages"
 
     local ARGV=("$@")
-    if ! local TEMP="$(getopt -o "sdrk:f:vhn" -l "shrink,compress,native-build,debug,rootfs,kernel:,firmware:,no-vendor-package,json:shrink-image:,write-image:,help" -n "$0" -- "$@")"
+    if ! local TEMP="$(getopt -o "sndrk:f:vh" -l "shrink,compress,native-build,debug,rootfs,kernel:,firmware:,no-vendor-package,help" -n "$0" -- "$@")"
     then
         usage
         return 1
@@ -417,10 +416,6 @@ main() {
             -n|--native-build)
                 NATIVE_BUILD="true"
                 ;;
-            --json)
-                json "$1"
-                return
-                ;;
             -h|--help)
                 usage
                 return
@@ -450,13 +445,9 @@ main() {
 
     TEMP="$1"
     case "$TEMP" in
-        shrink-image)
-            shrink "$2"
-            return
-            ;;
-        write-image)
+        shrink-image|write-image|json)
             shift
-            write-image "$@"
+            "$TEMP" "$@"
             return
             ;;
     esac
@@ -557,7 +548,7 @@ main() {
             echo "The process is paused to prevent sudo timeout on asking for password."
             read -p "Please press enter to continue..." i
         fi
-        shrink "$IMAGE"
+        shrink-image "$IMAGE"
     fi
 
     sha512sum "$IMAGE" > "$IMAGE.sha512"

@@ -21,9 +21,9 @@ jobs:
       - name: Query available board configs
         id: query
         run: |
-          echo "boards=$(./rbuild --json boards)" >> $GITHUB_OUTPUT
-          echo "distros=$(./rbuild --json distros)" >> $GITHUB_OUTPUT
-          echo "flavors=$(./rbuild --json flavors)" >> $GITHUB_OUTPUT
+          echo "boards=$(./rbuild json boards)" >> $GITHUB_OUTPUT
+          echo "distros=$(./rbuild json distros)" >> $GITHUB_OUTPUT
+          echo "flavors=$(./rbuild json flavors)" >> $GITHUB_OUTPUT
 
   build-rootfs:
     needs: query
