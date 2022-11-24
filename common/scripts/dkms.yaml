@@ -13,4 +13,9 @@ actions:
     packages:
       - r8125-dkms
 
+{{ else }}
+
+  - action: recipe
+    recipe: scripts/nop.yaml
+
 {{ end }}

@@ -69,7 +69,7 @@ actions:
 
   - action: recipe
     description: Add {{ $soc_family }}-{{ $suite }} Repo
-    recipe: add_repo.yaml
+    recipe: scripts/add_repo.yaml
     variables:
       origin: radxa-{{ $soc_family }}
       suite: {{ $soc_family }}-{{ $suite }}
@@ -109,7 +109,7 @@ actions:
 
   - action: recipe
     description: Install custom firmware
-    recipe: hack_install_deb.yaml
+    recipe: scripts/hack_install_deb.yaml
     variables:
       name: {{ $firmware }}
 
@@ -154,7 +154,7 @@ actions:
 
   - action: recipe
     description: Install custom kernel
-    recipe: hack_install_deb.yaml
+    recipe: scripts/hack_install_deb.yaml
     variables:
       name: {{ $kernel }}
 
@@ -186,7 +186,7 @@ actions:
 
   - action: recipe
     description: Install custom kernel header
-    recipe: hack_install_deb.yaml
+    recipe: scripts/hack_install_deb.yaml
     variables:
       name: {{ $header }}
 
@@ -194,7 +194,7 @@ actions:
 
   - action: recipe
     description: Install dkms packages
-    recipe: flavors/.dkms.yaml
+    recipe: scripts/dkms.yaml
     variables:
       distro: {{ $distro }}
       board: {{ $board }}
@@ -202,7 +202,7 @@ actions:
   - action: run
     description: Preload device tree overlay from default kernel
     chroot: true
-    script: copy_overlay.bash {{ $soc_family }}
+    script: scripts/copy_overlay.bash {{ $soc_family }}
 
   - action: run
     description: Product specific setup
@@ -213,4 +213,4 @@ actions:
 
   - action: recipe
     description: Clean up rootfs
-    recipe: clean.yaml
+    recipe: scripts/clean.yaml

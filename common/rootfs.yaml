@@ -32,7 +32,7 @@ actions:
 
   - action: recipe
     description: Add {{ $suite }}-updates Repo
-    recipe: add_repo.yaml
+    recipe: scripts/add_repo.yaml
     variables:
       suite: {{ $suite }}-updates
 {{ if eq $distro "debian" }}
@@ -45,7 +45,7 @@ actions:
 
   - action: recipe
     description: Add {{ $suite }}-backports Repo
-    recipe: add_repo.yaml
+    recipe: scripts/add_repo.yaml
     variables:
       suite: {{ $suite }}-backports
 {{ if eq $distro "debian" }}
@@ -58,7 +58,7 @@ actions:
 
   - action: recipe
     description: Add {{ $suite }}-security Repo
-    recipe: add_repo.yaml
+    recipe: scripts/add_repo.yaml
     variables:
       suite: {{ $suite }}-security
 {{ if eq $distro "debian" }}
@@ -78,7 +78,7 @@ actions:
 
   - action: recipe
     description: Add Radxa Repo
-    recipe: add_repo.yaml
+    recipe: scripts/add_repo.yaml
     variables:
       origin: radxa
       suite: {{ $suite }}
@@ -132,7 +132,7 @@ actions:
   
   - action: recipe
     description: Clean up rootfs
-    recipe: clean.yaml
+    recipe: scripts/clean.yaml
 
   - action: pack
     description: Save rootfs
