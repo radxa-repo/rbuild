@@ -16,6 +16,6 @@ actions:
 {{ else }}
 
   - action: recipe
-    recipe: scripts/nop.yaml
+    recipe: nop.yaml
 
 {{ end }}
