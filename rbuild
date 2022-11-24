@@ -372,6 +372,7 @@ main() {
     local DEBOS_OPTIONS=
     local DEBOS_ROOTFS="false"
     local RBUILD_KERNEL=
+    local RBUILD_HEADER=
     local RBUILD_FIRMWARE=
     local INSTALL_VENDOR_PACKAGE="true"
     local RBUILD_AS_ROOT="false"
