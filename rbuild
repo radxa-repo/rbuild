@@ -360,7 +360,7 @@ main() {
     mkdir -p "$SCRIPT_DIR/common/.packages"
 
     local ARGV=("$@")
-    if ! local TEMP="$(getopt -o "sndrk:f:vh" -l "shrink,compress,native-build,debug,rootfs,kernel:,firmware:,no-vendor-package,help" -n "$0" -- "$@")"
+    if ! local TEMP="$(getopt -o "sndrk:f:vh" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package,help" -n "$0" -- "$@")"
     then
         usage
         return 1
@@ -424,7 +424,7 @@ main() {
             --)
                 break
                 ;;
-            --root)
+            --root-override)
                 RBUILD_AS_ROOT="true"
                 ;;
             *)
