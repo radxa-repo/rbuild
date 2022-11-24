@@ -69,7 +69,6 @@ actions:
       - rfkill
       - spi-tools
       - usbutils
-      - v4l-utils
 
   - action: apt
     description: Install Radxa backported packages
