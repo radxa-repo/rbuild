@@ -6,7 +6,7 @@ architecture: {{ $architecture }}
 actions:
   - action: overlay
     description: Copy deb package
-    source: .packages/{{ $name }}
+    source: ../.packages/{{ $name }}
     destination: /{{ $name }}
   
   - action: run
