@@ -15,11 +15,15 @@ actions:
     description: Install KDE specific packages
     packages:
       - bluedevil
+      - kde-config-plymouth
       - kde-config-sddm
       - kinfocenter
       - kscreen
       - kwin-x11
       - plasma-nm
+      - plymouth
+      - plymouth-theme-breeze
+      - plymouth-themes
       - qml-module-org-kde-newstuff
       - sddm-theme-breeze
       - systemsettings
