@@ -34,6 +34,7 @@ actions:
       - systemd-timesyncd
       - tmux
       - u-boot-tools
+      - vim
       - wget
       - whiptail
       - xz-utils
