@@ -19,6 +19,7 @@ actions:
       - kde-config-sddm
       - kinfocenter
       - kio-extras
+      - konqueror
       - kscreen
       - kwin-x11
       - plasma-discover
