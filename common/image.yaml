@@ -210,6 +210,7 @@ actions:
     command: |
       set -e
       rsetup update_hostname {{ $board }}
+      echo "IMAGE='$date'" >> /etc/build_info
 
   - action: recipe
     description: Clean up rootfs
