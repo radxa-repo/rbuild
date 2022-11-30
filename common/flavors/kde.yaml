@@ -18,8 +18,10 @@ actions:
       - kde-config-plymouth
       - kde-config-sddm
       - kinfocenter
+      - kio-extras
       - kscreen
       - kwin-x11
+      - plasma-discover
       - plasma-nm
       - plymouth
       - plymouth-theme-breeze
