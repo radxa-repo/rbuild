@@ -381,14 +381,14 @@ main() {
     local NATIVE_BUILD="false"
 
     copy_kernel() {
-        echo "Using custom kernel $1..."
+        echo "Using custom kernel '$1' ..."
         RBUILD_KERNEL="$(basename $1)"
         cp "$1" "$SCRIPT_DIR/common/.packages/$RBUILD_KERNEL"
         RBUILD_HEADER="linux-headers-${RBUILD_KERNEL#linux-image-}"
         cp "$(dirname $1)/$RBUILD_HEADER" "$SCRIPT_DIR/common/.packages/$RBUILD_HEADER"
     }
     copy_firmware() {
-        echo "Using custom firmware $1..."
+        echo "Using custom firmware '$1' ..."
         cp "$1" "$SCRIPT_DIR/common/.packages/$(basename "$1")"
         RBUILD_FIRMWARE="$(basename $1)"
     }
@@ -425,12 +425,12 @@ main() {
                 shift
                 ;;
             -c|--custom)
-                for i in u-boot-$1_*.deb
+                for i in u-boot-$1_*.deb ../bsp/u-boot-$1_*.deb
                 do
                     copy_firmware "$i"
                     break
                 done
-                for i in linux-image-*-$1_*.deb
+                for i in linux-image-*-$1_*.deb ../bsp/linux-image-*-$1_*.deb
                 do
                     copy_kernel "$i"
                     break
