@@ -6,7 +6,7 @@
 architecture: {{ $architecture }}
 
 actions:
-{{ if eq $board "rock-5b" }}
+{{ if or (eq $board "rock-5b") (eq $board "radxa-e25") }}
 
   - action: apt
     description: Install {{ $board }} dkms packages
