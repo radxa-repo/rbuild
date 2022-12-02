@@ -143,6 +143,8 @@ Supported image generation options:
                             This option also requires the matching kernel header package
                             under the same folder
     -f, --firmware [deb]    Use custom firmware package
+    -c, --custom [profile]  Try matching locally built bsp packages with the same profile
+                            Implies --kernel and --firmware if available packages are found
     -v, --no-vendor-package Do not install vendor packages
     -h, --help              Show this help message
 
@@ -360,7 +362,7 @@ main() {
     mkdir -p "$SCRIPT_DIR/common/.packages"
 
     local ARGV=("$@")
-    if ! local TEMP="$(getopt -o "sndrk:f:vh" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package,help" -n "$0" -- "$@")"
+    if ! local TEMP="$(getopt -o "sndrk:f:vhc:" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package,help,custom:" -n "$0" -- "$@")"
     then
         usage
         return 1
@@ -378,6 +380,18 @@ main() {
     local RBUILD_AS_ROOT="false"
     local NATIVE_BUILD="false"
 
+    copy_kernel() {
+        echo "Using custom kernel $1..."
+        RBUILD_KERNEL="$(basename $1)"
+        cp "$1" "$SCRIPT_DIR/common/.packages/$RBUILD_KERNEL"
+        RBUILD_HEADER="linux-headers-${RBUILD_KERNEL#linux-image-}"
+        cp "$(dirname $1)/$RBUILD_HEADER" "$SCRIPT_DIR/common/.packages/$RBUILD_HEADER"
+    }
+    copy_firmware() {
+        echo "Using custom firmware $1..."
+        cp "$1" "$SCRIPT_DIR/common/.packages/$(basename "$1")"
+        RBUILD_FIRMWARE="$(basename $1)"
+    }
     while true
     do
         TEMP="$1"
@@ -403,15 +417,24 @@ main() {
                 INSTALL_VENDOR_PACKAGE="false"
                 ;;
             -k|--kernel)
-                RBUILD_KERNEL="$(basename $1)"
-                cp "$1" "$SCRIPT_DIR/common/.packages/$RBUILD_KERNEL"
-                RBUILD_HEADER="linux-headers-${RBUILD_KERNEL#linux-image-}"
-                cp "$(dirname $1)/$RBUILD_HEADER" "$SCRIPT_DIR/common/.packages/$RBUILD_HEADER"
+                copy_kernel "$1"
                 shift
                 ;;
             -f|--firmware)
-                cp "$1" "$SCRIPT_DIR/common/.packages/$(basename "$1")"
-                RBUILD_FIRMWARE="$(basename $1)"
+                copy_firmware "$1"
+                shift
+                ;;
+            -c|--custom)
+                for i in u-boot-$1_*.deb
+                do
+                    copy_firmware "$i"
+                    break
+                done
+                for i in linux-image-*-$1_*.deb
+                do
+                    copy_kernel "$i"
+                    break
+                done
                 shift
                 ;;
             -n|--native-build)
