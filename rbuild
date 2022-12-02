@@ -146,6 +146,7 @@ Supported image generation options:
     -c, --custom [profile]  Try matching locally built bsp packages with the same profile
                             Implies --kernel and --firmware if available packages are found
     -v, --no-vendor-package Do not install vendor packages
+    -o, --overlay [profile] Specify an optional overlay that should be enabled in the image
     -h, --help              Show this help message
 
 Alternative commands
@@ -362,7 +363,7 @@ main() {
     mkdir -p "$SCRIPT_DIR/common/.packages"
 
     local ARGV=("$@")
-    if ! local TEMP="$(getopt -o "sndrk:f:vhc:" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package,help,custom:" -n "$0" -- "$@")"
+    if ! local TEMP="$(getopt -o "sndrk:f:vhc:o:" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package,help,custom:,overlay:" -n "$0" -- "$@")"
     then
         usage
         return 1
@@ -376,6 +377,7 @@ main() {
     local RBUILD_KERNEL=
     local RBUILD_HEADER=
     local RBUILD_FIRMWARE=
+    local RBUILD_OVERLAY=
     local INSTALL_VENDOR_PACKAGE="true"
     local RBUILD_AS_ROOT="false"
     local NATIVE_BUILD="false"
@@ -439,6 +441,10 @@ main() {
                 ;;
             -n|--native-build)
                 NATIVE_BUILD="true"
+                ;;
+            -o|--overlay)
+                RBUILD_OVERLAY="$1"
+                shift
                 ;;
             -h|--help)
                 usage
@@ -561,7 +567,7 @@ main() {
         -t soc:"$SOC" -t soc_family:"$SOC_FAMILY" \
         -t image:"$IMAGE" -t efi_end:"$EFI_END" -t partition_type:"$PARTITION_TYPE" \
         -t kernel:"$RBUILD_KERNEL" -t header:"$RBUILD_HEADER" -t firmware:"$RBUILD_FIRMWARE" \
-        -t install_vendor_package:"$INSTALL_VENDOR_PACKAGE"
+        -t install_vendor_package:"$INSTALL_VENDOR_PACKAGE" -t overlay:"$RBUILD_OVERLAY"
 
     if $RBUILD_SHRINK
     then
