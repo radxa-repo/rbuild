@@ -81,8 +81,8 @@ actions:
     chroot: true
     command: |
       set -e
-      apt update
-      apt full-upgrade -y --allow-downgrades
+      apt-get update
+      apt-get full-upgrade -y --allow-downgrades
 
   - action: apt
     description: Install task-{{ $board }} package
