@@ -501,7 +501,7 @@ main() {
     esac
 
     local ARCH="arm64"
-    local IMAGE="${BOARD}_${DISTRO}_${SUITE}_${FLAVOR}_$(date --iso-8601=m)_${PARTITION_TYPE}.img"
+    local IMAGE="${BOARD}_${DISTRO}_${SUITE}_${FLAVOR}_$(date --iso-8601=m | tr -d :)_${PARTITION_TYPE}.img"
     local EFI_END=${EFI_END:-"32MiB"}
     
     # Release targeting image in case previous shrink failed
