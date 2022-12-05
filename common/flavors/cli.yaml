@@ -50,6 +50,7 @@ actions:
       - iputils-ping
       - iw
       - network-manager
+      - samba
       - wireless-regdb
       - wpasupplicant
 
