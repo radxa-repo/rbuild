@@ -147,6 +147,7 @@ Supported image generation options:
                             Implies --kernel and --firmware if available packages are found
     -v, --no-vendor-package Do not install vendor packages
     -o, --overlay [profile] Specify an optional overlay that should be enabled in the image
+    -t, --timestamp         Add build timestamp to the filename
     -h, --help              Show this help message
 
 Alternative commands
@@ -378,6 +379,7 @@ main() {
     local RBUILD_HEADER=
     local RBUILD_FIRMWARE=
     local RBUILD_OVERLAY=
+    local RBUILD_TIMESTAMP="false"
     local INSTALL_VENDOR_PACKAGE="true"
     local RBUILD_AS_ROOT="false"
     local NATIVE_BUILD="false"
@@ -441,6 +443,9 @@ main() {
                 ;;
             -n|--native-build)
                 NATIVE_BUILD="true"
+                ;;
+            -t|--timestamp)
+                RBUILD_TIMESTAMP="true"
                 ;;
             -o|--overlay)
                 RBUILD_OVERLAY="$1"
@@ -520,6 +525,13 @@ main() {
     local SOC_FAMILY="$(get_soc_family $SOC)"
     local PARTITION_TYPE="$(get_partition_type $SOC_FAMILY)"
 
+    if $RBUILD_TIMESTAMP
+    then
+        RBUILD_TIMESTAMP="_$(date --iso-8601=m | tr -d :)_${PARTITION_TYPE}"
+    else
+        RBUILD_TIMESTAMP=""
+    fi
+
     case $DISTRO in
         debian)
             local SUITE="bullseye"
@@ -530,7 +542,7 @@ main() {
     esac
 
     local ARCH="arm64"
-    local IMAGE="${BOARD}_${DISTRO}_${SUITE}_${FLAVOR}_$(date --iso-8601=m | tr -d :)_${PARTITION_TYPE}.img"
+    local IMAGE="${BOARD}_${DISTRO}_${SUITE}_${FLAVOR}${RBUILD_TIMESTAMP}.img"
     local EFI_END=${EFI_END:-"32MiB"}
     
     # Release targeting image in case previous shrink failed
