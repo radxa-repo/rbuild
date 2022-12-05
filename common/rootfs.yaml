@@ -2,95 +2,21 @@
 {{- $suite := .suite -}}
 {{- $flavor := .flavor -}}
 
-{{- $debian_mirror := "https://deb.debian.org" -}}
-{{- $debian_area := "main contrib non-free" -}}
-{{- $ubuntu_mirror := "http://ports.ubuntu.com" -}}
-{{- $ubuntu_area := "main restricted universe multiverse" -}}
-{{- $radxa_mirror := "https://radxa-repo.github.io/apt" -}}
-
 {{- $architecture := .architecture -}}
 
 architecture: {{ $architecture }}
 
 actions:
-  - action: debootstrap
-    suite: {{ $suite }}
-    variant: minbase
-    components:
-      - main
-{{ if eq $distro "debian" }}
-      - contrib
-      - non-free
-    mirror: {{ $debian_mirror }}/debian
-{{ else if eq $distro "ubuntu" }}
-      - restricted
-      - universe
-      - multiverse
-    mirror: {{ $ubuntu_mirror }}/ubuntu-ports
-    check-gpg: false
-{{ end }}
-
-  - action: recipe
-    description: Add {{ $suite }}-updates Repo
-    recipe: scripts/add_repo.yaml
-    variables:
-      suite: {{ $suite }}-updates
-{{ if eq $distro "debian" }}
-      base_url: {{ $debian_mirror }}/debian
-      area: {{ $debian_area }}
-{{ else if eq $distro "ubuntu" }}
-      base_url: {{ $ubuntu_mirror }}/ubuntu-ports
-      area: {{ $ubuntu_area }}
-{{ end }}
-
-  - action: recipe
-    description: Add {{ $suite }}-backports Repo
-    recipe: scripts/add_repo.yaml
-    variables:
-      suite: {{ $suite }}-backports
-{{ if eq $distro "debian" }}
-      base_url: {{ $debian_mirror }}/debian
-      area: {{ $debian_area }}
-{{ else if eq $distro "ubuntu" }}
-      base_url: {{ $ubuntu_mirror }}/ubuntu-ports
-      area: {{ $ubuntu_area }}
-{{ end }}
-
-  - action: recipe
-    description: Add {{ $suite }}-security Repo
-    recipe: scripts/add_repo.yaml
-    variables:
-      suite: {{ $suite }}-security
-{{ if eq $distro "debian" }}
-      base_url: {{ $debian_mirror }}/debian-security
-      area: {{ $debian_area }}
-{{ else if eq $distro "ubuntu" }}
-      base_url: {{ $ubuntu_mirror }}/ubuntu-ports
-      area: {{ $ubuntu_area }}
-{{ end }}
-
-  - action: apt
-    description: Prepare for custom repo
-    packages:
-      - gpg
-      - apt-transport-https
-      - ca-certificates
-
-  - action: recipe
-    description: Add Radxa Repo
-    recipe: scripts/add_repo.yaml
-    variables:
-      origin: radxa
-      suite: {{ $suite }}
-      base_url: {{ $radxa_mirror }}
-      public_key: pubkey.gpg
+  - action: unpack
+    description: Unpack rootfs
+    file: .rootfs/{{ $distro }}_{{ $suite }}_base.tar
 
   - action: recipe
     description: Install {{ $flavor }} packages
     recipe: flavors/{{ $flavor }}.yaml
     variables:
       distro: {{ $distro }}
-  
+
   - action: overlay
     description: Install common system configs
     source: overlays/common

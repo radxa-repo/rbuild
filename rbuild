@@ -545,12 +545,24 @@ main() {
     fi
 
     mkdir -p "$SCRIPT_DIR/.rootfs"
+
+    if $DEBOS_ROOTFS || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}_base.tar" ]]
+    then
+        pushd "$SCRIPT_DIR"
+        debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/.base.yaml" \
+            -t architecture:"$ARCH" \
+            -t distro:"$DISTRO" -t suite:"$SUITE"
+        popd
+    else
+        echo "Using ${DISTRO}_${SUITE}_base.tar intermediate rootfs."
+    fi
+
     if $DEBOS_ROOTFS || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar" ]]
     then
         pushd "$SCRIPT_DIR"
         debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/rootfs.yaml" \
             -t architecture:"$ARCH" \
-            -t board:"$BOARD" -t distro:"$DISTRO" -t suite:"$SUITE" -t flavor:"$FLAVOR"
+            -t distro:"$DISTRO" -t suite:"$SUITE" -t flavor:"$FLAVOR"
         popd
     else
         echo "Using ${DISTRO}_${SUITE}_${FLAVOR}.tar rootfs."

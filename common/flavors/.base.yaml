@@ -1,0 +1,88 @@
+{{- $distro := .distro -}}
+
+{{- $architecture := .architecture -}}
+
+architecture: {{ $architecture }}
+
+actions:
+  - action: apt
+    description: Install base packages
+    packages:
+      - init
+      - initramfs-tools
+      - sudo
+  
+  - action: apt
+    description: Install system utilities
+    packages:
+      - apt-utils
+      - bash-completion
+      - bc
+      - cloud-initramfs-growroot
+      - curl
+      - file
+      - haveged
+      - htop
+      - less
+      - locales
+      - man-db
+      - nano
+      - ntfs-3g
+      - python-is-python3
+      - python3
+      - python3-pip
+      - ssh
+      - systemd-timesyncd
+      - tmux
+      - u-boot-tools
+      - vim
+      - wget
+      - whiptail
+      - xz-utils
+
+  - action: apt
+    description: Install network utilities
+    packages:
+      - bluetooth
+      - ldnsutils
+      - ifupdown
+      - iproute2
+      - iputils-ping
+      - iw
+      - network-manager
+      - samba
+      - wireless-regdb
+      - wpasupplicant
+
+  - action: apt
+    description: Install audio utilities
+    packages:
+      - alsa-utils
+      - pulseaudio
+      - pulseaudio-module-bluetooth
+
+  - action: apt
+    description: Install hardware utilities
+    packages:
+      - gpiod
+      - hdparm
+      - i2c-tools
+      - mtd-utils
+      - pciutils
+      - rfkill
+      - spi-tools
+      - usbutils
+
+  - action: apt
+    description: Install Radxa backported packages
+    packages:
+      - u-boot-menu
+
+  - action: apt
+    description: Install Radxa packages
+    packages:
+      - radxa-firmware
+      - rsetup
+      - libreelec-alsa-utils
+      - radxa-otgutils
+      - radxa-bootutils

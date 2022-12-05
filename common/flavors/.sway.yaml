@@ -5,12 +5,6 @@
 architecture: {{ $architecture }}
 
 actions:
-  - action: recipe
-    description: Install CLI packages
-    recipe: cli.yaml
-    variables:
-      distro: {{ $distro }}
-
   - action: apt
     description: Install sway packages
     packages:
