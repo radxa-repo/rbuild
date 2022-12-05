@@ -15,7 +15,8 @@ actions:
 
 {{ else }}
 
-  - action: recipe
-    recipe: nop.yaml
+  - action: run
+    description: No operation
+    command: set -e
 
 {{ end }}

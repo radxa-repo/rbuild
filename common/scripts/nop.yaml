@@ -1,9 +1,0 @@
-{{- $architecture := .architecture -}}
-
-architecture: {{ $architecture }}
-
-actions:
-
-  - action: run
-    description: No operation
-    command: set -e
