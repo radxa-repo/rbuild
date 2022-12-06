@@ -364,7 +364,7 @@ main() {
     mkdir -p "$SCRIPT_DIR/common/.packages"
 
     local ARGV=("$@")
-    if ! local TEMP="$(getopt -o "sndrk:f:vhc:o:" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package,help,custom:,overlay:" -n "$0" -- "$@")"
+    if ! local TEMP="$(getopt -o "sndrk:f:vhc:o:t" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package,help,custom:,overlay:,timestamp" -n "$0" -- "$@")"
     then
         usage
         return 1
