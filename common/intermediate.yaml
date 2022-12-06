@@ -86,7 +86,7 @@ actions:
 
   - action: recipe
     description: Install base packages
-    recipe: flavors/base.yaml
+    recipe: flavors/.base.yaml
     variables:
       distro: {{ $distro }}
 
