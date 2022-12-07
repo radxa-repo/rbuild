@@ -3,5 +3,6 @@
 # This file contains the names of kernel modules that should be loaded
 # at boot time, one per line. Lines beginning with "#" are ignored.
 
+# LED triggers are not automatically loaded according to device tree
 ledtrig-heartbeat
 ledtrig-pattern
