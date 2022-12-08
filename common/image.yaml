@@ -10,6 +10,7 @@
 {{- $partition_type := .partition_type -}}
 
 {{- $kernel := .kernel -}}
+{{- $kernel_dbg := .kernel_dbg -}}
 {{- $header := .header -}}
 {{- $firmware := .firmware -}}
 {{- $overlay := .overlay -}}
@@ -29,7 +30,7 @@ actions:
   - action: image-partition
     description: Set up on-disk layout
     imagename: {{ $image }}
-    imagesize: 5GiB
+    imagesize: 6GiB
     partitiontype: {{ $partition_type }}
     mountpoints:
       - mountpoint: /
@@ -158,6 +159,16 @@ actions:
     recipe: scripts/hack_install_deb.yaml
     variables:
       name: {{ $kernel }}
+
+{{ end }}
+
+{{ if ne $kernel_dbg "" }}
+
+  - action: recipe
+    description: Install custom debug kernel
+    recipe: scripts/hack_install_deb.yaml
+    variables:
+      name: {{ $kernel_dbg }}
 
 {{ end }}
 

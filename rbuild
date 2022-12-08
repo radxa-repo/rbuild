@@ -145,6 +145,8 @@ Supported image generation options:
     -f, --firmware [deb]    Use custom firmware package
     -c, --custom [profile]  Try matching locally built bsp packages with the same profile
                             Implies --kernel and --firmware if available packages are found
+                            If --debug is specified before this option, rbuild will also
+                            search debug version of the package first
     -v, --no-vendor-package Do not install vendor packages
     -o, --overlay [profile] Specify an optional overlay that should be enabled in the image
     -t, --timestamp         Add build timestamp to the filename
@@ -375,7 +377,9 @@ main() {
     local RBUILD_COMPRESSION="false"
     local DEBOS_OPTIONS=
     local DEBOS_ROOTFS="false"
+    local RBUILD_DEBUG="false"
     local RBUILD_KERNEL=
+    local RBUILD_KERNEL_DBG=
     local RBUILD_HEADER=
     local RBUILD_FIRMWARE=
     local RBUILD_OVERLAY=
@@ -390,6 +394,11 @@ main() {
         cp "$1" "$SCRIPT_DIR/common/.packages/$RBUILD_KERNEL"
         RBUILD_HEADER="linux-headers-${RBUILD_KERNEL#linux-image-}"
         cp "$(dirname $1)/$RBUILD_HEADER" "$SCRIPT_DIR/common/.packages/$RBUILD_HEADER"
+    }
+    copy_kernel_dbg() {
+        echo "Using custom debug kernel '$1' ..."
+        RBUILD_KERNEL_DBG="$(basename $1)"
+        cp "$1" "$SCRIPT_DIR/common/.packages/$RBUILD_KERNEL_DBG"
     }
     copy_firmware() {
         echo "Using custom firmware '$1' ..."
@@ -413,6 +422,7 @@ main() {
                 ;;
             -d|--debug)
                 DEBOS_OPTIONS="-v --debug-shell --show-boot"
+                RBUILD_DEBUG="true"
                 ;;
             -r|--rootfs)
                 DEBOS_ROOTFS="true"
@@ -429,16 +439,24 @@ main() {
                 shift
                 ;;
             -c|--custom)
-                for i in u-boot-$1_*.deb ../bsp/u-boot-$1_*.deb
-                do
-                    copy_firmware "$i"
-                    break
-                done
-                for i in linux-image-*-$1_*.deb ../bsp/linux-image-*-$1_*.deb
-                do
-                    copy_kernel "$i"
-                    break
-                done
+                local pkgs=(u-boot-$1_*.deb ../bsp/u-boot-$1_*.deb)
+                if (( ${#pkgs[@]} > 0 ))
+                then
+                    copy_firmware "${pkgs[0]}"
+                fi
+                pkgs=(linux-image-*-$1_*.deb ../bsp/linux-image-*-$1_*.deb)
+                if (( ${#pkgs[@]} > 0 ))
+                then
+                    copy_kernel "${pkgs[0]}"
+                fi
+                if $RBUILD_DEBUG
+                then
+                    pkgs=(linux-image-*-$1-dbg_*.deb ../bsp/linux-image-*-$1-dbg_*.deb)
+                    if (( ${#pkgs[@]} > 0 ))
+                    then
+                        copy_kernel_dbg "${pkgs[0]}"
+                    fi
+                fi
                 shift
                 ;;
             -n|--native-build)
@@ -590,7 +608,7 @@ main() {
         -t board:"$BOARD" -t distro:"$DISTRO" -t suite:"$SUITE" -t flavor:"$FLAVOR" \
         -t soc:"$SOC" -t soc_family:"$SOC_FAMILY" \
         -t image:"$IMAGE" -t efi_end:"$EFI_END" -t partition_type:"$PARTITION_TYPE" \
-        -t kernel:"$RBUILD_KERNEL" -t header:"$RBUILD_HEADER" -t firmware:"$RBUILD_FIRMWARE" \
+        -t kernel:"$RBUILD_KERNEL" -t kernel_dbg:"$RBUILD_KERNEL_DBG" -t header:"$RBUILD_HEADER" -t firmware:"$RBUILD_FIRMWARE" \
         -t install_vendor_package:"$INSTALL_VENDOR_PACKAGE" -t overlay:"$RBUILD_OVERLAY"
 
     if $RBUILD_SHRINK
