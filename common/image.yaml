@@ -78,6 +78,11 @@ actions:
       base_url: {{ $radxa_mirror }}
       priority: 1001
 
+  - action: apt
+    description: Install task-{{ $board }} package
+    packages:
+      - task-{{ $board }}
+
   - action: run
     description: Downgrade to vendor packages
     chroot: true
@@ -85,11 +90,6 @@ actions:
       set -e
       apt-get update
       apt-get full-upgrade -y --allow-downgrades
-
-  - action: apt
-    description: Install task-{{ $board }} package
-    packages:
-      - task-{{ $board }}
 
   - action: overlay
     description: Install vendor overlays
