@@ -6,3 +6,6 @@
 # LED triggers are not automatically loaded according to device tree
 ledtrig-heartbeat
 ledtrig-pattern
+
+# Load ROCK 4 dual display driver before X.org is loaded
+extcon-pd-virtual
