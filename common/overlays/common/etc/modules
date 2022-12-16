@@ -4,6 +4,7 @@
 # at boot time, one per line. Lines beginning with "#" are ignored.
 
 # LED triggers are not automatically loaded according to device tree
+ledtrig-default-on
 ledtrig-heartbeat
 ledtrig-pattern
 
