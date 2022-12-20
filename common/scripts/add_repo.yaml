@@ -14,20 +14,36 @@ actions:
     description: Download public key
     url: {{ $base_url }}/{{ $public_key }}
     name: {{ $origin }}-archive-keyring
-  
+    
+  - action: run
+    description: Debian 11 workaround
+    chroot: true
+    command: |
+      set -e
+      mkdir -p /etc/apt/keyrings/
+      chmod 0755 /etc/apt/keyrings/
+
   - action: overlay
     description: Copy public key to rootfs
     origin: {{ $origin }}-archive-keyring
-    destination: /etc/apt/trusted.gpg.d/{{ $origin }}-archive-keyring
+    destination: /etc/apt/keyrings/{{ $origin }}-archive-keyring
   
   - action: run
     description: Dearmor key
     chroot: true
     command: |
       set -e
-      gpg --dearmor /etc/apt/trusted.gpg.d/{{ $origin }}-archive-keyring
-      rm /etc/apt/trusted.gpg.d/{{ $origin }}-archive-keyring
-{{ end }}
+      gpg --dearmor /etc/apt/keyrings/{{ $origin }}-archive-keyring
+      rm /etc/apt/keyrings/{{ $origin }}-archive-keyring
+
+  - action: run
+    description: Set up repo
+    chroot: true
+    command: |
+      set -e
+      echo "deb [signed-by=/etc/apt/keyrings/{{ $origin }}-archive-keyring.gpg] {{ $base_url }} {{ $suite }} {{ $area }}" > /etc/apt/sources.list.d/{{ $origin }}.list
+
+{{ else }}
 
   - action: run
     description: Set up repo
@@ -35,6 +51,8 @@ actions:
     command: |
       set -e
       echo "deb {{ $base_url }} {{ $suite }} {{ $area }}" > /etc/apt/sources.list.d/{{ $origin }}.list
+
+{{ end }}
 
 {{ if ne $priority "" }}
   - action: run

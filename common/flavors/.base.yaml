@@ -21,6 +21,7 @@ actions:
       - cloud-initramfs-growroot
       - curl
       - file
+      - gpg
       - haveged
       - htop
       - less

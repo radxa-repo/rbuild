@@ -1,0 +1,34 @@
+{{- $radxa_mirror := "https://radxa-repo.github.io/apt" -}}
+
+{{- $origin := .origin -}}
+{{- $suite := .suite -}}
+{{- $priority := or .priority "" -}}
+{{- $area := "main" -}}
+
+{{- $architecture := .architecture -}}
+architecture: {{ $architecture }}
+
+actions:
+  - action: run
+    description: Add repo
+    chroot: true
+    command: |
+      set -e
+      if ! dpkg -l radxa-archive-keyrin&>/dev/null
+      then
+        temp="$(mktemp)"
+        version="$(curl -L https://github.com/radxa-pkg/radxa-archive-keyring/releases/latest/download/VERSION)"
+        curl -L --output "$temp" "https://github.com/radxa-pkg/radxa-archive-keyring/releases/latest/download/radxa-archive-keyring_${version}_all.deb"
+        dpkg -i "$temp"
+        rm -f "$temp"
+      fi
+      echo "deb [signed-by=/usr/share/keyrings/radxa-archive-keyring.gpg] {{ $radxa_mirror }} {{ $suite }} {{ $area }}" > /etc/apt/sources.list.d/{{ $origin }}.list
+
+{{ if ne $priority "" }}
+  - action: run
+    description: Update repo priority
+    chroot: true
+    command: |
+      set -e
+      bash -c "printf 'Package: *\nPin: release a={{ $suite }}\nPin-Priority: {{ $priority }}\n' > /etc/apt/preferences.d/{{ $origin }}"
+{{ end }}

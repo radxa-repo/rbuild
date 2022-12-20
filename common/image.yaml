@@ -16,8 +16,6 @@
 {{- $overlay := .overlay -}}
 {{- $install_vendor_package := or .install_vendor_package "true" -}}
 
-{{- $radxa_mirror := "https://radxa-repo.github.io/apt" -}}
-
 {{- $architecture := .architecture -}}
 
 architecture: {{ $architecture }}
@@ -71,11 +69,10 @@ actions:
 
   - action: recipe
     description: Add {{ $soc_family }}-{{ $suite }} Repo
-    recipe: scripts/add_repo.yaml
+    recipe: scripts/add_radxa_repo.yaml
     variables:
       origin: radxa-{{ $soc_family }}
       suite: {{ $soc_family }}-{{ $suite }}
-      base_url: {{ $radxa_mirror }}
       priority: 1001
 
   - action: apt

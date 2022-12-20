@@ -5,7 +5,6 @@
 {{- $debian_area := "main contrib non-free" -}}
 {{- $ubuntu_mirror := "http://ports.ubuntu.com" -}}
 {{- $ubuntu_area := "main restricted universe multiverse" -}}
-{{- $radxa_mirror := "https://radxa-repo.github.io/apt" -}}
 
 {{- $architecture := .architecture -}}
 
@@ -28,6 +27,13 @@ actions:
     mirror: {{ $ubuntu_mirror }}/ubuntu-ports
     check-gpg: false
 {{ end }}
+
+  - action: apt
+    description: Prepare for custom repo
+    packages:
+      - curl
+      - apt-transport-https
+      - ca-certificates
 
   - action: recipe
     description: Add {{ $suite }}-updates Repo
@@ -68,21 +74,12 @@ actions:
       area: {{ $ubuntu_area }}
 {{ end }}
 
-  - action: apt
-    description: Prepare for custom repo
-    packages:
-      - gpg
-      - apt-transport-https
-      - ca-certificates
-
   - action: recipe
     description: Add Radxa Repo
-    recipe: scripts/add_repo.yaml
+    recipe: scripts/add_radxa_repo.yaml
     variables:
       origin: radxa
       suite: {{ $suite }}
-      base_url: {{ $radxa_mirror }}
-      public_key: pubkey.gpg
 
   - action: recipe
     description: Install base packages
