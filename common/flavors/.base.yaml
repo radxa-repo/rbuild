@@ -11,6 +11,14 @@ actions:
       - init
       - initramfs-tools
       - sudo
+
+  - action: apt
+    description: Install firmwares
+    packages:
+      - firmware-brcm80211
+      - firmware-iwlwifi
+      - firmware-linux
+      - firmware-realtek
   
   - action: apt
     description: Install system utilities
