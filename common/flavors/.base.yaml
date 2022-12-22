@@ -15,10 +15,14 @@ actions:
   - action: apt
     description: Install firmwares
     packages:
+{{ if eq $distro "debian"}}
       - firmware-brcm80211
       - firmware-iwlwifi
       - firmware-linux
       - firmware-realtek
+{{ else if eq $distro "ubuntu"}}
+      - linux-firmware
+{{ end }}
   
   - action: apt
     description: Install system utilities
