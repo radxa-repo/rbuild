@@ -9,6 +9,7 @@ actions:
     description: Install KDE specific packages
     packages:
       - bluedevil
+      - kaffeine
       - kde-config-plymouth
       - kde-config-sddm
       - kinfocenter
@@ -16,6 +17,8 @@ actions:
       - konqueror
       - kscreen
       - kwin-x11
+      - phonon4qt5-backend-gstreamer
+      - phonon4qt5settings
       - plasma-discover
       - plasma-nm
       - plymouth

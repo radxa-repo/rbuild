@@ -8,10 +8,11 @@ actions:
   - action: apt
     description: Install common desktop packages
     packages:
-      - xdg-utils
-      - smplayer
-  {{ if eq $distro "debian"}}
+{{ if eq $distro "debian"}}
       - firefox-esr
-  {{ else if eq $distro "ubuntu"}}
+{{ else if eq $distro "ubuntu"}}
       - firefox
-  {{ end }}
+{{ end }}
+      - smplayer
+      - vlc
+      - xdg-utils
