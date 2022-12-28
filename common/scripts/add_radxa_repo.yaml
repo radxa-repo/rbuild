@@ -14,7 +14,7 @@ actions:
     chroot: true
     command: |
       set -e
-      if ! dpkg -l radxa-archive-keyrin&>/dev/null
+      if ! dpkg -l radxa-archive-keyring >/dev/null 2>&1
       then
         temp="$(mktemp)"
         version="$(curl -L https://github.com/radxa-pkg/radxa-archive-keyring/releases/latest/download/VERSION)"
