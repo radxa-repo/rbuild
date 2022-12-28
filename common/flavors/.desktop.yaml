@@ -13,6 +13,4 @@ actions:
 {{ else if eq $distro "ubuntu"}}
       - firefox
 {{ end }}
-      - smplayer
-      - vlc
       - xdg-utils
