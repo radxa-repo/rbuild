@@ -70,6 +70,7 @@ actions:
   - action: apt
     description: Install audio utilities
     packages:
+      - alsa-ucm-conf
       - alsa-utils
       - pulseaudio
       - pulseaudio-module-bluetooth
