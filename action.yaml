@@ -3,7 +3,7 @@ description: Radxa Image Builder
 inputs:
   board:
     required: true
-  distro:
+  suite:
     required: true
   flavor:
     required: true
@@ -33,7 +33,7 @@ runs:
       if: inputs.prebuilt-rootfs == 'true'
       uses: actions/download-artifact@v3
       with:
-        name: rootfs_${{ inputs.distro }}_${{ inputs.flavor }}
+        name: rootfs_${{ inputs.suite }}_${{ inputs.flavor }}
         path: .rootfs
     - name: Build
       shell: bash
@@ -41,7 +41,7 @@ runs:
         mkdir .output
         cd .output
         # --root-override is a hidden argument so we can build as root.
-        sudo ../rbuild --timestamp --compress --native-build --shrink --root-override ${{ inputs.board }} ${{ inputs.distro }} ${{ inputs.flavor }}
+        sudo ../rbuild --timestamp --compress --native-build --shrink --root-override ${{ inputs.board }} ${{ inputs.suite }} ${{ inputs.flavor }}
         if [ -n "$(ls -A ./* 2>/dev/null)" ]
         then
           sudo chown $USER ./*
@@ -50,13 +50,13 @@ runs:
       if: inputs.artifacts == 'true' && inputs.board != 'rootfs'
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ inputs.board }}_${{ inputs.distro }}_${{ inputs.flavor }}
+        name: ${{ inputs.board }}_${{ inputs.suite }}_${{ inputs.flavor }}
         path: .output
     - name: Upload rootfs artifacts
       if: inputs.artifacts == 'true' && inputs.board == 'rootfs'
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ inputs.board }}_${{ inputs.distro }}_${{ inputs.flavor }}
+        name: ${{ inputs.board }}_${{ inputs.suite }}_${{ inputs.flavor }}
         path: .rootfs
     - name: Upload image
       if: inputs.release-id != '' && inputs.github-token != '' && inputs.board != 'rootfs'

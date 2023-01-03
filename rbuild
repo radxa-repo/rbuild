@@ -128,7 +128,7 @@ EOF
 usage() {
     cat >&2 << EOF
 Radxa Image Builder
-usage: $(basename "$0") [options] <board> [distro] [flavor]
+usage: $(basename "$0") [options] <board> [suite] [flavor]
 
 Supported image generation options:
     -s, --shrink            Shrink root partition after image is generated
@@ -162,8 +162,8 @@ Alternative commands
 Supported board:
 $(printf_array "    %s\n" "$(get_supported_boards)")
 
-Supported distros (default to the first one):
-$(printf_array "    %s\n" "$(get_supported_distros)")
+Supported suites (default to the first one):
+$(printf_array "    %s\n" "$(get_supported_suites)")
 
 Supported flavors (default to the first one):
 $(printf_array "    %s\n" "$(get_supported_flavors)")
@@ -200,14 +200,14 @@ get_supported_boards() {
     echo "${BOARDS[@]}"
 }
 
-get_supported_distros() {
+get_supported_suites() {
     while (( $# > 0 )) && [[ "$1" == "--" ]]
     do
         shift
     done
 
-    local DISTROS=("debian" "ubuntu")
-    echo "${DISTROS[@]}"
+    local SUITES=("bullseye" "jammy")
+    echo "${SUITES[@]}"
 }
 
 get_supported_flavors() {
@@ -507,11 +507,11 @@ main() {
 
     local DEBOS_TUPLE="$@"
     local BOARDS=($(get_supported_boards))
-    local DISTROS=($(get_supported_distros))
+    local SUITES=($(get_supported_suites))
     local FLAVORS=($(get_supported_flavors))
 
     local BOARD=
-    local DISTRO=${DISTROS[0]}
+    local SUITE=${SUITES[0]}
     local FLAVOR=${FLAVORS[0]}
 
     while (( $# > 0 ))
@@ -519,9 +519,9 @@ main() {
         if in_array "$1" "${BOARDS[@]}"
         then
             BOARD="$1"
-        elif in_array "$1" "${DISTROS[@]}"
+        elif in_array "$1" "${SUITES[@]}"
         then
-            DISTRO="$1"
+            SUITE="$1"
         elif in_array "$1" "${FLAVORS[@]}"
         then
             FLAVOR="$1"
@@ -532,7 +532,7 @@ main() {
     done
     
     if ! ( in_array "$BOARD" "${BOARDS[@]}" && \
-           in_array "$DISTRO" "${DISTROS[@]}" && \
+           in_array "$SUITE" "${SUITES[@]}" && \
            in_array "$FLAVOR" "${FLAVORS[@]}" )
     then
         error $EXIT_UNSUPPORTED_OPTION "$DEBOS_TUPLE"
@@ -550,12 +550,12 @@ main() {
         RBUILD_TIMESTAMP=""
     fi
 
-    case $DISTRO in
-        debian)
-            local SUITE="bullseye"
+    case $SUITE in
+        bullseye)
+            local DISTRO="debian"
             ;;
-        ubuntu)
-            local SUITE="jammy"
+        jammy|focal)
+            local SUITE="ubuntu"
             ;;
     esac
 

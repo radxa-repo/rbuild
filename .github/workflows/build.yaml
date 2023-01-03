@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       boards: ${{ steps.query.outputs.boards }}
-      distros: ${{ steps.query.outputs.distros }}
+      suites: ${{ steps.query.outputs.suites }}
       flavors: ${{ steps.query.outputs.flavors }}
     steps:
       - name: Checkout
@@ -22,7 +22,7 @@ jobs:
         id: query
         run: |
           echo "boards=$(./rbuild json boards)" >> $GITHUB_OUTPUT
-          echo "distros=$(./rbuild json distros)" >> $GITHUB_OUTPUT
+          echo "suites=$(./rbuild json suites)" >> $GITHUB_OUTPUT
           echo "flavors=$(./rbuild json flavors)" >> $GITHUB_OUTPUT
 
   build-rootfs:
@@ -31,33 +31,33 @@ jobs:
     strategy:
       matrix:
         boards: [ rootfs ]
-        distros: ${{ fromJSON(needs.query.outputs.distros )}}
+        suites: ${{ fromJSON(needs.query.outputs.suites )}}
         flavors: ${{ fromJSON(needs.query.outputs.flavors )}}
     steps:
-      - name: Build ${{ matrix.boards }}_${{ matrix.distros }}_${{ matrix.flavors }}
+      - name: Build ${{ matrix.boards }}_${{ matrix.suites }}_${{ matrix.flavors }}
         uses: radxa-repo/rbuild@main
         with:
           board: ${{ matrix.boards }}
-          distro: ${{ matrix.distros }}
+          suite: ${{ matrix.suites }}
           flavor: ${{ matrix.flavors }}
           artifacts: true
 
   build-images:
-    needs: [ query, build-rootfs ]
+    needs: build-rootfs
     runs-on: ubuntu-latest
     strategy:
       matrix:
         boards: ${{ fromJSON(needs.query.outputs.boards) }}
-        distros: ${{ fromJSON(needs.query.outputs.distros )}}
+        suites: ${{ fromJSON(needs.query.outputs.suites )}}
         flavors: ${{ fromJSON(needs.query.outputs.flavors )}}
         exclude:
           - boards: rootfs
     steps:
-      - name: Build ${{ matrix.boards }}_${{ matrix.distros }}_${{ matrix.flavors }}
+      - name: Build ${{ matrix.boards }}_${{ matrix.suites }}_${{ matrix.flavors }}
         uses: radxa-repo/rbuild@main
         with:
           board: ${{ matrix.boards }}
-          distro: ${{ matrix.distros }}
+          suite: ${{ matrix.suites }}
           flavor: ${{ matrix.flavors }}
           artifacts: true
           prebuilt-rootfs: true
