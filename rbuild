@@ -555,7 +555,7 @@ main() {
             local DISTRO="debian"
             ;;
         jammy|focal)
-            local SUITE="ubuntu"
+            local DISTRO="ubuntu"
             ;;
     esac
 
