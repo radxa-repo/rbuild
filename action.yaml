@@ -33,10 +33,12 @@ runs:
         then
           echo "suite=${{ inputs.suite }}" >> $GITHUB_ENV
         elif [[ "${{ inputs.distro }}" == "debian" ]]
+        then
           suite="bullseye"
           echo "Distro set to ${{ inputs.distro }}, using $suite as suite"
           echo "suite=$suite" >> $GITHUB_ENV
         elif [[ "${{ inputs.distro }}" == "ubuntu" ]]
+        then
           suite="jammy"
           echo "Distro set to ${{ inputs.distro }}, using $suite as suite"
           echo "suite=$suite" >> $GITHUB_ENV
