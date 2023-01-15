@@ -230,7 +230,7 @@ get_supported_infos() {
         shift
     done
 
-    local INFOS=("boards" "distros" "flavors")
+    local INFOS=("boards" "suites" "flavors")
     echo "${INFOS[@]}"
 }
 
