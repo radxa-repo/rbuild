@@ -3,8 +3,10 @@ description: Radxa Image Builder
 inputs:
   board:
     required: true
+  distro:
+    required: false
   suite:
-    required: true
+    required: false
   flavor:
     required: true
   artifacts:
@@ -24,6 +26,24 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: radxa-repo/rbuild
+    - name: Set suite based on input variables
+      shell: bash
+      run: |
+        if [[ -n "${{ inputs.suite }}" ]]
+        then
+          echo "suite=${{ inputs.suite }}" >> $GITHUB_ENV
+        elif [[ "${{ inputs.distro }}" == "debian" ]]
+          suite="bullseye"
+          echo "Distro set to ${{ inputs.distro }}, using $suite as suite"
+          echo "suite=$suite" >> $GITHUB_ENV
+        elif [[ "${{ inputs.distro }}" == "ubuntu" ]]
+          suite="jammy"
+          echo "Distro set to ${{ inputs.distro }}, using $suite as suite"
+          echo "suite=$suite" >> $GITHUB_ENV
+        else
+          echo "Unknown distro/suite value!" >&2
+          exit 1
+        fi
     - name: Install dependencies
       shell: bash
       run: |
@@ -33,7 +53,7 @@ runs:
       if: inputs.prebuilt-rootfs == 'true'
       uses: actions/download-artifact@v3
       with:
-        name: rootfs_${{ inputs.suite }}_${{ inputs.flavor }}
+        name: rootfs_${{ env.suite }}_${{ inputs.flavor }}
         path: .rootfs
     - name: Build
       shell: bash
@@ -50,13 +70,13 @@ runs:
       if: inputs.artifacts == 'true' && inputs.board != 'rootfs'
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ inputs.board }}_${{ inputs.suite }}_${{ inputs.flavor }}
+        name: ${{ inputs.board }}_${{ env.suite }}_${{ inputs.flavor }}
         path: .output
     - name: Upload rootfs artifacts
       if: inputs.artifacts == 'true' && inputs.board == 'rootfs'
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ inputs.board }}_${{ inputs.suite }}_${{ inputs.flavor }}
+        name: ${{ inputs.board }}_${{ env.suite }}_${{ inputs.flavor }}
         path: .rootfs
     - name: Upload image
       if: inputs.release-id != '' && inputs.github-token != '' && inputs.board != 'rootfs'
