@@ -200,17 +200,6 @@ get_supported_boards() {
     echo "${BOARDS[@]}"
 }
 
-# This is only for backwards compatibility
-get_supported_distro() {
-    while (( $# > 0 )) && [[ "$1" == "--" ]]
-    do
-        shift
-    done
-
-    local DISTROS=("debian" "ubuntu")
-    echo "${DISTROS[@]}"
-}
-
 get_supported_suites() {
     while (( $# > 0 )) && [[ "$1" == "--" ]]
     do
