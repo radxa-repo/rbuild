@@ -52,6 +52,7 @@ actions:
       - wget
       - whiptail
       - xz-utils
+      - zram-tools
 
   - action: apt
     description: Install network utilities
