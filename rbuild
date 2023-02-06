@@ -206,7 +206,7 @@ get_supported_suites() {
         shift
     done
 
-    local SUITES=("bullseye" "jammy" "focal")
+    local SUITES=("bullseye" "jammy")
     echo "${SUITES[@]}"
 }
 
@@ -509,6 +509,22 @@ main() {
     local BOARDS=($(get_supported_boards))
     local SUITES=($(get_supported_suites))
     local FLAVORS=($(get_supported_flavors))
+
+    # Add hidden & non-officially supported options
+    # Some of them will be broken!
+    for i in "$SCRIPT_DIR"/configs/.*.conf
+    do
+        i="$(basename "$i")"
+        i="${i#.}"
+        BOARDS+=("${i%.conf}")
+    done
+    SUITES+=("focal")
+    for i in "$SCRIPT_DIR"/common/flavors/.*.yaml
+    do
+        i="$(basename "$i")"
+        i="${i#.}"
+        FLAVORS+=("${i%.yaml}")
+    done
 
     local BOARD=
     local SUITE=${SUITES[0]}
