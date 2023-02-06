@@ -65,7 +65,7 @@ actions:
     # u-boot-menu will add root= in append for us
     setup-kernel-cmdline: false
 
-{{ if and (eq $install_vendor_package "true") (eq $flavor "kde") (eq $distro "debian") }}
+{{ if and (eq $install_vendor_package "true") (ne $flavor "cli") (eq $distro "debian") }}
 
   - action: recipe
     description: Add {{ $soc_family }}-{{ $suite }} Repo
