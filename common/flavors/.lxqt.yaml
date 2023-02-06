@@ -1,0 +1,27 @@
+{{- $distro := .distro -}}
+
+{{- $architecture := .architecture -}}
+
+architecture: {{ $architecture }}
+
+actions:
+  - action: apt
+    description: Install Xfce specific packages
+    packages:
+      - bluedevil
+      - breeze-cursor-theme
+      - gnome-themes-extra
+      - oxygen-icon-theme
+      - papirus-icon-theme
+      - qterminal
+{{ if eq $distro "debian" }}
+      - task-lxqt-desktop
+{{ else }}
+      - lxqt
+{{ end }}
+
+  - action: recipe
+    description: Install common desktop packages
+    recipe: .desktop.yaml
+    variables:
+      distro: {{ $distro }}
