@@ -1,0 +1,18 @@
+{{- $distro := .distro -}}
+
+{{- $architecture := .architecture -}}
+
+architecture: {{ $architecture }}
+
+actions:
+  - action: apt
+    description: Install Xfce specific packages
+    packages:
+      - openbox
+      - pcmanfm
+
+  - action: recipe
+    description: Install common desktop packages
+    recipe: .desktop.yaml
+    variables:
+      distro: {{ $distro }}
