@@ -515,14 +515,12 @@ main() {
     for i in "$SCRIPT_DIR"/configs/.*.conf
     do
         i="$(basename "$i")"
-        i="${i#.}"
         BOARDS+=("${i%.conf}")
     done
     SUITES+=("focal")
     for i in "$SCRIPT_DIR"/common/flavors/.*.yaml
     do
         i="$(basename "$i")"
-        i="${i#.}"
         FLAVORS+=("${i%.yaml}")
     done
 
