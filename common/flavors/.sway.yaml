@@ -10,3 +10,9 @@ actions:
     packages:
       - sway
       - foot
+
+  - action: recipe
+    description: Install common desktop packages
+    recipe: .desktop.yaml
+    variables:
+      distro: {{ $distro }}
