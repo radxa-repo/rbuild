@@ -13,4 +13,7 @@ actions:
 {{ else if eq $distro "ubuntu"}}
       - firefox
 {{ end }}
+      - plymouth
+      - plymouth-theme-breeze
+      - plymouth-themes
       - xdg-utils

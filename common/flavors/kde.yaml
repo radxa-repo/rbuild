@@ -20,9 +20,6 @@ actions:
       - phonon4qt5-backend-gstreamer
       - plasma-discover
       - plasma-nm
-      - plymouth
-      - plymouth-theme-breeze
-      - plymouth-themes
       - qml-module-org-kde-newstuff
       - sddm-theme-breeze
       - systemsettings
