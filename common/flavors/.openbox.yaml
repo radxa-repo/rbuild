@@ -6,7 +6,7 @@ architecture: {{ $architecture }}
 
 actions:
   - action: apt
-    description: Install Xfce specific packages
+    description: Install Openbox specific packages
     packages:
       - openbox
       - pcmanfm
