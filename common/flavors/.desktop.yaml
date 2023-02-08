@@ -13,6 +13,7 @@ actions:
 {{ else if eq $distro "ubuntu"}}
       - firefox
 {{ end }}
+      - fonts-noto-cjk
       - gvfs
       - gvfs-backends
       - gvfs-fuse
