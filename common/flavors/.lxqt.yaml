@@ -11,6 +11,7 @@ actions:
       - bluedevil
       - breeze-cursor-theme
       - gnome-themes-extra
+      - lightdm
       - oxygen-icon-theme
       - papirus-icon-theme
       - qterminal

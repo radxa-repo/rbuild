@@ -13,6 +13,9 @@ actions:
 {{ else if eq $distro "ubuntu"}}
       - firefox
 {{ end }}
+      - gvfs
+      - gvfs-backends
+      - gvfs-fuse
       - plymouth
       - plymouth-theme-breeze
       - plymouth-themes
