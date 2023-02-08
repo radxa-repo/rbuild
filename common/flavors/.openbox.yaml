@@ -8,8 +8,15 @@ actions:
   - action: apt
     description: Install Openbox specific packages
     packages:
+      - feh
+      - obconf
       - openbox
+      - openbox-menu
+      - lightdm
+      - lxterminal
       - pcmanfm
+      - xinit
+      - xserver-xorg-input-all
 
   - action: recipe
     description: Install common desktop packages
