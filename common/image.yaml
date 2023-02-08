@@ -65,7 +65,9 @@ actions:
     # u-boot-menu will add root= in append for us
     setup-kernel-cmdline: false
 
-{{ if and (eq $install_vendor_package "true") (ne $flavor "cli") (eq $distro "debian") }}
+{{ if and (eq $install_vendor_package "true") (ne $flavor "cli") }}
+
+  {{ if eq $distro "debian" }}
 
   - action: recipe
     description: Add {{ $soc_family }}-{{ $suite }} Repo
@@ -79,6 +81,26 @@ actions:
     description: Install task-{{ $board }} package
     packages:
       - task-{{ $board }}
+
+  {{ else if and (eq $suite "jammy") (eq $soc_family "rockchip") }}
+
+  - action: run
+    description: Add rockchip-multimedia Repo
+    chroot: true
+    command: |
+      set -e
+      add-apt-repository ppa:liujianfeng1994/rockchip-multimedia
+
+  - action: apt
+    description: Install vendor package
+    packages:
+      - chromium-browser
+      - clapper
+      - ffmpeg
+      - gstreamer1.0-rockchip
+      - rockchip-multimedia-config
+
+  {{ end }}
 
   - action: run
     description: Downgrade to vendor packages
