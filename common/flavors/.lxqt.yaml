@@ -9,7 +9,6 @@ actions:
     description: Install LXQt specific packages
     packages:
       - bluedevil
-      - breeze-cursor-theme
       - gnome-themes-extra
       - lightdm
       - oxygen-icon-theme

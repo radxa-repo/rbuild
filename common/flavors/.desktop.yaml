@@ -8,6 +8,8 @@ actions:
   - action: apt
     description: Install common desktop packages
     packages:
+      - breeze-cursor-theme
+      - desktop-base
 {{ if eq $distro "debian"}}
       - firefox-esr
 {{ else if eq $distro "ubuntu"}}
