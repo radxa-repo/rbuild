@@ -139,24 +139,24 @@ Supported image generation options:
                             Require running rbuild with sudo
     -d, --debug             Drop into a debug shell when build failed
     -r, --rootfs            Do not use saved rootfs and regenerate it
-    -k, --kernel [deb]      Use custom Linux kernel package
+    -k, --kernel <deb>      Use custom Linux kernel package
                             This option also requires the matching kernel header package
                             under the same folder
-    -f, --firmware [deb]    Use custom firmware package
-    -c, --custom [profile]  Try matching locally built bsp packages with the same profile
+    -f, --firmware <deb>    Use custom firmware package
+    -c, --custom <profile>  Try matching locally built bsp packages with the same profile
                             Implies --kernel and --firmware if available packages are found
                             If --debug is specified before this option, rbuild will also
                             search debug version of the package first
     -v, --no-vendor-package Do not install vendor packages
-    -o, --overlay [profile] Specify an optional overlay that should be enabled in the image
+    -o, --overlay <profile> Specify an optional overlay that should be enabled in the image
     -t, --timestamp         Add build timestamp to the filename
     -h, --help              Show this help message
 
 Alternative commands
-    json [catagory]         Print supported options in json format
+    json <catagory>         Print supported options in json format
                             Available catagories: $(get_supported_infos)
-    shrink-image [image]    Shrink generated image
-    write-image [image] [/dev/block]
+    shrink-image <image>    Shrink generated image
+    write-image <image> </dev/block>
                             Write image to block device, support --shrink flag
 
 Supported board:
