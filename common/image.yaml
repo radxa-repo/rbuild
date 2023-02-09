@@ -65,7 +65,9 @@ actions:
     # u-boot-menu will add root= in append for us
     setup-kernel-cmdline: false
 
-{{ if and (eq $install_vendor_package "true") (ne $flavor "cli") (eq $distro "debian") }}
+{{ if and (ne $install_vendor_package "false") (ne $flavor "cli") (eq $distro "debian") }}
+
+  {{ if eq $install_vendor_package "true" }}
 
   - action: recipe
     description: Add {{ $soc_family }}-{{ $suite }} Repo
@@ -92,6 +94,23 @@ actions:
     description: Install vendor overlays
     source: overlays/{{ $soc_family }}
     destination: /
+  
+  {{ else }}
+
+  - action: recipe
+    description: Add {{ $soc_family }}-{{ $suite }} Repo
+    recipe: scripts/add_radxa_repo.yaml
+    variables:
+      origin: radxa-{{ $soc_family }}
+      suite: {{ $soc_family }}-{{ $suite }}
+      priority: 100
+
+  - action: apt
+    description: Install {{ $install_vendor_package }} package
+    packages:
+      - {{ $install_vendor_package }}
+
+  {{ end }}
 
 {{ end }}
 

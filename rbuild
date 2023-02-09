@@ -147,7 +147,11 @@ Supported image generation options:
                             Implies --kernel and --firmware if available packages are found
                             If --debug is specified before this option, rbuild will also
                             search debug version of the package first
-    -v, --no-vendor-package Do not install vendor packages
+    -v[but_this_package], --no-vendor-package[=but_this_package] 
+                            When no optional argument is provided:
+                                    vendor packages will not be installed
+                            When optional argument is provided:
+                                    install specified vendor package instead
     -o, --overlay <profile> Specify an optional overlay that should be enabled in the image
     -t, --timestamp         Add build timestamp to the filename
     -h, --help              Show this help message
@@ -366,7 +370,7 @@ main() {
     mkdir -p "$SCRIPT_DIR/common/.packages"
 
     local ARGV=("$@")
-    if ! local TEMP="$(getopt -o "sndrk:f:vhc:o:t" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package,help,custom:,overlay:,timestamp" -n "$0" -- "$@")"
+    if ! local TEMP="$(getopt -o "sndrk:f:v::hc:o:t" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package::,help,custom:,overlay:,timestamp" -n "$0" -- "$@")"
     then
         usage
         return 1
@@ -428,7 +432,8 @@ main() {
                 DEBOS_ROOTFS="true"
                 ;;
             -v|--no-vendor-package)
-                INSTALL_VENDOR_PACKAGE="false"
+                INSTALL_VENDOR_PACKAGE="${1:-false}"
+                shift
                 ;;
             -k|--kernel)
                 copy_kernel "$1"
