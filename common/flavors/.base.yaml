@@ -30,6 +30,7 @@ actions:
       - apt-utils
       - bash-completion
       - bc
+      - binutils
       - cloud-initramfs-growroot
       - curl
       - file
