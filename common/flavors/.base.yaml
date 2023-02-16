@@ -47,6 +47,7 @@ actions:
       - python3-pip
       - software-properties-common
       - ssh
+      - sysfsutils
       - systemd-timesyncd
       - tmux
       - u-boot-tools
