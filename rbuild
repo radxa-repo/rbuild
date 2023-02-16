@@ -660,5 +660,6 @@ shopt -s nullglob
 LC_ALL="C"
 LANG="C"
 LANGUAGE="C"
+PATH="/usr/sbin:$PATH"
 
 main "$@"
