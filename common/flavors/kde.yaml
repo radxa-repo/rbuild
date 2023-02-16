@@ -12,6 +12,7 @@ actions:
       - dragonplayer
       - kde-config-plymouth
       - kde-config-sddm
+      - kde-config-screenlocker
       - kinfocenter
       - kio-extras
       - konqueror
@@ -20,6 +21,7 @@ actions:
       - phonon4qt5-backend-gstreamer
       - plasma-discover
       - plasma-nm
+      - powerdevil
       - qml-module-org-kde-newstuff
       - sddm-theme-breeze
       - systemsettings
