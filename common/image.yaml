@@ -251,11 +251,15 @@ actions:
     command: |
       set -e
       rsetup update_hostname {{ $board }}
-      echo "BUILD_DATE='$(date -R)'" > /etc/radxa_image_info
-      echo "RBUILD_REV='{{ $rbuild_rev }}'" >> /etc/radxa_image_info
-      echo "RBUILD_CMD='{{ $rbuild_cmd }}'" >> /etc/radxa_image_info
-      echo "KERNEL_INCLUDED='$(dpkg-query -f '${binary:Package}:${Version}\n' -W | grep -v {{ $board }} | grep linux-image)'" >> /etc/radxa_image_info
-      echo "UBOOT_INCLUDED='$(dpkg-query -f '${binary:Package}:${Version}\n' -W | grep -v -e {{ $board }} -e u-boot-menu -e u-boot-tools | grep u-boot)'" >> /etc/radxa_image_info
+      echo "BUILD_DATE='$(date -R)'" > /etc/radxa_image_fingerprint
+      echo "RBUILD_REVISION='{{ $rbuild_rev }}'" >> /etc/radxa_image_fingerprint
+      echo "RBUILD_COMMAND='{{ $rbuild_cmd }}'" >> /etc/radxa_image_fingerprint
+      pkg_info=( $(dpkg-query -f '${binary:Package} ${Version}\n' -W | grep -v -e {{ $board }} | grep linux-image) )
+      echo "RBUILD_KERNEL='${pkg_info[0]}'" >> /etc/radxa_image_fingerprint
+      echo "RBUILD_KERNEL_VERSION='${pkg_info[1]}'" >> /etc/radxa_image_fingerprint
+      pkg_info=( $(dpkg-query -f '${binary:Package} ${Version}\n' -W | grep -v -e {{ $board }} -e u-boot-menu -e u-boot-tools | grep u-boot) )
+      echo "RBUILD_UBOOT='${pkg_info[0]}'" >> /etc/radxa_image_fingerprint
+      echo "RBUILD_UBOOT_VERSION='${pkg_info[1]}'" >> /etc/radxa_image_fingerprint
 
   - action: recipe
     description: Clean up rootfs
