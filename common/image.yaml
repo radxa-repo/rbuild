@@ -251,7 +251,7 @@ actions:
     command: |
       set -e
       rsetup update_hostname {{ $board }}
-      echo "BUILD_DATE='$(date -R)'" > /etc/radxa_image_fingerprint
+      echo "RBUILD_BUILD_DATE='$(date -R)'" > /etc/radxa_image_fingerprint
       echo "RBUILD_REVISION='{{ $rbuild_rev }}'" >> /etc/radxa_image_fingerprint
       echo "RBUILD_COMMAND='{{ $rbuild_cmd }}'" >> /etc/radxa_image_fingerprint
       pkg_info=( $(dpkg-query -f '${binary:Package} ${Version}\n' -W | grep -v -e {{ $board }} | grep linux-image) )
