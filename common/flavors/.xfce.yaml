@@ -9,6 +9,8 @@ actions:
     description: Install Xfce specific packages
     packages:
       - blueman
+      - network-manager-gnome
+      - pavucontrol
 {{ if eq $distro "debian" }}
       - task-xfce-desktop
 {{ else }}
