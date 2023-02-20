@@ -1,8 +1,12 @@
+# ==============================
 # Radxa First Boot Configuration
 # ==============================
-log "Running before.txt"
-#
-# Basic system settings
+log "Running before.txt as first boot configuration"
+
+# Create the default account
+# Commands:
+#   add_user <user name> <password>
+#   user_append_group <user name> <group>
 #
 add_user radxa radxa
 user_append_group radxa sudo
@@ -10,24 +14,25 @@ user_append_group radxa audio
 user_append_group radxa video
 user_append_group radxa plugdev
 user_append_group radxa render
-#
+
 # Resize root partition
 #
 resize_root
-#
-# Disable SSH since our default account uses a weak password
+
+# Disable open services
+# Command:
+#   disable_service <systemd unit name>
 #
 disable_service ssh
-#
-# Disable Samba smbd service
-#
 disable_service smbd
-#
+
 # Generate unique hardware fingerprint
 #
 regenerate_ssh_hostkey
 regenerate_machine_id
-#
-# Update locale
+
+# Configure locale
+# Command:
+#   update_locale <locale>
 #
 update_locale en_US.UTF-8

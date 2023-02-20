@@ -39,7 +39,7 @@ actions:
 
       if echo "$(apt list --installed sway 2>/dev/null)" | grep -q "installed"
       then
-          mkdir -p /etc/skel/.config/sway
+        mkdir -p /etc/skel/.config/sway
         cp /etc/sway/config /etc/skel/.config/sway/config
       fi
 
