@@ -70,7 +70,6 @@ actions:
       - network-manager
       - samba
       - wireless-regdb
-      - wpasupplicant
 
   - action: apt
     description: Install audio utilities
