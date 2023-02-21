@@ -66,6 +66,7 @@ actions:
       - iproute2
       - iputils-ping
       - iw
+      - iwd
       - network-manager
       - samba
       - wireless-regdb
