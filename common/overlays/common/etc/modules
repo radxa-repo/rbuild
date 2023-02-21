@@ -7,6 +7,7 @@
 ledtrig-default-on
 ledtrig-heartbeat
 ledtrig-pattern
+ledtrig-timer
 
 # Load ROCK 4 dual display driver before X.org is loaded
 extcon-pd-virtual
