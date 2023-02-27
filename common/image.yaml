@@ -92,7 +92,7 @@ actions:
       set -e
       apt-get update
       apt-get full-upgrade -y --allow-downgrades
-      apt-get autoremove -y
+      apt-get autoremove -y --purge
 
   - action: overlay
     description: Install vendor overlays
