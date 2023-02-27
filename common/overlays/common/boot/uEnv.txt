@@ -1,0 +1,4 @@
+# uEnv.txt has been retired.
+# Please use:
+#   `rsetup` command to confiure device overlays;
+#   `sudo nano /etc/kernel/cmdline && sudo u-boot-update` to update kernel arguments.
