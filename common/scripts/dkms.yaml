@@ -13,6 +13,11 @@ actions:
     packages:
       - r8125-dkms
 
+  - action: overlay
+    description: Install dkms overlays
+    source: overlays/r8125-dkms
+    destination: /
+
 {{ else }}
 
   - action: run
