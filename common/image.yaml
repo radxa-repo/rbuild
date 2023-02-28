@@ -98,6 +98,15 @@ actions:
     description: Install vendor overlays
     source: overlays/{{ $soc_family }}
     destination: /
+
+    {{ if and (eq $soc_family "rockchip")(eq $flavor "xfce")  }}
+
+  - action: overlay
+    description: Install vendor {{ $flavor }} overlays
+    source: overlays/{{ $soc_family }}-{{ $flavor }}
+    destination: /
+
+    {{ end }}
   
   {{ else }}
 
