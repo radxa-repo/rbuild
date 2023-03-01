@@ -15,7 +15,7 @@ actions:
 
   - action: overlay
     description: Install dkms overlays
-    source: overlays/r8125-dkms
+    source: ../overlays/r8125-dkms
     destination: /
 
 {{ else }}
