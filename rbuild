@@ -317,12 +317,12 @@ debos() {
 
     if [[ $SCRIPT_DIR != $PWD ]]
     then
-        DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR,destination=$SCRIPT_DIR" )
+        DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR,destination=$SCRIPT_DIR,relabel=shared" )
         if $NATIVE_BUILD
         then
             ln -s "$(realpath "--relative-to=$PWD" "$SCRIPT_DIR/.rootfs")" .rootfs
         else
-            DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR/.rootfs,destination=$PWD/.rootfs" )
+            DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR/.rootfs,destination=$PWD/.rootfs,relabel=shared" )
         fi
     fi
     
@@ -347,9 +347,15 @@ debos() {
     then
         env debos --disable-fakemachine $DEBOS_OPTIONS "$@"
     else
-        docker run --rm $DEBOS_BACKEND --user $(id -u) \
+        if [[ "$(docker --version)" =~ "podman" ]]
+        then
+            DOCKER_OPTIONS+=( "--user" "root" )
+        else
+            DOCKER_OPTIONS+=( "--user" "$(id -u)" )
+        fi
+        docker run --rm $DEBOS_BACKEND \
             --security-opt label=disable \
-            --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD" \
+            --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD,relabel=shared" \
             "${DOCKER_OPTIONS[@]}" godebos/debos $DEBOS_OPTIONS "$@"
     fi
 }
