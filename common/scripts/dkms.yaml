@@ -8,15 +8,15 @@ architecture: {{ $architecture }}
 actions:
 {{ if or (eq $board "rock-5b") (eq $board "radxa-e25") }}
 
-  - action: apt
-    description: Install {{ $board }} dkms packages
-    packages:
-      - r8125-dkms
-
   - action: overlay
     description: Install dkms overlays
     source: ../overlays/r8125-dkms
     destination: /
+
+  - action: apt
+    description: Install {{ $board }} dkms packages
+    packages:
+      - r8125-dkms
 
 {{ else }}
 
