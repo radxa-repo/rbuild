@@ -317,12 +317,12 @@ debos() {
 
     if [[ $SCRIPT_DIR != $PWD ]]
     then
-        DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR,destination=$SCRIPT_DIR,relabel=shared" )
+        DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR,destination=$SCRIPT_DIR" )
         if $NATIVE_BUILD
         then
             ln -s "$(realpath "--relative-to=$PWD" "$SCRIPT_DIR/.rootfs")" .rootfs
         else
-            DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR/.rootfs,destination=$PWD/.rootfs,relabel=shared" )
+            DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR/.rootfs,destination=$PWD/.rootfs" )
         fi
     fi
     
@@ -355,7 +355,7 @@ debos() {
         fi
         docker run --rm $DEBOS_BACKEND \
             --security-opt label=disable \
-            --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD,relabel=shared" \
+            --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD" \
             "${DOCKER_OPTIONS[@]}" godebos/debos $DEBOS_OPTIONS "$@"
     fi
 }
