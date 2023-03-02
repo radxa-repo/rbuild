@@ -1,5 +1,6 @@
 {{- $distro := .distro -}}
 {{- $suite := .suite -}}
+{{- $repo_prefix := .repo_prefix -}}
 
 {{- $debian_mirror := "https://deb.debian.org" -}}
 {{- $debian_area := "main contrib non-free" -}}
@@ -80,6 +81,7 @@ actions:
     variables:
       origin: radxa
       suite: {{ $suite }}
+      repo: {{ $suite }}{{ $repo_prefix }}
 
   - action: recipe
     description: Install base packages

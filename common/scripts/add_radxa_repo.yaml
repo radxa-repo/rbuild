@@ -1,7 +1,8 @@
-{{- $radxa_mirror := "https://radxa-repo.github.io/apt" -}}
+{{- $radxa_mirror := "https://radxa-repo.github.io/" -}}
 
 {{- $origin := .origin -}}
 {{- $suite := .suite -}}
+{{- $repo := .repo -}}
 {{- $priority := or .priority "" -}}
 {{- $area := "main" -}}
 
@@ -22,7 +23,7 @@ actions:
         dpkg -i "$temp"
         rm -f "$temp"
       fi
-      echo "deb [signed-by=/usr/share/keyrings/radxa-archive-keyring.gpg] {{ $radxa_mirror }} {{ $suite }} {{ $area }}" > /etc/apt/sources.list.d/{{ $origin }}.list
+      echo "deb [signed-by=/usr/share/keyrings/radxa-archive-keyring.gpg] {{ $radxa_mirror }}{{ $repo }} {{ $suite }} {{ $area }}" > /etc/apt/sources.list.d/{{ $origin }}.list
 
 {{ if ne $priority "" }}
   - action: run

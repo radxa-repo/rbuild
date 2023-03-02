@@ -154,6 +154,7 @@ Supported image generation options:
                                     install specified vendor package instead
     -o, --overlay <profile> Specify an optional overlay that should be enabled in the image
     -t, --timestamp         Add build timestamp to the filename
+    -T, --test-repo         Use Radxa Test Repositories
     -h, --help              Show this help message
 
 Alternative commands
@@ -376,7 +377,7 @@ main() {
     mkdir -p "$SCRIPT_DIR/common/.packages"
 
     local ARGV=("$@")
-    if ! local TEMP="$(getopt -o "sndrk:f:v::hc:o:t" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package::,help,custom:,overlay:,timestamp" -n "$0" -- "$@")"
+    if ! local TEMP="$(getopt -o "sndrk:f:v::hc:o:tT" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package::,help,custom:,overlay:,timestamp,test-repo" -n "$0" -- "$@")"
     then
         usage
         return 1
@@ -397,6 +398,7 @@ main() {
     local INSTALL_VENDOR_PACKAGE="true"
     local RBUILD_AS_ROOT="false"
     local NATIVE_BUILD="false"
+    local REPO_PREFIX=
 
     copy_kernel() {
         echo "Using custom kernel '$1' ..."
@@ -475,6 +477,9 @@ main() {
                 ;;
             -t|--timestamp)
                 RBUILD_TIMESTAMP="true"
+                ;;
+            -T|--test-repo)
+                REPO_PREFIX="-test"
                 ;;
             -o|--overlay)
                 RBUILD_OVERLAY="$1"
@@ -606,7 +611,7 @@ main() {
         pushd "$SCRIPT_DIR"
         debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/intermediate.yaml" \
             -t architecture:"$ARCH" \
-            -t distro:"$DISTRO" -t suite:"$SUITE"
+            -t distro:"$DISTRO" -t suite:"$SUITE" -t repo_prefix:"$REPO_PREFIX"
         popd
     else
         echo "Using ${DISTRO}_${SUITE}_base.tar intermediate rootfs."
@@ -631,7 +636,7 @@ main() {
     debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/image.yaml" \
         -t architecture:"$ARCH" \
         -t board:"$BOARD" -t distro:"$DISTRO" -t suite:"$SUITE" -t flavor:"$FLAVOR" \
-        -t soc:"$SOC" -t soc_family:"$SOC_FAMILY" \
+        -t soc:"$SOC" -t soc_family:"$SOC_FAMILY" -t repo_prefix:"$REPO_PREFIX" \
         -t image:"$IMAGE" -t efi_end:"$EFI_END" -t partition_type:"$PARTITION_TYPE" \
         -t kernel:"$RBUILD_KERNEL" -t kernel_dbg:"$RBUILD_KERNEL_DBG" -t header:"$RBUILD_HEADER" -t firmware:"$RBUILD_FIRMWARE" \
         -t install_vendor_package:"$INSTALL_VENDOR_PACKAGE" -t overlay:"$RBUILD_OVERLAY" \

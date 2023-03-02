@@ -2,6 +2,7 @@
 {{- $distro := .distro -}}
 {{- $suite := .suite -}}
 {{- $flavor := .flavor -}}
+{{- $repo_prefix := .repo_prefix -}}
 
 {{- $soc := .soc -}}
 {{- $soc_family := .soc_family -}}
@@ -78,6 +79,7 @@ actions:
     variables:
       origin: radxa-{{ $soc_family }}
       suite: {{ $soc_family }}-{{ $suite }}
+      repo: {{ $suite }}{{ $repo_prefix }}
       priority: 1001
 
   - action: apt
@@ -116,6 +118,7 @@ actions:
     variables:
       origin: radxa-{{ $soc_family }}
       suite: {{ $soc_family }}-{{ $suite }}
+      repo: {{ $suite }}{{ $repo_prefix }}
       priority: 100
 
   - action: apt
