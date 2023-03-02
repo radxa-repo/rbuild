@@ -33,6 +33,7 @@ actions:
       - binutils
       - cloud-initramfs-growroot
       - curl
+      - eject
       - file
       - gpg
       - haveged
