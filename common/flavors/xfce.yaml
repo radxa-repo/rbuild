@@ -9,6 +9,7 @@ actions:
     description: Install Xfce specific packages
     packages:
       - blueman
+      - light-locker
       - network-manager-gnome
       - parole
       - pavucontrol
