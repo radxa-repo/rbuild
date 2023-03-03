@@ -85,7 +85,7 @@ actions:
     recipe: scripts/add_radxa_repo.yaml
     variables:
       origin: radxa
-      suite: {{ $suite }}
+      suite: {{ $suite }}{{ $repo_prefix }}
       repo: {{ $suite }}{{ $repo_prefix }}
 
   - action: recipe
