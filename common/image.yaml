@@ -78,7 +78,7 @@ actions:
     recipe: scripts/add_radxa_repo.yaml
     variables:
       origin: radxa-{{ $soc_family }}
-      suite: {{ $soc_family }}-{{ $suite }}
+      suite: {{ $soc_family }}-{{ $suite }}{{ $repo_prefix }}
       repo: {{ $suite }}{{ $repo_prefix }}
       priority: 1001
 
