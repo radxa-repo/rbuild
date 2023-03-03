@@ -27,7 +27,7 @@ architecture: {{ $architecture }}
 actions:
   - action: unpack
     description: Unpack rootfs
-    file: .rootfs/{{ $distro }}_{{ $suite }}_{{ $flavor }}.tar
+    file: .rootfs/{{ $distro }}_{{ $suite }}{{ $repo_prefix }}_{{ $flavor }}.tar
     
   - action: image-partition
     description: Set up on-disk layout

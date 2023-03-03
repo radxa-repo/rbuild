@@ -590,7 +590,7 @@ main() {
     esac
 
     local ARCH="arm64"
-    local IMAGE="${BOARD}_${DISTRO}_${SUITE}_${FLAVOR}${RBUILD_TIMESTAMP}.img"
+    local IMAGE="${BOARD}_${DISTRO}_${SUITE}${REPO_PREFIX}_${FLAVOR}${RBUILD_TIMESTAMP}.img"
     local EFI_END=${EFI_END:-"32MiB"}
     
     # Release targeting image in case previous shrink failed
@@ -622,7 +622,7 @@ main() {
         pushd "$SCRIPT_DIR"
         debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/rootfs.yaml" \
             -t architecture:"$ARCH" \
-            -t distro:"$DISTRO" -t suite:"$SUITE" -t flavor:"$FLAVOR"
+            -t distro:"$DISTRO" -t suite:"$SUITE" -t flavor:"$FLAVOR" -t repo_prefix:"$REPO_PREFIX"
         popd
     else
         echo "Using ${DISTRO}_${SUITE}_${FLAVOR}.tar rootfs."
