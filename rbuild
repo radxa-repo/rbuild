@@ -533,7 +533,7 @@ main() {
         i="$(basename "$i")"
         BOARDS+=("${i%.conf}")
     done
-    SUITES+=("focal")
+    SUITES+=("focal" "buster")
     for i in "$SCRIPT_DIR"/common/flavors/.*.yaml
     do
         i="$(basename "$i")"
@@ -581,7 +581,7 @@ main() {
     fi
 
     case $SUITE in
-        bullseye)
+        bullseye|buster)
             local DISTRO="debian"
             ;;
         jammy|focal)

@@ -63,10 +63,15 @@ actions:
 {{ end }}
 
   - action: recipe
-    description: Add {{ $suite }}-security Repo
+    description: Add {{ $suite }} security update Repo
     recipe: scripts/add_repo.yaml
     variables:
+{{ if eq $suite "buster" }}
+      suite: {{ $suite }}/updates
+      origin: {{ $suite }}-security
+{{ else }}
       suite: {{ $suite }}-security
+{{ end }}
 {{ if eq $distro "debian" }}
       base_url: {{ $debian_mirror }}/debian-security
       area: {{ $debian_area }}
