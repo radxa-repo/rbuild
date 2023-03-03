@@ -155,6 +155,8 @@ Supported image generation options:
     -o, --overlay <profile> Specify an optional overlay that should be enabled in the image
     -t, --timestamp         Add build timestamp to the filename
     -T, --test-repo         Use Radxa Test Repositories
+    -b, --backend [backend] Manually specify container backend. supported values are:
+                            docker, podman
     -h, --help              Show this help message
 
 Alternative commands
@@ -348,13 +350,13 @@ debos() {
     then
         env debos --disable-fakemachine $DEBOS_OPTIONS "$@"
     else
-        if [[ "$(docker --version)" =~ "podman" ]]
+        if [[ "$(basename "$CONTAINER_BACKEND")" == "podman" ]]
         then
             CONTAINER_OPTIONS+=( "--user" "root" )
         else
             CONTAINER_OPTIONS+=( "--user" "$(id -u)" )
         fi
-        docker run --rm $DEBOS_BACKEND \
+        $CONTAINER_BACKEND run --rm $DEBOS_BACKEND \
             --security-opt label=disable \
             --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD" \
             "${CONTAINER_OPTIONS[@]}" godebos/debos $DEBOS_OPTIONS "$@"
@@ -377,7 +379,7 @@ main() {
     mkdir -p "$SCRIPT_DIR/common/.packages"
 
     local ARGV=("$@")
-    if ! local TEMP="$(getopt -o "sndrk:f:v::hc:o:tT" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package::,help,custom:,overlay:,timestamp,test-repo" -n "$0" -- "$@")"
+    if ! local TEMP="$(getopt -o "sndrk:f:v::hc:o:tTb:" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package::,help,custom:,overlay:,timestamp,test-repo,backend:" -n "$0" -- "$@")"
     then
         usage
         return 1
@@ -399,6 +401,7 @@ main() {
     local RBUILD_AS_ROOT="false"
     local NATIVE_BUILD="false"
     local REPO_PREFIX=
+    local CONTAINER_BACKEND="docker"
 
     copy_kernel() {
         echo "Using custom kernel '$1' ..."
@@ -483,6 +486,10 @@ main() {
                 ;;
             -o|--overlay)
                 RBUILD_OVERLAY="$1"
+                shift
+                ;;
+            -b|--backend)
+                CONTAINER_BACKEND="$1"
                 shift
                 ;;
             -h|--help)
@@ -601,7 +608,13 @@ main() {
 
     if ! $NATIVE_BUILD
     then
-        docker pull godebos/debos:latest
+        if [[ "$(basename "$CONTAINER_BACKEND")" == "docker" ]] && "$CONTAINER_BACKEND" -v | grep -q podman
+        then
+            echo "'$CONTAINER_BACKEND' backend is selected, but the functionality is actually provided by 'podman' backend. Updating accordingly..."
+            CONTAINER_BACKEND="$(command -v podman)"
+        fi
+
+        $CONTAINER_BACKEND pull godebos/debos:latest
     fi
 
     mkdir -p "$SCRIPT_DIR/.rootfs"
