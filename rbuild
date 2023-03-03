@@ -403,6 +403,11 @@ main() {
     local REPO_PREFIX=
     local CONTAINER_BACKEND="docker"
 
+    if [[ -f "$SCRIPT_DIR/.rbuild-config" ]]
+    then
+        source "$SCRIPT_DIR/.rbuild-config"
+    fi
+
     copy_kernel() {
         echo "Using custom kernel '$1' ..."
         RBUILD_KERNEL="$(basename $1)"

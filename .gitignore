@@ -5,3 +5,4 @@
 .rootfs
 common/.packages
 /.vscode*
+/.rbuild-config
