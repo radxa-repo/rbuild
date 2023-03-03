@@ -134,7 +134,7 @@ Supported image generation options:
     -s, --shrink            Shrink root partition after image is generated
                             Require root permission and additional dependencies
     --compress              Compress the final image with xz
-    -n, --native-build      Use locally installed debos instead of docker
+    -n, --native-build      Use locally installed debos instead of container
                             This is a workaround for building Ubuntu image on Ubuntu host
                             Require running rbuild with sudo
     -d, --debug             Drop into a debug shell when build failed
@@ -310,20 +310,20 @@ debos() {
     fi
     DEBOS_BACKEND+="--tmpfs /dev/shm:exec"
     
-    local DOCKER_OPTIONS=()
+    local CONTAINER_OPTIONS=()
     if [[ -t 0 ]]
     then
-        DOCKER_OPTIONS+=( "-it" )
+        CONTAINER_OPTIONS+=( "-it" )
     fi
 
     if [[ $SCRIPT_DIR != $PWD ]]
     then
-        DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR,destination=$SCRIPT_DIR" )
+        CONTAINER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR,destination=$SCRIPT_DIR" )
         if $NATIVE_BUILD
         then
             ln -s "$(realpath "--relative-to=$PWD" "$SCRIPT_DIR/.rootfs")" .rootfs
         else
-            DOCKER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR/.rootfs,destination=$PWD/.rootfs" )
+            CONTAINER_OPTIONS+=( "--mount" "type=bind,source=$SCRIPT_DIR/.rootfs,destination=$PWD/.rootfs" )
         fi
     fi
     
@@ -350,14 +350,14 @@ debos() {
     else
         if [[ "$(docker --version)" =~ "podman" ]]
         then
-            DOCKER_OPTIONS+=( "--user" "root" )
+            CONTAINER_OPTIONS+=( "--user" "root" )
         else
-            DOCKER_OPTIONS+=( "--user" "$(id -u)" )
+            CONTAINER_OPTIONS+=( "--user" "$(id -u)" )
         fi
         docker run --rm $DEBOS_BACKEND \
             --security-opt label=disable \
             --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD" \
-            "${DOCKER_OPTIONS[@]}" godebos/debos $DEBOS_OPTIONS "$@"
+            "${CONTAINER_OPTIONS[@]}" godebos/debos $DEBOS_OPTIONS "$@"
     fi
 }
 
