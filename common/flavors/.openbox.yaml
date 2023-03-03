@@ -1,4 +1,5 @@
 {{- $distro := .distro -}}
+{{- $suite := .suite -}}
 
 {{- $architecture := .architecture -}}
 
@@ -23,3 +24,4 @@ actions:
     recipe: .desktop.yaml
     variables:
       distro: {{ $distro }}
+      suite: {{ $suite }}

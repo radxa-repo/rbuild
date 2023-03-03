@@ -88,6 +88,7 @@ actions:
     recipe: flavors/.base.yaml
     variables:
       distro: {{ $distro }}
+      suite: {{ $suite }}
 
   - action: recipe
     description: Clean up rootfs

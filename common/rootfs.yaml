@@ -16,6 +16,7 @@ actions:
     recipe: flavors/{{ $flavor }}.yaml
     variables:
       distro: {{ $distro }}
+      suite: {{ $suite }}
 
   - action: overlay
     description: Install common system configs
