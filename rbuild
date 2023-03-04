@@ -357,7 +357,7 @@ debos() {
             CONTAINER_OPTIONS+=( "--user" "$(id -u)" )
         fi
         $CONTAINER_BACKEND run --rm $DEBOS_BACKEND \
-            --security-opt label=disable \
+            --security-opt label=disable --cap-add=SYS_PTRACE \
             --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD" \
             "${CONTAINER_OPTIONS[@]}" docker.io/godebos/debos $DEBOS_OPTIONS "$@"
     fi
