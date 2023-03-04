@@ -613,7 +613,7 @@ main() {
     fi
 
     # Check /dev/kvm permission
-    if [[ -f /dev/kvm && "$(stat -c "%A" /dev/kvm)" != "crw-rw-rw-"]]
+    if [[ -f /dev/kvm && "$(stat -c "%A" /dev/kvm)" != "crw-rw-rw-" ]]
     then
         echo "KVM detected but the permission is not optimal."
     fi
