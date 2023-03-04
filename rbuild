@@ -359,7 +359,7 @@ debos() {
         $CONTAINER_BACKEND run --rm $DEBOS_BACKEND \
             --security-opt label=disable \
             --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD" \
-            "${CONTAINER_OPTIONS[@]}" godebos/debos $DEBOS_OPTIONS "$@"
+            "${CONTAINER_OPTIONS[@]}" docker.io/godebos/debos $DEBOS_OPTIONS "$@"
     fi
 }
 
@@ -619,7 +619,7 @@ main() {
             CONTAINER_BACKEND="$(command -v podman)"
         fi
 
-        $CONTAINER_BACKEND pull godebos/debos:latest
+        $CONTAINER_BACKEND pull docker.io/godebos/debos:latest
     fi
 
     mkdir -p "$SCRIPT_DIR/.rootfs"
