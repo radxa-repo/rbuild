@@ -359,7 +359,8 @@ debos() {
         $CONTAINER_BACKEND run --rm $DEBOS_BACKEND \
             --security-opt label=disable --cap-add=SYS_PTRACE \
             --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD" \
-            "${CONTAINER_OPTIONS[@]}" docker.io/godebos/debos $DEBOS_OPTIONS "$@"
+            "${CONTAINER_OPTIONS[@]}" --entrypoint /bin/bash docker.io/godebos/debos \
+            -c 'echo "Acquire::http::Pipeline-Depth \"0\";" > /etc/apt/apt.conf.d/99nopipelining && '"/usr/local/bin/debos $DEBOS_OPTIONS $(printf "'%s' " "$@")"
     fi
 }
 
