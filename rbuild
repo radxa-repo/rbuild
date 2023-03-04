@@ -612,6 +612,12 @@ main() {
         sudo kpartx -d "$IMAGE"
     fi
 
+    # Check /dev/kvm permission
+    if [[ -f /dev/kvm && "$(stat -c "%A" /dev/kvm)" != "crw-rw-rw-"]]
+    then
+        echo "KVM detected but the permission is not optimal."
+    fi
+
     if ! $NATIVE_BUILD
     then
         if [[ "$(basename "$CONTAINER_BACKEND")" == "docker" ]] && "$CONTAINER_BACKEND" -v | grep -q podman
