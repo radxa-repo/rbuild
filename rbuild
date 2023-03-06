@@ -356,12 +356,15 @@ debos() {
         if [[ "$(basename "$CONTAINER_BACKEND")" == "podman" ]]
         then
             CONTAINER_OPTIONS+=( "--user" "root" )
+            $CONTAINER_BACKEND run \
+                "${CONTAINER_OPTIONS[@]}" --entrypoint /bin/bash docker.io/godebos/debos \
+                -c 'echo "Acquire::http::Pipeline-Depth \"0\";" > /etc/apt/apt.conf.d/99nopipelining && '"/usr/local/bin/debos $DEBOS_OPTIONS $(printf "'%s' " "$@")"
         else
             CONTAINER_OPTIONS+=( "--user" "$(id -u)" )
+            $CONTAINER_BACKEND run \
+                "${CONTAINER_OPTIONS[@]}" docker.io/godebos/debos \
+                $DEBOS_OPTIONS "$@"
         fi
-        $CONTAINER_BACKEND run \
-            "${CONTAINER_OPTIONS[@]}" --entrypoint /bin/bash docker.io/godebos/debos \
-            -c 'echo "Acquire::http::Pipeline-Depth \"0\";" > /etc/apt/apt.conf.d/99nopipelining && '"/usr/local/bin/debos $DEBOS_OPTIONS $(printf "'%s' " "$@")"
     fi
 }
 
