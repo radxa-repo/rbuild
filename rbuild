@@ -305,17 +305,20 @@ write-image() {
 }
 
 debos() {
-    local DEBOS_BACKEND
-    if [[ -e /dev/kvm ]]
-    then
-        DEBOS_BACKEND="--device /dev/kvm "
-    fi
-    DEBOS_BACKEND+="--tmpfs /dev/shm:exec"
-    
-    local CONTAINER_OPTIONS=()
+    local CONTAINER_OPTIONS=( "--rm"
+    "--tmpfs" "/dev/shm:exec"
+    "--security-opt" "label=disable"
+    "--cap-add=SYS_PTRACE"
+    "--workdir" "$PWD" "--mount" "type=bind,source=$PWD,destination=$PWD" )
+
     if [[ -t 0 ]]
     then
         CONTAINER_OPTIONS+=( "-it" )
+    fi
+
+    if [[ -e /dev/kvm ]]
+    then
+        CONTAINER_OPTIONS+=( "--device" "/dev/kvm" )
     fi
 
     if [[ $SCRIPT_DIR != $PWD ]]
@@ -356,9 +359,7 @@ debos() {
         else
             CONTAINER_OPTIONS+=( "--user" "$(id -u)" )
         fi
-        $CONTAINER_BACKEND run --rm $DEBOS_BACKEND \
-            --security-opt label=disable --cap-add=SYS_PTRACE \
-            --workdir "$PWD" --mount "type=bind,source=$PWD,destination=$PWD" \
+        $CONTAINER_BACKEND run \
             "${CONTAINER_OPTIONS[@]}" --entrypoint /bin/bash docker.io/godebos/debos \
             -c 'echo "Acquire::http::Pipeline-Depth \"0\";" > /etc/apt/apt.conf.d/99nopipelining && '"/usr/local/bin/debos $DEBOS_OPTIONS $(printf "'%s' " "$@")"
     fi
