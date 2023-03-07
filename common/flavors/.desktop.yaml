@@ -23,4 +23,6 @@ actions:
       - plymouth
       - plymouth-theme-breeze
       - plymouth-themes
+      - xdg-user-dirs
+      - xdg-user-dirs-gtk
       - xdg-utils
