@@ -9,6 +9,7 @@ actions:
   - action: apt
     description: Install common desktop packages
     packages:
+      - accountsservice
       - breeze-cursor-theme
       - desktop-base
 {{ if eq $distro "debian"}}
