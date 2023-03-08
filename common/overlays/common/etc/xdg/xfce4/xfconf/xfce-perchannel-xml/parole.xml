@@ -2,6 +2,6 @@
 
 <channel name="parole" version="1.0">
   <property name="video" type="empty">
-    <property name="videosink" type="string" value="autoimagesink"/>
+    <property name="videosink" type="string" value="xvimagesink"/>
   </property>
 </channel>
