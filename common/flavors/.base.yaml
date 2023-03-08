@@ -105,8 +105,8 @@ actions:
   - action: apt
     description: Install Radxa packages
     packages:
-      - radxa-firmware
-      - rsetup
       - libreelec-alsa-utils
-      - radxa-otgutils
       - radxa-bootutils
+      - radxa-firmware
+      - radxa-otgutils
+      - rsetup
