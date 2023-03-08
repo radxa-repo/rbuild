@@ -7,7 +7,16 @@ architecture: {{ $architecture }}
 
 actions:
   - action: apt
-    description: Install KDE specific packages
+    description: Install KDE
+    packages:
+{{ if eq $distro "debian" }}
+      - task-kde-desktop
+{{ else }}
+      - kubuntu-desktop
+{{ end }}
+
+  - action: apt
+    description: Install additional KDE packages
     packages:
       - bluedevil
       - dragonplayer
@@ -26,11 +35,6 @@ actions:
       - qml-module-org-kde-newstuff
       - sddm-theme-breeze
       - systemsettings
-{{ if eq $distro "debian" }}
-      - task-kde-desktop
-{{ else }}
-      - kubuntu-desktop
-{{ end }}
       - yakuake
 
   - action: recipe
