@@ -11,14 +11,17 @@ inputs:
     required: true
   artifacts:
     required: false
-    default: 'false'
+    default: false
   release-id:
     required: false
   github-token:
     required: false
   prebuilt-rootfs:
     required: false
-    default: 'false'
+    default: false
+  test-repo:
+    required: false
+    default: false
 runs:
   using: "composite"
   steps:
@@ -46,6 +49,13 @@ runs:
           echo "Unknown distro/suite value!" >&2
           exit 1
         fi
+
+        options=()
+        if [[ "${{ inputs.test-repo }}" == "true" ]]
+        then
+          options+=("--test-repo")
+        fi
+        echo "options=${options[*]}" >> $GITHUB_ENV
     - name: Install dependencies
       shell: bash
       run: |
@@ -63,7 +73,7 @@ runs:
         mkdir .output
         cd .output
         # --root-override is a hidden argument so we can build as root.
-        sudo ../rbuild --timestamp --compress --native-build --shrink --root-override ${{ inputs.board }} ${{ env.suite }} ${{ inputs.flavor }}
+        sudo ../rbuild ${{ env.options }} --timestamp --compress --native-build --shrink --root-override ${{ inputs.board }} ${{ env.suite }} ${{ inputs.flavor }}
         if [ -n "$(ls -A ./* 2>/dev/null)" ]
         then
           sudo chown $USER ./*
