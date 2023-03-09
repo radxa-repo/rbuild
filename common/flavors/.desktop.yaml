@@ -32,3 +32,9 @@ actions:
     description: Install Xorg packages
     packages:
       - xinput
+
+  - action: apt
+    description: Install Radxa packages
+    packages:
+      - radxa-touchscreen-utils
+      - radxa-xorg-wrapper

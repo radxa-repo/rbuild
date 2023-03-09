@@ -109,5 +109,4 @@ actions:
       - radxa-bootutils
       - radxa-firmware
       - radxa-otgutils
-      - radxa-touchscreen-utils
       - rsetup
