@@ -6,6 +6,14 @@
 architecture: {{ $architecture }}
 
 actions:
+# Installing KDE hits connection reset bug frquently
+# Break into smaller steps to slow it down
+  - action: apt
+    description: Install display manager
+    packages:
+      - sddm
+      - xorg
+
   - action: apt
     description: Install KDE
     packages:
