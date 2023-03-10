@@ -26,6 +26,7 @@ actions:
   - action: apt
     description: Install additional KDE packages
     packages:
+      - accountwizard
       - bluedevil
       - dragonplayer
       - kde-config-plymouth
