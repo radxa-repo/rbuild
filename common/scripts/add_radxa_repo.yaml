@@ -24,6 +24,7 @@ actions:
         rm -f "$temp"
       fi
       echo "deb [signed-by=/usr/share/keyrings/radxa-archive-keyring.gpg] {{ $radxa_mirror }}{{ $repo }} {{ $suite }} {{ $area }}" > /etc/apt/sources.list.d/{{ $origin }}.list
+      curl -L -o /etc/radxa_apt_snapshot {{ $radxa_mirror }}{{ $repo }}/pkgs.json
 
 {{ if ne $priority "" }}
   - action: run
