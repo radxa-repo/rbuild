@@ -33,6 +33,7 @@ actions:
       - kde-config-screenlocker
       - kde-config-sddm
       - kde-config-systemd
+      - khotkeys
       - kinfocenter
       - kio-extras
       - konqueror
