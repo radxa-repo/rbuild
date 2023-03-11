@@ -32,7 +32,6 @@ actions:
       - kde-config-plymouth
       - kde-config-screenlocker
       - kde-config-sddm
-      - kde-config-systemd
       - khotkeys
       - kinfocenter
       - kio-extras
@@ -51,6 +50,9 @@ actions:
       - systemsettings
       - yakuake
       - xdg-desktop-portal-kde
+{{ if ne $suite "focal" }}
+      - kde-config-systemd
+{{ end }}
 
   - action: recipe
     description: Install common desktop packages
