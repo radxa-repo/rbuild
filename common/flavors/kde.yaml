@@ -45,6 +45,7 @@ actions:
       - sddm-theme-breeze
       - systemsettings
       - yakuake
+      - xdg-desktop-portal-kde
 
   - action: recipe
     description: Install common desktop packages
