@@ -30,13 +30,16 @@ actions:
       - bluedevil
       - dragonplayer
       - kde-config-plymouth
-      - kde-config-sddm
       - kde-config-screenlocker
+      - kde-config-sddm
+      - kde-config-systemd
       - kinfocenter
       - kio-extras
       - konqueror
       - kscreen
       - kwin-x11
+      - libkf5kdelibs4support5
+      - libkf5kdelibs4support5-bin
       - phonon4qt5-backend-gstreamer
       - phonon4qt5settings
       - plasma-discover
