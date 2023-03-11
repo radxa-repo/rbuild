@@ -234,11 +234,6 @@ actions:
       distro: {{ $distro }}
       board: {{ $board }}
 
-  - action: run
-    description: Preload device tree overlay from default kernel
-    chroot: true
-    script: scripts/copy_overlay.bash {{ $soc_family }}
-
 {{ if $overlay }}
 
   - action: recipe
