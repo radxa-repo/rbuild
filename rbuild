@@ -153,7 +153,8 @@ Supported image generation options:
                             When optional argument is provided:
                                     install specified vendor package instead
     -o, --overlay <profile> Specify an optional overlay that should be enabled in the image
-    -t, --timestamp         Add build timestamp to the filename
+    -t[custom_string], --timestamp[=custom_string]
+                            Add build timestamp to the filename, or a custom string
     -T, --test-repo         Use Radxa Test Repositories
     -b, --backend [backend] Manually specify container backend. supported values are:
                             docker, podman
@@ -384,7 +385,7 @@ main() {
     mkdir -p "$SCRIPT_DIR/common/.packages"
 
     local ARGV=("$@")
-    if ! local TEMP="$(getopt -o "sndrk:f:v::hc:o:tTb:" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package::,help,custom:,overlay:,timestamp,test-repo,backend:" -n "$0" -- "$@")"
+    if ! local TEMP="$(getopt -o "sndrk:f:v::hc:o:t::Tb:" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package::,help,custom:,overlay:,timestamp::,test-repo,backend:" -n "$0" -- "$@")"
     then
         usage
         return 1
@@ -401,7 +402,7 @@ main() {
     local RBUILD_HEADER=
     local RBUILD_FIRMWARE=
     local RBUILD_OVERLAY=
-    local RBUILD_TIMESTAMP="false"
+    local RBUILD_TIMESTAMP=
     local INSTALL_VENDOR_PACKAGE="true"
     local RBUILD_AS_ROOT="false"
     local NATIVE_BUILD="false"
@@ -489,7 +490,8 @@ main() {
                 NATIVE_BUILD="true"
                 ;;
             -t|--timestamp)
-                RBUILD_TIMESTAMP="true"
+                RBUILD_TIMESTAMP="_${1:-$(date --iso-8601=m | tr -d :)_${PARTITION_TYPE}}"
+                shift
                 ;;
             -T|--test-repo)
                 REPO_PREFIX="-test"
@@ -589,13 +591,6 @@ main() {
     source "$SCRIPT_DIR/common/hw-info.conf"
     local SOC_FAMILY="$(get_soc_family $SOC)"
     local PARTITION_TYPE="$(get_partition_type $SOC_FAMILY)"
-
-    if $RBUILD_TIMESTAMP
-    then
-        RBUILD_TIMESTAMP="_$(date --iso-8601=m | tr -d :)_${PARTITION_TYPE}"
-    else
-        RBUILD_TIMESTAMP=""
-    fi
 
     case $SUITE in
         bullseye|buster)
