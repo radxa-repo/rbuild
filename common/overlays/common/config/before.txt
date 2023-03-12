@@ -19,12 +19,13 @@ user_append_group radxa render
 #
 resize_root
 
-# Disable open services
+# Disable enabled services
 # Command:
 #   disable_service <systemd unit name>
 #
 disable_service ssh
 disable_service smbd
+disable_service nmbd
 
 # Generate unique hardware fingerprint
 #
