@@ -370,15 +370,6 @@ debos() {
 }
 
 main() {
-    if command -v notify-send >/dev/null
-    then
-        local NOTIFY_SEND=notify-send
-    else
-        local NOTIFY_SEND=echo
-    fi
-
-    SECONDS=0
-
     local SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 
     rm -rf "$SCRIPT_DIR/common/.packages"
@@ -685,9 +676,6 @@ main() {
     then
         xz -fT 0 "$IMAGE"
     fi
-
-    $NOTIFY_SEND "rbuild is finished."
-    TZ=UTC0 printf 'Total execution time: %(%H:%M:%S)T\n' $SECONDS
 }
 
 set -euo pipefail
@@ -698,4 +686,16 @@ LANG="C"
 LANGUAGE="C"
 PATH="/usr/sbin:$PATH"
 
+if command -v notify-send >/dev/null
+then
+    NOTIFY_SEND=notify-send
+else
+    NOTIFY_SEND=echo
+fi
+
+SECONDS=0
+
 main "$@"
+
+$NOTIFY_SEND "rbuild is finished."
+TZ=UTC0 printf 'Total execution time: %(%H:%M:%S)T\n' $SECONDS
