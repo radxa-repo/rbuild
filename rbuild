@@ -249,6 +249,8 @@ in_array() {
 }
 
 json() {
+    RBUILD_SHOW_EXECUTION_TIME="false"
+
     local ARRAY=($(get_supported_infos))
     if ! in_array "$@" "${ARRAY[@]}"
     then
@@ -694,8 +696,12 @@ else
 fi
 
 SECONDS=0
+RBUILD_SHOW_EXECUTION_TIME="true"
 
 main "$@"
 
-$NOTIFY_SEND "rbuild is finished."
-TZ=UTC0 printf 'Total execution time: %(%H:%M:%S)T\n' $SECONDS
+if $RBUILD_SHOW_EXECUTION_TIME
+then
+    $NOTIFY_SEND "rbuild is finished."
+    TZ=UTC0 printf 'Total execution time: %(%H:%M:%S)T\n' $SECONDS
+fi
