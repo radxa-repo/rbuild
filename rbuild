@@ -483,7 +483,7 @@ main() {
                 NATIVE_BUILD="true"
                 ;;
             -t|--timestamp)
-                RBUILD_TIMESTAMP="_${1:-$(date --iso-8601=m | tr -d :)_${PARTITION_TYPE}}"
+                RBUILD_TIMESTAMP="_${1:-${RBUILD_STARTING_TIME}_${PARTITION_TYPE}}"
                 shift
                 ;;
             -T|--test-repo)
@@ -697,11 +697,13 @@ fi
 
 SECONDS=0
 RBUILD_SHOW_EXECUTION_TIME="true"
+RBUILD_STARTING_TIME="$(date --iso-8601=m | tr -d :)"
 
 main "$@"
 
 if $RBUILD_SHOW_EXECUTION_TIME
 then
     $NOTIFY_SEND "rbuild is finished."
+    echo "Execution started at $RBUILD_STARTING_TIME"
     TZ=UTC0 printf 'Total execution time: %(%H:%M:%S)T\n' $SECONDS
 fi
