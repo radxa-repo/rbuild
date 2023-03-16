@@ -19,6 +19,10 @@ actions:
 {{ else }}
       - xfce4
 {{ end }}
+      - thunar-volman
+      - xfce4-clipman
+      - xfce4-notifyd
+      - xfce4-power-manager
       - xfce4-terminal
 
   - action: recipe

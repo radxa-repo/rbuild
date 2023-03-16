@@ -29,3 +29,8 @@ actions:
       - xdg-user-dirs
       - xdg-user-dirs-gtk
       - xdg-utils
+
+  - action: apt
+    description: Install common X.Org packages
+    packages:
+      - xiccd
