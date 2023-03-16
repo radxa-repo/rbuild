@@ -35,6 +35,7 @@ actions:
       - cloud-initramfs-growroot
       - curl
       - eject
+      - exfat-fuse
       - file
       - gpg
       - haveged
