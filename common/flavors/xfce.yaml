@@ -23,7 +23,14 @@ actions:
       - xfce4-clipman
       - xfce4-notifyd
       - xfce4-power-manager
+      - xfce4-screensaver
       - xfce4-terminal
+
+  - action: run
+    description: Remove light-locker in favor of xfce4-screensaver
+    chroot: true
+    command: |
+      apt remove -y light-locker
 
   - action: recipe
     description: Install common desktop packages
