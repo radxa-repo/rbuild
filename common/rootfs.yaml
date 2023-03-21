@@ -53,6 +53,7 @@ actions:
 
       echo 'U_BOOT_TIMEOUT="10"' >> /etc/default/u-boot
       echo "U_BOOT_PARAMETERS=\"\$(cat /etc/kernel/cmdline)\"" >> /etc/default/u-boot
+      echo 'U_BOOT_FDT_DIR="/usr/lib/linux-image-"' >> /etc/default/u-boot
       echo 'QT_QUICK_BACKEND DEFAULT=software' >> /etc/security/pam_env.conf
 
       sed -i 's/\${_BOOT_DIRECTORY}\${U_BOOT_FDT_OVERLAYS_DIR}/\${U_BOOT_FDT_OVERLAYS_DIR}/g' /usr/sbin/u-boot-update
