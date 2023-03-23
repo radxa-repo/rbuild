@@ -6,6 +6,8 @@ actions:
     description: Clean up rootfs
     chroot: true
     command: |
-      set -e
       apt clean
       rm -rf /var/lib/apt/lists/*
+      rm -rf /etc/machine-id /var/lib/dbus/machine-id
+      rm -rf /var/log/journal/*
+   

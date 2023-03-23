@@ -30,7 +30,6 @@ disable_service nmbd
 # Generate unique hardware fingerprint
 #
 regenerate_ssh_hostkey
-regenerate_machine_id
 
 # Configure locale
 # Command:
