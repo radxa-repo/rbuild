@@ -37,6 +37,12 @@ regenerate_ssh_hostkey
 #
 update_locale en_US.UTF-8
 
+# Connect to Wi-Fi
+# Command:
+#   connect_wi-fi <network name> [password]
+#
+#connect_wi-fi private_network password
+
 # Enable SSH on headless first boot
 # Keyword:
 #   if|if_not <condition> <command>
