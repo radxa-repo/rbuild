@@ -6,3 +6,4 @@
 common/.packages
 /.vscode*
 /.rbuild-config
+/book
