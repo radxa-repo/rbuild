@@ -15,11 +15,11 @@ user_append_group radxa video
 user_append_group radxa plugdev
 user_append_group radxa render
 
-# Resize root partition
+# Resize root partition at filesystem level
 #
 resize_root
 
-# Disable enabled services
+# Disable services
 # Command:
 #   disable_service <systemd unit name>
 #
@@ -36,3 +36,13 @@ regenerate_ssh_hostkey
 #   update_locale <locale>
 #
 update_locale en_US.UTF-8
+
+# Enable SSH on headless first boot
+# Keyword:
+#   if|if_not <condition> <command>
+# Condition:
+#   headless: When no display connector is connected
+# Command:
+#   enable_service <systemd unit name>
+#
+if headless enable_service ssh
