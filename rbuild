@@ -297,6 +297,10 @@ write-image() {
     then
         echo "Writting zip image..."
         unzip -p $IMAGE | sudo dd of=$BLOCKDEV bs=16M conv=fsync status=progress
+    elif file $IMAGE | grep -q "7-zip archive data"
+    then
+        echo "Writting 7-zip image..."
+        7z e -so $IMAGE | sudo dd of=$BLOCKDEV bs=16M conv=fsync status=progress
     else
         if $RBUILD_SHRINK
         then
