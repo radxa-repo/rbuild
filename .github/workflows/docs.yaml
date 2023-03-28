@@ -10,8 +10,11 @@ on:
     paths:
       - 'docs/**'
 
+permissions:
+  id-token: write
+
 jobs:
-  update:
+  build-doc:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
