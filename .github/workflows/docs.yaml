@@ -11,6 +11,7 @@ on:
       - 'docs/**'
 
 permissions:
+  pages: write
   id-token: write
 
 jobs:
