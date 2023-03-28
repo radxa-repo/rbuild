@@ -6,23 +6,45 @@
 {{- $priority := or .priority "" -}}
 {{- $area := "main" -}}
 
+{{- $managed_keyring := "true" -}}
+{{- $managed_keyring_repo := "radxa-pkg/radxa-archive-keyring" -}}
+
 {{- $architecture := .architecture -}}
 architecture: {{ $architecture }}
 
 actions:
+{{ if eq $managed_keyring "true" }}
+
   - action: run
-    description: Add repo
+    description: Installl keyring from package
     chroot: true
     command: |
       set -e
       if ! dpkg -l radxa-archive-keyring >/dev/null 2>&1
       then
         temp="$(mktemp)"
-        version="$(curl -L https://github.com/radxa-pkg/radxa-archive-keyring/releases/latest/download/VERSION)"
-        curl -L --output "$temp" "https://github.com/radxa-pkg/radxa-archive-keyring/releases/latest/download/radxa-archive-keyring_${version}_all.deb"
+        version="$(curl -L https://github.com/{{ $managed_keyring_repo }}/releases/latest/download/VERSION)"
+        curl -L --output "$temp" "https://github.com/{{ $managed_keyring_repo }}/releases/latest/download/radxa-archive-keyring_${version}_all.deb"
         dpkg -i "$temp"
         rm -f "$temp"
       fi
+
+{{ else }}
+
+  - action: run
+    description: Installl keyring from APT
+    chroot: true
+    command: |
+      set -e
+      curl -L -o /usr/share/keyrings/radxa-archive-keyring.gpg {{ $radxa_mirror }}{{ $repo }}/keyring.gpg
+
+{{ end }}
+
+  - action: run
+    description: Add repo
+    chroot: true
+    command: |
+      set -e
       echo "deb [signed-by=/usr/share/keyrings/radxa-archive-keyring.gpg] {{ $radxa_mirror }}{{ $repo }} {{ $suite }} {{ $area }}" > /etc/apt/sources.list.d/{{ $origin }}.list
       curl -L -o /etc/radxa_apt_snapshot {{ $radxa_mirror }}{{ $repo }}/pkgs.json
 
