@@ -1,1 +1,0 @@
-# Reproduce release image

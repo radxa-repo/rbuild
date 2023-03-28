@@ -2,4 +2,4 @@
 
 # Image Customization
 
-- [Reproduce release image](image/reproduce.md)
+- [Reproduce released image](image/reproduce/index.md)
