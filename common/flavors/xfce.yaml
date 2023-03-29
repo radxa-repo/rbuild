@@ -23,8 +23,10 @@ actions:
       - xfce4-clipman
       - xfce4-notifyd
       - xfce4-power-manager
-      - xfce4-screensaver
       - xfce4-terminal
+{{ if ne $suite "buster"}}
+      - xfce4-screensaver
+{{ end }}
 
   - action: run
     description: Remove light-locker in favor of xfce4-screensaver
