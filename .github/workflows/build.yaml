@@ -5,9 +5,11 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'docs/**'
       - '**.md'
       - .gitignore
+      - 'docs/**'
+      - book.toml
+      - .github/workflows/docs.yaml
 
 jobs:
   query:

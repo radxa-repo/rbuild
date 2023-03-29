@@ -6,9 +6,13 @@ on:
       - main
     paths:
       - 'docs/**'
+      - book.toml
+      - .github/workflows/docs.yaml
   pull_request:
     paths:
       - 'docs/**'
+      - book.toml
+      - .github/workflows/docs.yaml
 
 permissions:
   pages: write
@@ -36,3 +40,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
+        if: github.event_name != 'pull_request'
