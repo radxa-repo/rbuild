@@ -15,7 +15,7 @@ The following repositories contain the source code, so the related commits shoul
 
 For packages under [radxa-pkg](https://github.com/radxa-pkg), once changes are made, please run `make dch` command to create a new changelog entry.
 
-Edit `debian/changlog` accordingly, then change `UNRELEASED` to `stable`. You should then create a commit containing only this change, with the commit title `Release` x.y.z`.
+Edit `debian/changlog` accordingly, then change `UNRELEASED` to `stable`. You should then create a commit containing only this change, with the commit title `Release x.y.z`.
 
 It is recommended to run `make deb` after you commit your changelog edit, so the package can be tested by [`lintian`](https://lintian.debian.org/) for common pitfalls. We treat warning as error, so please fix them, instead of suppressing them.
 
