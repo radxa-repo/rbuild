@@ -3,7 +3,7 @@
 # ==============================
 log "Running before.txt as first boot configuration"
 
-# Create the default account
+# Create default accounts
 # Commands:
 #   add_user <user name> <password>
 #   user_append_group <user name> <group>
@@ -14,6 +14,14 @@ user_append_group radxa audio
 user_append_group radxa video
 user_append_group radxa plugdev
 user_append_group radxa render
+
+add_user rock rock
+user_append_group rock sudo
+user_append_group rock audio
+user_append_group rock video
+user_append_group rock plugdev
+user_append_group rock render
+
 
 # Resize root partition at filesystem level
 #
