@@ -128,7 +128,7 @@ EOF
 usage() {
     cat >&2 << EOF
 Radxa Image Builder
-usage: $(basename "$0") [options] <board> [suite] [flavor]
+usage: $(basename "$0") [options] <product> [suite] [flavor]
 
 Supported image generation options:
     -s, --shrink            Shrink root partition after image is generated
@@ -167,7 +167,7 @@ Alternative commands
     write-image <image> </dev/block>
                             Write image to block device, support --shrink flag
 
-Supported board:
+Supported products:
 $(printf_array "    %s\n" "$(get_supported_boards)")
 
 Supported suites (default to the first one):
