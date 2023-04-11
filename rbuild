@@ -312,11 +312,14 @@ write-image() {
 }
 
 debos() {
-    local CONTAINER_OPTIONS=( "--rm"
+    local CONTAINER_OPTIONS=(
+        "--rm"
     "--tmpfs" "/dev/shm:exec"
     "--security-opt" "label=disable"
     "--cap-add=SYS_PTRACE"
-    "--workdir" "$PWD" "--mount" "type=bind,source=$PWD,destination=$PWD" )
+        "--workdir" "$PWD"
+        "--mount" "type=bind,source=$PWD,destination=$PWD"
+    )
 
     if [[ -t 0 ]]
     then
