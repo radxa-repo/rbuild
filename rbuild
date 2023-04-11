@@ -627,9 +627,9 @@ main() {
 
     mkdir -p "$SCRIPT_DIR/.rootfs"
 
-    if $DEBOS_ROOTFS || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}_${FLAVOR}.tar" ]]
+    if $DEBOS_ROOTFS || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}${REPO_PREFIX}_${FLAVOR}.tar" ]]
     then
-        if $DEBOS_ROOTFS || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}_base.tar" ]]
+        if $DEBOS_ROOTFS || [[ ! -e "$SCRIPT_DIR/.rootfs/${DISTRO}_${SUITE}${REPO_PREFIX}_base.tar" ]]
         then
             pushd "$SCRIPT_DIR"
             debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/intermediate.yaml" \
@@ -637,7 +637,7 @@ main() {
                 -t distro:"$DISTRO" -t suite:"$SUITE" -t repo_prefix:"$REPO_PREFIX"
             popd
         else
-            echo "Using ${DISTRO}_${SUITE}_base.tar intermediate rootfs."
+            echo "Using ${DISTRO}_${SUITE}${REPO_PREFIX}_base.tar intermediate rootfs."
         fi
 
         pushd "$SCRIPT_DIR"
@@ -646,7 +646,7 @@ main() {
             -t distro:"$DISTRO" -t suite:"$SUITE" -t flavor:"$FLAVOR" -t repo_prefix:"$REPO_PREFIX"
         popd
     else
-        echo "Using ${DISTRO}_${SUITE}_${FLAVOR}.tar rootfs."
+        echo "Using ${DISTRO}_${SUITE}${REPO_PREFIX}_${FLAVOR}.tar rootfs."
     fi
 
     if [[ "$BOARD" == "rootfs" ]]
