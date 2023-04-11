@@ -14,7 +14,9 @@ sudo apt install -y git
 sudo apt install -y podman podman-docker
 sudo touch /etc/containers/nodocker
 # Docker
-#sudo apt install docker.io
+#sudo apt install -y docker.io
+#sudo adduser $USER docker
+#sudo reboot
 
 # For Ubuntu user you can also install `debos` package for building Ubuntu image
 sudo apt install -y debos
@@ -39,9 +41,9 @@ Most options listed in the help messages are targetting at developers. If you on
 
 ```bash
 # Build radxa-cm3-sodimm-io image with default OS (currently Debian Bullseye) and flavor (CLI)
-./bsp radxa-cm3-sodimm-io
+./rbuild radxa-cm3-sodimm-io
 # Build rock-5b Debian image with KDE
-./bsp rock-5b kde
+./rbuild rock-5b kde
 ```
 
 Supported products, suites, and flavors are listed at the end of the help message.
