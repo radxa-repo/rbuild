@@ -314,9 +314,9 @@ write-image() {
 debos() {
     local CONTAINER_OPTIONS=(
         "--rm"
-    "--tmpfs" "/dev/shm:exec"
-    "--security-opt" "label=disable"
-    "--cap-add=SYS_PTRACE"
+        "--tmpfs" "/dev/shm:exec"
+        "--security-opt" "label=disable"
+        "--cap-add=SYS_PTRACE"
         "--workdir" "$PWD"
         "--mount" "type=bind,source=$PWD,destination=$PWD"
     )
@@ -363,6 +363,11 @@ debos() {
     then
         env debos --disable-fakemachine $DEBOS_OPTIONS "$@"
     else
+        if [[ -e /dev/kvm ]]
+        then
+            DEBOS_OPTIONS="$DEBOS_OPTIONS -t rbuild_swap:true"
+        fi
+
         if [[ "$(basename "$CONTAINER_BACKEND")" == "podman" ]]
         then
             CONTAINER_OPTIONS+=( "--user" "root" )

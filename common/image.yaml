@@ -19,20 +19,17 @@
 
 {{- $rbuild_rev := .rbuild_rev -}}
 {{- $rbuild_cmd := .rbuild_cmd -}}
+{{- $rbuild_swap := or .rbuild_swap "false" -}}
 
 {{- $architecture := .architecture -}}
 
 architecture: {{ $architecture }}
 
 actions:
-  - action: unpack
-    description: Unpack rootfs
-    file: .rootfs/{{ $distro }}_{{ $suite }}{{ $repo_prefix }}_{{ $flavor }}.tar
-    
   - action: image-partition
     description: Set up on-disk layout
     imagename: {{ $image }}
-    imagesize: 6GiB
+    imagesize: 10GiB
     partitiontype: {{ $partition_type }}
     mountpoints:
       - mountpoint: /
@@ -60,8 +57,26 @@ actions:
       - name: rootfs
         fs: ext4
         start: {{ $efi_end }}
+        end: 6GiB
+        flags: [ boot ]
+{{ if eq $rbuild_swap "true" }}
+      - name: swap
+        fs: none
+        start: 6GiB
         end: 100%
         flags: [ boot ]
+
+  - action: run
+    description: Enable swap device
+    command: |
+      set -e
+      mkswap /dev/vda3
+      swapon /dev/vda3
+{{ end }}
+
+  - action: unpack
+    description: Unpack rootfs
+    file: .rootfs/{{ $distro }}_{{ $suite }}{{ $repo_prefix }}_{{ $flavor }}.tar
 
   - action: filesystem-deploy
     description: Deploying filesystem onto image
@@ -263,3 +278,12 @@ actions:
   - action: recipe
     description: Clean up rootfs
     recipe: scripts/clean.yaml
+
+{{ if eq $rbuild_swap "true" }}
+  - action: run
+    description: Clean up swap device
+    command: |
+      set -e
+      swapoff /dev/vda3
+      sfdisk --delete /dev/vda 3
+{{ end }}
