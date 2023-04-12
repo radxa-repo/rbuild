@@ -100,6 +100,16 @@ actions:
       - spi-tools
       - usbutils
 
+{{ if eq $suite "bullseye"}}
+  - action: run
+    description: Installl keyring from package
+    chroot: true
+    command: |
+      set -e
+      apt-get install -y -t {{ $suite }}-backports \
+        wpasupplicant
+{{ end }}
+
   - action: apt
     description: Install Radxa backported packages
     packages:
