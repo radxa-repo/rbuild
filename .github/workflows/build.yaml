@@ -8,6 +8,7 @@ on:
       - '**.md'
       - .gitignore
       - 'docs/**'
+      - 'theme/**'
       - book.toml
       - .github/workflows/docs.yaml
 
