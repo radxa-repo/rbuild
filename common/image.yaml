@@ -64,7 +64,6 @@ actions:
         fs: none
         start: 6GiB
         end: 100%
-        flags: [ boot ]
 
   - action: run
     description: Enable swap device
