@@ -163,7 +163,7 @@ actions:
       ROOTDEV="$(lsblk -no pkname $ROOTPART)"
       TARGET="/dev/$ROOTDEV"
       echo "Writting to $TARGET"
-      /usr/lib/u-boot-{{ $board }}/setup.sh update_bootloader "$TARGET" {{ $soc_family }}
+      /usr/lib/u-boot/{{ $board }}/setup.sh update_bootloader "$TARGET" {{ $soc_family }}
 
 {{ end }}
 
