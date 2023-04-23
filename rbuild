@@ -309,6 +309,7 @@ write-image() {
         echo "Writting raw image..."
         sudo dd if=$IMAGE of=$BLOCKDEV bs=16M conv=fsync status=progress
     fi
+    sync
 }
 
 debos() {
