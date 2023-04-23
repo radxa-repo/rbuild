@@ -18,6 +18,7 @@ actions:
     packages:
       - r8125-dkms
   {{ if ne $board "radxa-e25" }}
+      - 8852be-dkms
       - 8852bu-dkms
       - rtk-btusb-dkms
   {{ end }}
