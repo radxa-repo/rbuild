@@ -118,6 +118,7 @@ actions:
   - action: apt
     description: Install Radxa packages
     packages:
+      - android-tools-adbd
       - libreelec-alsa-utils
       - radxa-bootutils
       - radxa-firmware
