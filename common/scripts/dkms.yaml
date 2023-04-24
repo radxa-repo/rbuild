@@ -1,32 +1,18 @@
-{{- $distro := .distro -}}
-{{- $board := .board -}}
+{{- $dkms := .dkms -}}
 
 {{- $architecture := .architecture -}}
 
 architecture: {{ $architecture }}
 
 actions:
-{{ if or (eq $board "rock-5a") (eq $board "rock-5b") (eq $board "radxa-e25") }}
-
   - action: overlay
     description: Install dkms overlays
     source: ../overlays/dkms
     destination: /
 
-  - action: apt
-    description: Install {{ $board }} dkms packages
-    packages:
-      - r8125-dkms
-  {{ if ne $board "radxa-e25" }}
-      - 8852be-dkms
-      - 8852bu-dkms
-      - rtk-btusb-dkms
-  {{ end }}
-
-{{ else }}
-
   - action: run
-    description: No operation
-    command: set -e
-
-{{ end }}
+    description: Product specific setup
+    chroot: true
+    command: |
+      set -e
+      apt install --no-install-recommends -y {{ $dkms }}

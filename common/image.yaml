@@ -20,6 +20,7 @@
 {{- $rbuild_rev := .rbuild_rev -}}
 {{- $rbuild_cmd := .rbuild_cmd -}}
 {{- $rbuild_swap := or .rbuild_swap "false" -}}
+{{- $dkms := .dkms -}}
 
 {{- $architecture := .architecture -}}
 
@@ -241,12 +242,15 @@ actions:
 
 {{ end }}
 
+{{ if ne $dkms "" }}
+
   - action: recipe
     description: Install dkms packages
     recipe: scripts/dkms.yaml
     variables:
-      distro: {{ $distro }}
-      board: {{ $board }}
+      dkms: {{ $dkms }}
+
+{{ end }}
 
 {{ if $overlay }}
 
