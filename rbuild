@@ -598,6 +598,11 @@ main() {
     local SOC_FAMILY="$(get_soc_family $SOC)"
     local PARTITION_TYPE="$(get_partition_type $SOC_FAMILY)"
 
+    if [[ -z "$RBUILD_OVERLAY" ]]
+    then
+        RBUILD_OVERLAY="${BOARD_OVERLAY:-}"
+    fi
+
     case $SUITE in
         bullseye|buster)
             local DISTRO="debian"
