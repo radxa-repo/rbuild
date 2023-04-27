@@ -8,6 +8,7 @@
 # Development
 
 - [Use apt mirrors to speed up build](dev/mirror.md)
+- [Use locally built kernel and firmware](dev/bsp.md)
 
 # Create Release
 
