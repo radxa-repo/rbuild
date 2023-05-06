@@ -289,4 +289,11 @@ actions:
       set -e
       swapoff /dev/vda3
       sfdisk --delete /dev/vda 3
+  
+  - action: run
+    description: Rebuild initramfs to not waiting for (now missing) suspend/resume device
+    chroot: true
+    command: |
+      set -e
+      update-initramfs -u
 {{ end }}
