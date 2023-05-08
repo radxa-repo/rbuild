@@ -2,7 +2,7 @@
 
 ## Install dependencies
 
-Currently due to our dependency on [`debos`](https://github.com/go-debos/debos/issues/363), we can only run `rbuild` on x86 based system.
+Currently, due to our dependency on [`debos`](https://github.com/go-debos/debos/issues/363), we can only run `rbuild` on x86 based system. If you are building in a virtual machine, we suggest you [enable nested virtualization](https://github.com/radxa-repo/rbuild/issues/16#issuecomment-1534176754).
 
 ### Debian 12 / Ubuntu 22.04
 
@@ -37,7 +37,7 @@ cd rbuild
 ./rbuild
 ```
 
-Most options listed in the help messages are targetting at developers. If you only want to build a image locally, you can run `rbuild` with only the required arguments:
+Most options listed in the help messages are targetting at developers. If you only want to build an image locally, you can run `rbuild` with only the required arguments:
 
 ```bash
 # Build radxa-cm3-sodimm-io image with default OS (currently Debian Bullseye) and flavor (CLI)
