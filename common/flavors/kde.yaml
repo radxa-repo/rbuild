@@ -45,6 +45,7 @@ actions:
       - plasma-discover
       - plasma-nm
       - powerdevil
+      - qtvirtualkeyboard-plugin
       - qml-module-org-kde-newstuff
       - sddm-theme-breeze
       - systemsettings
