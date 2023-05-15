@@ -158,6 +158,7 @@ Supported image generation options:
     -T, --test-repo         Use Radxa Test Repositories
     -b, --backend [backend] Manually specify container backend. supported values are:
                             docker, podman
+    --no-container-update   Do not update the container image
     -h, --help              Show this help message
 
 Alternative commands
@@ -391,7 +392,7 @@ main() {
     mkdir -p "$SCRIPT_DIR/common/.packages"
 
     local ARGV=("$@")
-    if ! local TEMP="$(getopt -o "sndrk:f:v::hc:o:t::Tb:" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package::,help,custom:,overlay:,timestamp::,test-repo,backend:" -n "$0" -- "$@")"
+    if ! local TEMP="$(getopt -o "sndrk:f:v::hc:o:t::Tb:" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package::,help,custom:,overlay:,timestamp::,test-repo,backend:,no-container-update" -n "$0" -- "$@")"
     then
         usage
         return 1
@@ -414,6 +415,7 @@ main() {
     local NATIVE_BUILD="false"
     local REPO_PREFIX=
     local CONTAINER_BACKEND="docker"
+    local NO_CONTAINER_UPDATE="false"
 
     if [[ -f "$SCRIPT_DIR/.rbuild-config" ]]
     then
@@ -509,6 +511,9 @@ main() {
             -b|--backend)
                 CONTAINER_BACKEND="$1"
                 shift
+                ;;
+            --no-container-update)
+                NO_CONTAINER_UPDATE="true"
                 ;;
             -h|--help)
                 usage
@@ -636,7 +641,10 @@ main() {
             CONTAINER_BACKEND="$(command -v podman)"
         fi
 
-        $CONTAINER_BACKEND pull docker.io/godebos/debos:latest
+        if ! $NO_CONTAINER_UPDATE
+        then
+            $CONTAINER_BACKEND pull docker.io/godebos/debos:latest
+        fi
     fi
 
     mkdir -p "$SCRIPT_DIR/.rootfs"
