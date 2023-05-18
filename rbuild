@@ -70,15 +70,7 @@ shrink-image() {
 
     sudo kpartx -a "$1"
     trap "sudo kpartx -d '$1'" SIGINT SIGQUIT SIGTSTP EXIT
-    local LOOP_DEV=
-    for i in /sys/class/block/*/loop/backing_file
-    do
-        if grep -q "$1" "$i"
-        then
-            LOOP_DEV="$(basename "$(dirname "$(dirname "$i")")")"
-            break
-        fi
-    done
+    local LOOP_DEV="$(basename $(sudo kpartx -l "$1" | head -n 1 | awk '{ print $5 }'))"
     local ROOT_DEV="/dev/mapper/${LOOP_DEV}p${ROOT_PART}"
 
     if [[ ! -e "$ROOT_DEV" ]]
@@ -86,6 +78,7 @@ shrink-image() {
         error $EXIT_SHRINK_NO_ROOTDEV "$ROOT_DEV"
     fi
 
+    sudo e2fsck -yf "$ROOT_DEV"
     local TOTAL_BLOCKS="$(sudo tune2fs -l "$ROOT_DEV" | grep '^Block count:' | tr -s ' ' | cut -d ' ' -f 3)"
     local TARGET_BLOCKS="$(sudo resize2fs -P "$ROOT_DEV" 2> /dev/null | cut -d ' ' -f 7)"
     local BLOCK_SIZE="$(sudo tune2fs -l "$ROOT_DEV" | grep '^Block size:' | tr -s ' ' | cut -d ' ' -f 3)"
@@ -93,7 +86,6 @@ shrink-image() {
 
     if (( $TARGET_BLOCKS < $TOTAL_BLOCKS ))
     then
-        sudo e2fsck -yf "$ROOT_DEV" > /dev/null
         sudo resize2fs -M "$ROOT_DEV" > /dev/null 2>&1
         sync
         TARGET_BLOCKS="$(sudo tune2fs -l "$ROOT_DEV" | grep '^Block count:' | tr -s ' ' | cut -d ' ' -f 3)"
