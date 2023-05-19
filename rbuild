@@ -467,14 +467,16 @@ main() {
                 shift
                 ;;
             -c|--custom)
-                local pkgs=(u-boot-$1_*.deb ../bsp/u-boot-$1_*.deb)
+                local pkgs=(u-boot-$1_*.deb ../bsp/u-boot-$1_*.deb) pkg_found="false"
                 if (( ${#pkgs[@]} > 0 ))
                 then
+                    pkg_found="true"
                     copy_firmware "${pkgs[0]}"
                 fi
                 pkgs=(linux-image-*-$1_*.deb ../bsp/linux-image-*-$1_*.deb)
                 if (( ${#pkgs[@]} > 0 ))
                 then
+                    pkg_found="true"
                     copy_kernel "${pkgs[0]}"
                 fi
                 if $RBUILD_DEBUG
@@ -482,8 +484,13 @@ main() {
                     pkgs=(linux-image-*-$1-dbg_*.deb ../bsp/linux-image-*-$1-dbg_*.deb)
                     if (( ${#pkgs[@]} > 0 ))
                     then
+                        pkg_found="true"
                         copy_kernel_dbg "${pkgs[0]}"
                     fi
+                fi
+                if ! $pkg_found
+                then
+                    error $EXIT_UNKNOWN_OPTION "$1"
                 fi
                 shift
                 ;;
