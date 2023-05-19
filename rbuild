@@ -78,15 +78,16 @@ shrink-image() {
         error $EXIT_SHRINK_NO_ROOTDEV "$ROOT_DEV"
     fi
 
-    sudo e2fsck -yf "$ROOT_DEV"
     local TOTAL_BLOCKS="$(sudo tune2fs -l "$ROOT_DEV" | grep '^Block count:' | tr -s ' ' | cut -d ' ' -f 3)"
+    sudo e2fsck -yf "$ROOT_DEV"
     local TARGET_BLOCKS="$(sudo resize2fs -P "$ROOT_DEV" 2> /dev/null | cut -d ' ' -f 7)"
     local BLOCK_SIZE="$(sudo tune2fs -l "$ROOT_DEV" | grep '^Block size:' | tr -s ' ' | cut -d ' ' -f 3)"
     echo "$TARGET_BLOCKS of $TOTAL_BLOCKS blocks are in use."
 
     if (( $TARGET_BLOCKS < $TOTAL_BLOCKS ))
     then
-        sudo resize2fs -M "$ROOT_DEV" > /dev/null 2>&1
+        sudo e2fsck -yf "$ROOT_DEV"
+        sudo resize2fs -M "$ROOT_DEV"
         sync
         TARGET_BLOCKS="$(sudo tune2fs -l "$ROOT_DEV" | grep '^Block count:' | tr -s ' ' | cut -d ' ' -f 3)"
         echo "Root filesystem has been shrinked to $TARGET_BLOCKS blocks."
