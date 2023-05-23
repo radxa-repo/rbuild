@@ -18,12 +18,23 @@ actions:
       - firefox
 {{ end }}
       - fonts-noto-cjk
+      - gstreamer1.0-gtk3
+      - gstreamer1.0-libav
+      - gstreamer1.0-plugins-bad
+      - gstreamer1.0-plugins-base
+      - gstreamer1.0-plugins-good
+      - gstreamer1.0-plugins-rtp
+      - gstreamer1.0-plugins-ugly
+      - gstreamer1.0-qt5
+      - gstreamer1.0-vaapi
       - gvfs
       - gvfs-backends
       - gvfs-fuse
+      - mesa-va-drivers
       - plymouth
       - plymouth-theme-breeze
       - plymouth-themes
+      - vdpau-driver-all
       - xdg-desktop-portal
       - xdg-desktop-portal-gtk
       - xdg-user-dirs
