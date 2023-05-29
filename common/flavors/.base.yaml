@@ -40,6 +40,7 @@ actions:
       - gpg
       - haveged
       - htop
+      - lbzip2
       - less
       - locales
       - man-db
