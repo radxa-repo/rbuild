@@ -11,3 +11,6 @@ ledtrig-timer
 
 # Load ROCK 4 dual display driver before X.org is loaded
 extcon-pd-virtual
+
+# Load Rockchip CPU Freq driver, which has no matching Device Tree node
+rockchip-cpufreq
