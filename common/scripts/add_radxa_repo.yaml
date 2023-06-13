@@ -1,4 +1,4 @@
-{{- $radxa_mirror := "https://radxa-repo.github.io/" -}}
+{{- $radxa_mirror := "http://apt.vamrs.com/rbuild-" -}}
 
 {{- $origin := .origin -}}
 {{- $suite := .suite -}}
@@ -6,7 +6,7 @@
 {{- $priority := or .priority "" -}}
 {{- $area := "main" -}}
 
-{{- $managed_keyring := "true" -}}
+{{- $managed_keyring := or .managed_keyring "true" -}}
 {{- $managed_keyring_repo := "radxa-pkg/radxa-archive-keyring" -}}
 
 {{- $architecture := .architecture -}}
@@ -36,7 +36,10 @@ actions:
     chroot: true
     command: |
       set -e
-      curl -L -o /usr/share/keyrings/radxa-archive-keyring.gpg {{ $radxa_mirror }}{{ $repo }}/keyring.gpg
+      if [ ! -f /usr/share/keyrings/radxa-archive-keyring.gpg ]
+      then
+        curl -L -o /usr/share/keyrings/radxa-archive-keyring.gpg {{ $radxa_mirror }}{{ $repo }}/keyring.gpg
+      fi
 
 {{ end }}
 
