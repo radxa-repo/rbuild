@@ -615,6 +615,9 @@ main() {
         jammy|focal)
             local DISTRO="ubuntu"
             ;;
+        *)
+            error $EXIT_UNKNOWN_OPTION "$SUITE"
+            ;;
     esac
 
     local ARCH="arm64"
