@@ -25,6 +25,7 @@ actions:
 {{ if eq $distro "debian" }}
       - contrib
       - non-free
+      - non-free-firmware
     mirror: {{ $debian_mirror }}/debian
 {{ else if eq $distro "ubuntu" }}
       - restricted
