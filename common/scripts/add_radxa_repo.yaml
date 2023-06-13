@@ -1,4 +1,4 @@
-{{- $radxa_mirror := "http://apt.vamrs.com/rbuild-" -}}
+{{- $radxa_mirror := "https://radxa-repo.github.io/" -}}
 
 {{- $origin := .origin -}}
 {{- $suite := .suite -}}
