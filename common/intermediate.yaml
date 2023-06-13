@@ -3,11 +3,10 @@
 {{- $repo_prefix := .repo_prefix -}}
 
 {{- $debian_mirror := "https://deb.debian.org" -}}
+{{- $debian_area := "main contrib non-free" -}}
 
 {{ if eq $suite "bookworm" }}
-{{- $debian_area := "main contrib non-free non-free-firmware" -}}
-{{ else }}
-{{- $debian_area := "main contrib non-free" -}}
+{{- $debian_area = print $debian_area " non-free-firmware" -}}
 {{ end }}
 
 {{- $ubuntu_mirror := "http://ports.ubuntu.com" -}}
