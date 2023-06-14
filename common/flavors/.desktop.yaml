@@ -10,7 +10,9 @@ actions:
     description: Install common desktop packages
     packages:
       - accountsservice
+      - aha
       - breeze-cursor-theme
+      - clinfo
       - desktop-base
 {{ if eq $distro "debian"}}
       - firefox-esr
@@ -18,6 +20,7 @@ actions:
       - firefox
 {{ end }}
       - fonts-noto-cjk
+      - fwupd
       - gstreamer1.0-gtk3
       - gstreamer1.0-libav
       - gstreamer1.0-plugins-bad
@@ -30,18 +33,31 @@ actions:
       - gvfs
       - gvfs-backends
       - gvfs-fuse
+      - mesa-utils
       - mesa-va-drivers
       - plymouth
       - plymouth-theme-breeze
       - plymouth-themes
       - vdpau-driver-all
+      - vulkan-tools
       - xdg-desktop-portal
       - xdg-desktop-portal-gtk
       - xdg-user-dirs
       - xdg-user-dirs-gtk
       - xdg-utils
 
+{{ if eq $suite "bookworm" }}
+
+  - action: apt
+    description: Install desktop utils
+    packages:
+      - wayland-utils
+
+{{ else }}
+
   - action: apt
     description: Install common X.Org packages
     packages:
       - xiccd
+
+{{ end }}
