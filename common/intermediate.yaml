@@ -27,6 +27,7 @@ actions:
     description: Enable swap device
     command: |
       set -e
+      lsblk
       mkswap /dev/vda
       swapon /dev/vda
 
