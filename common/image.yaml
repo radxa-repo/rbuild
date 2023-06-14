@@ -19,7 +19,6 @@
 
 {{- $rbuild_rev := .rbuild_rev -}}
 {{- $rbuild_cmd := .rbuild_cmd -}}
-{{- $rbuild_swap := or .rbuild_swap "false" -}}
 {{- $dkms := .dkms -}}
 
 {{- $architecture := .architecture -}}
@@ -28,9 +27,22 @@ architecture: {{ $architecture }}
 
 actions:
   - action: image-partition
+    description: Set up swap
+    imagename: .swap.img
+    imagesize: 4GiB
+    partitiontype: gpt
+
+  - action: run
+    description: Enable swap device
+    command: |
+      set -e
+      mkswap /dev/vda
+      swapon /dev/vda
+
+  - action: image-partition
     description: Set up on-disk layout
     imagename: {{ $image }}
-    imagesize: 10GiB
+    imagesize: 6GiB
     partitiontype: {{ $partition_type }}
     mountpoints:
       - mountpoint: /
@@ -58,21 +70,8 @@ actions:
       - name: rootfs
         fs: ext4
         start: {{ $efi_end }}
-        end: 6GiB
-        flags: [ boot ]
-{{ if eq $rbuild_swap "true" }}
-      - name: swap
-        fs: none
-        start: 6GiB
         end: 100%
-
-  - action: run
-    description: Enable swap device
-    command: |
-      set -e
-      mkswap /dev/vda3
-      swapon /dev/vda3
-{{ end }}
+        flags: [ boot ]
 
   - action: unpack
     description: Unpack rootfs
@@ -282,13 +281,11 @@ actions:
     description: Clean up rootfs
     recipe: scripts/clean.yaml
 
-{{ if eq $rbuild_swap "true" }}
   - action: run
     description: Clean up swap device
     command: |
       set -e
-      swapoff /dev/vda3
-      sfdisk --delete /dev/vda 3
+      swapoff /dev/vda
   
   - action: run
     description: Rebuild initramfs to not waiting for (now missing) suspend/resume device
@@ -296,4 +293,3 @@ actions:
     command: |
       set -e
       update-initramfs -u
-{{ end }}

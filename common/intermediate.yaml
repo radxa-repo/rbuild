@@ -17,6 +17,19 @@
 architecture: {{ $architecture }}
 
 actions:
+  - action: image-partition
+    description: Set up swap
+    imagename: .swap.img
+    imagesize: 4GiB
+    partitiontype: gpt
+
+  - action: run
+    description: Enable swap device
+    command: |
+      set -e
+      mkswap /dev/vda
+      swapon /dev/vda
+
   - action: overlay
     description: Install apt policies
     source: overlays/apt

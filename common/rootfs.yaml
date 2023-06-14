@@ -8,6 +8,19 @@
 architecture: {{ $architecture }}
 
 actions:
+  - action: image-partition
+    description: Set up swap
+    imagename: .swap.img
+    imagesize: 4GiB
+    partitiontype: gpt
+
+  - action: run
+    description: Enable swap device
+    command: |
+      set -e
+      mkswap /dev/vda
+      swapon /dev/vda
+
   - action: unpack
     description: Unpack rootfs
     file: .rootfs/{{ $distro }}_{{ $suite }}{{ $repo_prefix }}_base.tar

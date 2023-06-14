@@ -358,11 +358,6 @@ debos() {
     then
         env debos --disable-fakemachine $DEBOS_OPTIONS "$@"
     else
-        if [[ -e /dev/kvm ]]
-        then
-            DEBOS_OPTIONS="$DEBOS_OPTIONS -t rbuild_swap:true"
-        fi
-
         if [[ "$(basename "$CONTAINER_BACKEND")" == "podman" ]]
         then
             CONTAINER_OPTIONS+=( "--user" "root" )
