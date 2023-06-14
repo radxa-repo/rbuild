@@ -36,8 +36,19 @@ actions:
     description: Enable swap device
     command: |
       set -e
-      mkswap /dev/vda
-      swapon /dev/vda
+      if [ -b /dev/vda ]
+      then
+        mkswap /dev/vda
+        swapon /dev/vda
+      else
+        if ! swapon | grep /swapfile >/dev/null
+        then
+          dd if=/dev/zero of=/swapfile bs=1M count=4096 status=progress
+          chmod 0600 /swapfile
+          mkswap -U clear /swapfile
+          swapon /swapfile
+        fi
+      fi
 
   - action: image-partition
     description: Set up on-disk layout
@@ -285,7 +296,7 @@ actions:
     description: Clean up swap device
     command: |
       set -e
-      swapoff /dev/vda
+      swapoff /dev/vda || swapoff /swapfile
 
 {{ if eq $suite "bookworm" }}
   - action: run
