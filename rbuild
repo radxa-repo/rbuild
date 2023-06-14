@@ -338,7 +338,7 @@ debos() {
     fi
     
     local DEV_SHM_CURRENT=$(df -h /dev/shm | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4)
-    local DEV_SHM_REQUIRE=5
+    local DEV_SHM_REQUIRE=6
     if (( $(df -B 1 /dev/shm | tail -n 1 | tr -s ' ' | cut -d ' ' -f 4) < $DEV_SHM_REQUIRE * 1024 * 1024 ))
     then
         if ! sudo -n true 2>/dev/null && ! [[ -t 0 ]]
