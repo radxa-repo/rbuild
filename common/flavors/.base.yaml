@@ -83,8 +83,12 @@ actions:
     description: Install audio utilities
     packages:
       - alsa-utils
+{{ if eq $suite "bookworm" }}
+      - pipewire-audio
+{{ else }}
       - pulseaudio
       - pulseaudio-module-bluetooth
+{{ end }}
 {{ if ne $suite "buster"}}
       - alsa-ucm-conf
 {{ end }}
