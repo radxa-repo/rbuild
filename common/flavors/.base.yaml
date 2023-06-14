@@ -103,7 +103,7 @@ actions:
 
 {{ if eq $suite "bullseye"}}
   - action: run
-    description: Installl keyring from package
+    description: Installl wpasupplicant from backports
     chroot: true
     command: |
       set -e
