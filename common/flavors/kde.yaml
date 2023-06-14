@@ -54,6 +54,9 @@ actions:
 {{ if ne $suite "focal" }}
       - kde-config-systemd
 {{ end }}
+{{ if eq $suite "bookworm" }}
+      - plasma-workspace-wayland
+{{ end }}
 
   - action: recipe
     description: Install common desktop packages

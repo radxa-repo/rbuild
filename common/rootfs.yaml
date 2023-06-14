@@ -37,6 +37,13 @@ actions:
     source: overlays/common
     destination: /
 
+{{ if eq $suite "bookworm" }}
+  - action: overlay
+    description: Install {{ $suite }} overlay
+    source: overlays/{{ $suite }}
+    destination: /
+{{ end }}
+
   - action: run
     description: OEM system setup
     chroot: true

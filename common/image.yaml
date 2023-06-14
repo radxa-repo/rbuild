@@ -286,7 +286,18 @@ actions:
     command: |
       set -e
       swapoff /dev/vda
-  
+
+{{ if eq $suite "bookworm" }}
+  - action: run
+    description: Workaround cloud-initramfs-growroot bug
+    chroot: true
+    command: |
+      echo "copy_exec /usr/bin/grep /bin" >> /usr/share/initramfs-tools/hooks/growroot
+      echo "copy_exec /usr/bin/sed /bin" >> /usr/share/initramfs-tools/hooks/growroot
+      echo "copy_exec /usr/bin/rm /bin" >> /usr/share/initramfs-tools/hooks/growroot
+      echo "copy_exec /usr/bin/awk /bin" >> /usr/share/initramfs-tools/hooks/growroot
+{{ end }}
+
   - action: run
     description: Rebuild initramfs to not waiting for (now missing) suspend/resume device
     chroot: true
