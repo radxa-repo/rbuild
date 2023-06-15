@@ -617,7 +617,7 @@ main() {
 
     local ARCH="arm64"
     local IMAGE="${BOARD}_${DISTRO}_${SUITE}${REPO_PREFIX}_${FLAVOR}${RBUILD_TIMESTAMP}.img"
-    local EFI_END=${EFI_END:-"32MiB"}
+    local EFI_END=${EFI_END:-"332MiB"}
     
     # Release targeting image in case previous shrink failed
     if $RBUILD_SHRINK && [[ -e /dev/mapper/loop* ]]
