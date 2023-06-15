@@ -44,15 +44,15 @@ actions:
           swapon /dev/vda
         fi
       else
-        if [ ! -f /swapfile ]
+        if [ ! -f /swapfile_rbuild ]
         then
-          dd if=/dev/zero of=/swapfile bs=1M count=4096 status=progress
-          chmod 0600 /swapfile
-          mkswap -U clear /swapfile
+          dd if=/dev/zero of=/swapfile_rbuild bs=1M count=4096 status=progress
+          chmod 0600 /swapfile_rbuild
+          mkswap -U clear /swapfile_rbuild
         fi
-        if ! swapon | grep /swapfile >/dev/null
+        if ! swapon | grep /swapfile_rbuild >/dev/null
         then
-          swapon /swapfile
+          swapon /swapfile_rbuild
         fi
       fi
 
@@ -306,9 +306,13 @@ actions:
       then
         swapoff /dev/vda
       fi
-      if swapon | grep /swapfile >/dev/null
+      if swapon | grep /swapfile_rbuild >/dev/null
       then
-        swapoff /swapfile
+        swapoff /swapfile_rbuild
+      fi
+      if [ -f /swapfile_rbuild ]
+      then
+        rm /swapfile_rbuild
       fi
 
 {{ if eq $suite "bookworm" }}
