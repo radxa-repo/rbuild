@@ -30,7 +30,7 @@ actions:
         then
           dd if=/dev/zero of=/swapfile_rbuild bs=1M count=4096 status=progress
           chmod 0600 /swapfile_rbuild
-          mkswap -U clear /swapfile_rbuild
+          mkswap /swapfile_rbuild
         fi
         if ! swapon | grep /swapfile_rbuild >/dev/null
         then
