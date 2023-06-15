@@ -29,14 +29,20 @@ actions:
       set -e
       if [ -b /dev/vda ]
       then
-        mkswap /dev/vda
-        swapon /dev/vda
+        if ! swapon | grep /dev/vda >/dev/null
+        then
+          mkswap /dev/vda
+          swapon /dev/vda
+        fi
       else
-        if ! swapon | grep /swapfile >/dev/null
+        if [ ! -f /swapfile ]
         then
           dd if=/dev/zero of=/swapfile bs=1M count=4096 status=progress
           chmod 0600 /swapfile
           mkswap -U clear /swapfile
+        fi
+        if ! swapon | grep /swapfile >/dev/null
+        then
           swapon /swapfile
         fi
       fi
