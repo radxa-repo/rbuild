@@ -82,10 +82,10 @@ actions:
         cp /etc/sway/config /etc/skel/.config/sway/config
       fi
 
-      if echo "$(apt list --installed efibootmgr 2>/dev/null)" | grep -q "installed"
+      if echo "$(apt list --installed systemd-boot 2>/dev/null)" | grep -q "installed"
       then
-        mkdir -p /boot/efi/$(cat /etc/machine-id)
-        bootctl install
+        mkdir /boot/efi
+        SYSTEMD_RELAX_ESP_CHECKS=1 SYSTEMD_ESP_PATH=/boot/efi bootctl install --entry-token=os-id --make-entry-directory=yes
       fi
 
       echo 'U_BOOT_TIMEOUT="10"' >> /etc/default/u-boot

@@ -62,6 +62,10 @@ actions:
       - python-is-python3
       - systemd-timesyncd
 {{ end }}
+{{ if eq $suite "bookworm" }}
+      - efibootmgr
+      - systemd-boot
+{{ end }}
 
   - action: apt
     description: Install network utilities
