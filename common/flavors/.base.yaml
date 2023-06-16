@@ -70,6 +70,7 @@ actions:
   - action: apt
     description: Install network utilities
     packages:
+      - avahi-daemon
       - bluetooth
       - dnsmasq
       - ldnsutils
