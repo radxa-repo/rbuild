@@ -108,7 +108,6 @@ actions:
       suite: {{ $soc_family }}-{{ $suite }}{{ $repo_prefix }}
       repo: {{ $suite }}{{ $repo_prefix }}
       priority: 1001
-      managed_keyring: false
 
   - action: apt
     description: Install task-{{ $board }} package
