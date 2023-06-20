@@ -714,7 +714,9 @@ LANG="C"
 LANGUAGE="C"
 PATH="/usr/sbin:$PATH"
 
-if command -v notify-send >/dev/null
+if command -v notify-send &>/dev/null && dbus-send --session \
+    --dest=org.freedesktop.Notifications --print-reply \
+    /org/freedesktop/Notifications org.freedesktop.DBus.Peer.Ping &>/dev/null
 then
     NOTIFY_SEND=notify-send
 else
