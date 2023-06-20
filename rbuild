@@ -69,6 +69,7 @@ shrink-image() {
     local START_SECTOR="$(sgdisk -i "$ROOT_PART" "$1" | grep "First sector:" | cut -d ' ' -f 3)"
     echo "Partition $ROOT_PART is root partition."
 
+    sudo kpartx -d "$1"
     sudo kpartx -a "$1"
     local LOOP_DEV="$(basename $(sudo kpartx -l "$1" | head -n 1 | awk '{ print $5 }'))"
     trap "sudo kpartx -d '$1'" SIGINT SIGQUIT SIGTSTP EXIT
