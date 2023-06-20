@@ -73,7 +73,7 @@ actions:
       if echo "$(apt list --installed foot 2>/dev/null)" | grep -q "installed"
       then
         mkdir -p /etc/skel/.config/foot
-        cp /usr/share/foot/foot.ini /etc/skel/.config/foot/foot.ini
+        cp /etc/xdg/foot/foot.ini /etc/skel/.config/foot/foot.ini
       fi
 
       if echo "$(apt list --installed sway 2>/dev/null)" | grep -q "installed"

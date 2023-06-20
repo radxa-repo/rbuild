@@ -9,8 +9,11 @@ actions:
   - action: apt
     description: Install sway packages
     packages:
-      - sway
       - foot
+      - greetd
+      - sway
+      - sway-backgrounds
+      - swaylock
 
   - action: recipe
     description: Install common desktop packages
