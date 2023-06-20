@@ -75,8 +75,7 @@ runs:
       run: |
         mkdir .output
         cd .output
-        # --root-override is a hidden argument so we can build as root.
-        sudo ../rbuild ${{ env.options }} --timestamp=${{ inputs.timestamp}} --compress --native-build --shrink --root-override ${{ inputs.board }} ${{ env.suite }} ${{ inputs.flavor }}
+        sudo ../rbuild ${{ env.options }} --timestamp=${{ inputs.timestamp}} --compress --native-build --shrink ${{ inputs.board }} ${{ env.suite }} ${{ inputs.flavor }}
         if [ -n "$(ls -A ./* 2>/dev/null)" ]
         then
           sudo chown $USER ./*

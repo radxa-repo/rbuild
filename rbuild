@@ -493,6 +493,7 @@ main() {
                 ;;
             -n|--native-build)
                 NATIVE_BUILD="true"
+                RBUILD_AS_ROOT="true"
                 ;;
             -t|--timestamp)
                 RBUILD_TIMESTAMP="_${1:-${RBUILD_STARTING_TIME}_${PARTITION_TYPE}}"
@@ -518,9 +519,6 @@ main() {
                 ;;
             --)
                 break
-                ;;
-            --root-override)
-                RBUILD_AS_ROOT="true"
                 ;;
             *)
                 error $EXIT_UNKNOWN_OPTION "$TEMP"
