@@ -626,9 +626,10 @@ main() {
     fi
 
     # Check /dev/kvm permission
-    if [[ -f /dev/kvm && "$(stat -c "%A" /dev/kvm)" != "crw-rw-rw-" ]]
+    if [[ -c /dev/kvm && "$(stat -c "%A" /dev/kvm)" != "crw-rw-rw-" ]]
     then
         echo "KVM detected but the permission is not optimal."
+        echo 'You might need to run `sudo chmod 0666 /dev/kvm` to have rbuild working.'
     fi
 
     if ! $NATIVE_BUILD
