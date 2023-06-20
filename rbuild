@@ -73,8 +73,8 @@ shrink-image() {
     then
         echo "Image is already mounted at /dev/${LOOP_DEV}. Trying to clean up..."
         sudo losetup -l
+        cat /sys/block/${LOOP_DEV}/loop/backing_file
         sudo kpartx -d "$1"
-        sudo losetup -d "/dev/${LOOP_DEV}"
     fi
     sudo kpartx -a "$1"
     LOOP_DEV="$(basename $(sudo kpartx -l "$1" | head -n 1 | awk '{ print $5 }'))"
