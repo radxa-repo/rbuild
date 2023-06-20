@@ -26,7 +26,6 @@ error() {
             echo "'$2' requires either passwordless sudo, or running in an interactive shell." >&2
             ;;
         $EXIT_SHRINK_NO_ROOTDEV)
-            lsblk >&2
             echo "Unable to access loop device '$2' for shrinking." >&2
             ;;
         $EXIT_DEV_SHM_TOO_SMALL)
@@ -69,11 +68,16 @@ shrink-image() {
     local START_SECTOR="$(sgdisk -i "$ROOT_PART" "$1" | grep "First sector:" | cut -d ' ' -f 3)"
     echo "Partition $ROOT_PART is root partition."
 
-    sudo kpartx -d "$1"
-    sudo kpartx -l "$1"
-    lsblk
-    sudo kpartx -a "$1"
     local LOOP_DEV="$(basename $(sudo kpartx -l "$1" | head -n 1 | awk '{ print $5 }'))"
+    if [[ -b /dev/${LOOP_DEV} ]]
+    then
+        echo "Image is already mounted at /dev/${LOOP_DEV}. Trying to clean up..."
+        sudo losetup -l
+        sudo kpartx -d "$1"
+        sudo losetup -d "/dev/${LOOP_DEV}"
+    fi
+    sudo kpartx -a "$1"
+    LOOP_DEV="$(basename $(sudo kpartx -l "$1" | head -n 1 | awk '{ print $5 }'))"
     trap "sudo kpartx -d '$1'" SIGINT SIGQUIT SIGTSTP EXIT
     local ROOT_DEV="/dev/mapper/${LOOP_DEV}p${ROOT_PART}"
 
