@@ -26,6 +26,7 @@ error() {
             echo "'$2' requires either passwordless sudo, or running in an interactive shell." >&2
             ;;
         $EXIT_SHRINK_NO_ROOTDEV)
+            lsblk >&2
             echo "Unable to access loop device '$2' for shrinking." >&2
             ;;
         $EXIT_DEV_SHM_TOO_SMALL)
