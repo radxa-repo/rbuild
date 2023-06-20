@@ -70,6 +70,8 @@ shrink-image() {
     echo "Partition $ROOT_PART is root partition."
 
     sudo kpartx -d "$1"
+    sudo kpartx -l "$1"
+    lsblk
     sudo kpartx -a "$1"
     local LOOP_DEV="$(basename $(sudo kpartx -l "$1" | head -n 1 | awk '{ print $5 }'))"
     trap "sudo kpartx -d '$1'" SIGINT SIGQUIT SIGTSTP EXIT
