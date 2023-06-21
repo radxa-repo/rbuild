@@ -21,6 +21,7 @@
 {{- $rbuild_rev := .rbuild_rev -}}
 {{- $rbuild_cmd := .rbuild_cmd -}}
 {{- $dkms := .dkms -}}
+{{- $kernel_profile := .kernel_profile -}}
 
 {{- $architecture := .architecture -}}
 
@@ -137,7 +138,7 @@ actions:
     recipe: scripts/add_radxa_repo.yaml
     variables:
       origin: radxa-{{ $soc_family }}
-      suite: {{ $soc_family }}-{{ $suite }}
+      suite: {{ $soc_family }}-{{ $suite }}{{ $repo_prefix }}
       repo: {{ $suite }}{{ $repo_prefix }}
       radxa_mirror: {{ $radxa_mirror }}
       priority: 100
@@ -151,7 +152,7 @@ actions:
 
 {{ end }}
 
-{{ if ne $soc_family "generic" }}
+{{ if eq $kernel_profile "" }}
 
   {{ if eq $firmware "" }}
 
@@ -185,24 +186,13 @@ actions:
 
 {{ if eq $kernel "" }}
 
-  {{ if eq $soc_family "generic" }}
-
-  - action: apt
-    description: Install upstream kernel
-    packages:
-  {{ if eq $distro "debian" }}
-      - linux-image-{{ $architecture }}
-  {{ else if eq $distro "ubuntu" }}
-      - linux-image-generic
-  {{ end }}
-
-  {{ else }}
-
   - action: apt
     description: Install Radxa kernel
     packages:
+  {{ if eq $kernel_profile "" }}
       - linux-image-{{ $board }}
-
+  {{ else }}
+      - linux-image-{{ $kernel_profile }}
   {{ end }}
 
 {{ else }}
@@ -227,24 +217,13 @@ actions:
 
 {{ if eq $header "" }}
 
-  {{ if eq $soc_family "generic" }}
-
-  - action: apt
-    description: Install upstream kernel header
-    packages:
-  {{ if eq $distro "debian" }}
-      - linux-headers-{{ $architecture }}
-  {{ else if eq $distro "ubuntu" }}
-      - linux-headers-generic
-  {{ end }}
-
-  {{ else }}
-
   - action: apt
     description: Install Radxa kernel header
     packages:
+  {{ if eq $kernel_profile "" }}
       - linux-headers-{{ $board }}
-
+  {{ else }}
+      - linux-headers-{{ $kernel_profile }}
   {{ end }}
 
 {{ else }}
@@ -281,7 +260,7 @@ actions:
     description: Product specific setup
     chroot: true
     command: |
-      set -e
+      set -xe
       rsetup update_hostname {{ $board }}
       echo "RBUILD_BUILD_DATE='$(date -R)'" > /etc/radxa_image_fingerprint
       echo "RBUILD_REVISION='{{ $rbuild_rev }}'" >> /etc/radxa_image_fingerprint
@@ -289,9 +268,15 @@ actions:
       pkg_info="$(dpkg-query -f '${binary:Package} ${Version}\n' -W | grep -v -e {{ $board }} | grep linux-image)"
       echo "RBUILD_KERNEL='$(echo $pkg_info | cut -d ' ' -f 1)'" >> /etc/radxa_image_fingerprint
       echo "RBUILD_KERNEL_VERSION='$(echo $pkg_info | cut -d ' ' -f 2)'" >> /etc/radxa_image_fingerprint
-      pkg_info="$(dpkg-query -f '${binary:Package} ${Version}\n' -W | grep -v -e {{ $board }} -e u-boot-menu -e u-boot-tools | grep u-boot)"
-      echo "RBUILD_UBOOT='$(echo $pkg_info | cut -d ' ' -f 1)'" >> /etc/radxa_image_fingerprint
-      echo "RBUILD_UBOOT_VERSION='$(echo $pkg_info | cut -d ' ' -f 2)'" >> /etc/radxa_image_fingerprint
+      if apt list --installed u-boot-{{ $board }} | grep u-boot
+      then
+        pkg_info="$(dpkg-query -f '${binary:Package} ${Version}\n' -W | grep -v -e {{ $board }} -e u-boot-menu -e u-boot-tools | grep u-boot)"
+        echo "RBUILD_UBOOT='$(echo $pkg_info | cut -d ' ' -f 1)'" >> /etc/radxa_image_fingerprint
+        echo "RBUILD_UBOOT_VERSION='$(echo $pkg_info | cut -d ' ' -f 2)'" >> /etc/radxa_image_fingerprint
+      else
+        echo "RBUILD_UBOOT='EFI-System'" >> /etc/radxa_image_fingerprint
+        echo "RBUILD_UBOOT_VERSION='1'" >> /etc/radxa_image_fingerprint
+      fi
 
   - action: recipe
     description: Clean up rootfs

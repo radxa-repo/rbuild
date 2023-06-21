@@ -70,19 +70,19 @@ actions:
       rm -f /etc/resolv.conf
       rsetup update_hostname radxa
 
-      if echo "$(apt list --installed foot 2>/dev/null)" | grep -q "installed"
+      if apt list --installed foot 2>/dev/null | grep -q "installed"
       then
         mkdir -p /etc/skel/.config/foot
         cp /etc/xdg/foot/foot.ini /etc/skel/.config/foot/foot.ini
       fi
 
-      if echo "$(apt list --installed sway 2>/dev/null)" | grep -q "installed"
+      if apt list --installed sway 2>/dev/null | grep -q "installed"
       then
         mkdir -p /etc/skel/.config/sway
         cp /etc/sway/config /etc/skel/.config/sway/config
       fi
 
-      if echo "$(apt list --installed systemd-boot 2>/dev/null)" | grep -q "installed"
+      if apt list --installed systemd-boot 2>/dev/null | grep -q "installed"
       then
         mkdir /boot/efi
         SYSTEMD_RELAX_ESP_CHECKS=1 SYSTEMD_ESP_PATH=/boot/efi bootctl install --entry-token=os-id --make-entry-directory=yes
