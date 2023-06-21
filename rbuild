@@ -68,19 +68,9 @@ shrink-image() {
     local START_SECTOR="$(sgdisk -i "$ROOT_PART" "$1" | grep "First sector:" | cut -d ' ' -f 3)"
     echo "Partition $ROOT_PART is root partition."
 
-    local LOOP_DEV="$(basename $(sudo kpartx -l "$1" | head -n 1 | awk '{ print $5 }'))"
-    if [[ -b /dev/${LOOP_DEV} ]]
-    then
-        echo "Image is already mounted at /dev/${LOOP_DEV}. Trying to clean up..."
-        sudo losetup -l
-        find /sys/block/${LOOP_DEV}
-        lsblk
-        sudo kpartx -d "$1"
-    fi
     sudo kpartx -a "$1"
-    LOOP_DEV="$(basename $(sudo kpartx -l "$1" | head -n 1 | awk '{ print $5 }'))"
+    local ROOT_DEV="$(sudo blkid -t LABEL=rootfs -o device | grep /dev/mapper/loop | tail -n 1)"
     trap "sudo kpartx -d '$1'" SIGINT SIGQUIT SIGTSTP EXIT
-    local ROOT_DEV="/dev/mapper/${LOOP_DEV}p${ROOT_PART}"
 
     if [[ ! -e "$ROOT_DEV" ]]
     then
