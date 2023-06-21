@@ -187,14 +187,14 @@ actions:
 
   {{ if eq $soc_family "generic" }}
 
-    - action: apt
-      description: Install upstream kernel
-      packages:
-    {{ if eq $distro "debian" }}
-        - linux-image-{{ $architecture }}
-    {{ else if eq $distro "ubuntu" }}
-        - linux-image-generic
-    {{ end }}
+  - action: apt
+    description: Install upstream kernel
+    packages:
+  {{ if eq $distro "debian" }}
+      - linux-image-{{ $architecture }}
+  {{ else if eq $distro "ubuntu" }}
+      - linux-image-generic
+  {{ end }}
 
   {{ else }}
 
@@ -229,14 +229,14 @@ actions:
 
   {{ if eq $soc_family "generic" }}
 
-    - action: apt
-      description: Install upstream kernel header
-      packages:
-    {{ if eq $distro "debian" }}
-        - linux-headers-{{ $architecture }}
-    {{ else if eq $distro "ubuntu" }}
-        - linux-headers-generic
-    {{ end }}
+  - action: apt
+    description: Install upstream kernel header
+    packages:
+  {{ if eq $distro "debian" }}
+      - linux-headers-{{ $architecture }}
+  {{ else if eq $distro "ubuntu" }}
+      - linux-headers-generic
+  {{ end }}
 
   {{ else }}
 
