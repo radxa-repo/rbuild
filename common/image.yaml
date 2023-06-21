@@ -41,7 +41,7 @@ actions:
       then
         if ! swapon | grep /dev/vda >/dev/null
         then
-          mkswap /dev/vda
+          mkswap -f /dev/vda
           swapon /dev/vda
         fi
       else
@@ -49,7 +49,7 @@ actions:
         then
           dd if=/dev/zero of=/swapfile_rbuild bs=1M count=4096 status=progress
           chmod 0600 /swapfile_rbuild
-          mkswap /swapfile_rbuild
+          mkswap -f /swapfile_rbuild
         fi
         if ! swapon | grep /swapfile_rbuild >/dev/null
         then
