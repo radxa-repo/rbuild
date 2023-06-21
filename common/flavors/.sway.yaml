@@ -11,9 +11,11 @@ actions:
     packages:
       - foot
       - greetd
+      - suckless-tools
       - sway
       - sway-backgrounds
       - swaylock
+      - xwayland
 
   - action: recipe
     description: Install common desktop packages
