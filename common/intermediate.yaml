@@ -1,15 +1,16 @@
 {{- $distro := .distro -}}
 {{- $suite := .suite -}}
 {{- $repo_prefix := .repo_prefix -}}
+{{- $radxa_mirror := .radxa_mirror -}}
 
-{{- $debian_mirror := "https://deb.debian.org" -}}
+{{- $debian_mirror := or .distro_mirror "https://deb.debian.org" -}}
 {{- $debian_area := "main contrib non-free" -}}
 
 {{ if eq $suite "bookworm" }}
 {{- $debian_area = print $debian_area " non-free-firmware" -}}
 {{ end }}
 
-{{- $ubuntu_mirror := "http://ports.ubuntu.com" -}}
+{{- $ubuntu_mirror := or .distro_mirror "http://ports.ubuntu.com" -}}
 {{- $ubuntu_area := "main restricted universe multiverse" -}}
 
 {{- $architecture := .architecture -}}
@@ -130,6 +131,7 @@ actions:
       origin: radxa
       suite: {{ $suite }}{{ $repo_prefix }}
       repo: {{ $suite }}{{ $repo_prefix }}
+      radxa_mirror: {{ $radxa_mirror }}
 
   - action: recipe
     description: Install base packages

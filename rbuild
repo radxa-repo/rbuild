@@ -151,6 +151,8 @@ Supported image generation options:
     -b, --backend [backend] Manually specify container backend. supported values are:
                             docker, podman
     --no-container-update   Do not update the container image
+    -m, --mirror [mirror]   Configure Debian/Ubuntu archive mirror
+    -M [mirror]             Configure Radxa archive mirror
     -h, --help              Show this help message
 
 Alternative commands
@@ -379,7 +381,7 @@ main() {
     mkdir -p "$SCRIPT_DIR/common/.packages"
 
     local ARGV=("$@")
-    if ! local TEMP="$(getopt -o "sndrk:f:v::hc:o:t::Tb:" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package::,help,custom:,overlay:,timestamp::,test-repo,backend:,no-container-update" -n "$0" -- "$@")"
+    if ! local TEMP="$(getopt -o "sndrk:f:v::hc:o:t::Tb:m:M:" -l "shrink,compress,native-build,debug,root-override,rootfs,kernel:,firmware:,no-vendor-package::,help,custom:,overlay:,timestamp::,test-repo,backend:,no-container-update,mirror:" -n "$0" -- "$@")"
     then
         usage
         return 1
@@ -403,6 +405,8 @@ main() {
     local REPO_PREFIX=
     local CONTAINER_BACKEND="docker"
     local NO_CONTAINER_UPDATE="false"
+    local RBUILD_DISTRO_MIRROR=
+    local RBUILD_RADXA_MIRROR=
 
     if [[ -f "$SCRIPT_DIR/.rbuild-config" ]]
     then
@@ -509,6 +513,14 @@ main() {
                 ;;
             --no-container-update)
                 NO_CONTAINER_UPDATE="true"
+                ;;
+            -m|--mirror)
+                RBUILD_DISTRO_MIRROR="$1"
+                shift
+                ;;
+            -M)
+                RBUILD_RADXA_MIRROR="$1"
+                shift
                 ;;
             -h|--help)
                 usage
@@ -652,6 +664,7 @@ main() {
             pushd "$SCRIPT_DIR"
             debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/intermediate.yaml" \
                 -t architecture:"$ARCH" \
+                -t distro_mirror:"$RBUILD_DISTRO_MIRROR" -t radxa_mirror:"$RBUILD_RADXA_MIRROR" \
                 -t distro:"$DISTRO" -t suite:"$SUITE" -t repo_prefix:"$REPO_PREFIX"
             popd
         else
@@ -661,6 +674,7 @@ main() {
         pushd "$SCRIPT_DIR"
         debos $DEBOS_OPTIONS "$SCRIPT_DIR/common/rootfs.yaml" \
             -t architecture:"$ARCH" \
+            -t distro_mirror:"$RBUILD_DISTRO_MIRROR" -t radxa_mirror:"$RBUILD_RADXA_MIRROR" \
             -t distro:"$DISTRO" -t suite:"$SUITE" -t flavor:"$FLAVOR" -t repo_prefix:"$REPO_PREFIX"
         popd
     else
@@ -680,6 +694,7 @@ main() {
         -t kernel:"$RBUILD_KERNEL" -t kernel_dbg:"$RBUILD_KERNEL_DBG" -t header:"$RBUILD_HEADER" -t firmware:"$RBUILD_FIRMWARE" \
         -t install_vendor_package:"$INSTALL_VENDOR_PACKAGE" -t overlay:"$RBUILD_OVERLAY" \
         -t dkms:"${BOARD_DKMS:-}" \
+        -t distro_mirror:"$RBUILD_DISTRO_MIRROR" -t radxa_mirror:"$RBUILD_RADXA_MIRROR" \
         -t rbuild_rev:"$(git rev-parse HEAD)$(git diff --quiet || echo '-dirty')" -t rbuild_cmd:"./rbuild ${ARGV[*]}"
 
     if $RBUILD_SHRINK

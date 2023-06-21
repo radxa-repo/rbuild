@@ -1,4 +1,4 @@
-{{- $radxa_mirror := "https://radxa-repo.github.io/" -}}
+{{- $radxa_mirror := or .radxa_mirror "https://radxa-repo.github.io/" -}}
 
 {{- $origin := .origin -}}
 {{- $suite := .suite -}}
