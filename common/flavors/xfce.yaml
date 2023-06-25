@@ -26,13 +26,13 @@ actions:
       - xfce4-terminal
 {{ if ne $suite "buster"}}
       - xfce4-screensaver
-{{ end }}
 
   - action: run
     description: Remove light-locker in favor of xfce4-screensaver
     chroot: true
     command: |
       apt remove -y light-locker
+{{ end }}
 
   - action: recipe
     description: Install common desktop packages
