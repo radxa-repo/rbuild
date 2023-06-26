@@ -14,7 +14,10 @@ actions:
       - suckless-tools
       - sway
       - sway-backgrounds
+      - swaybg
+      - swayidle
       - swaylock
+      - xdg-desktop-portal-wlr
       - xwayland
 
   - action: recipe
