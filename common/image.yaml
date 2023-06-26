@@ -126,11 +126,6 @@ actions:
       apt-get full-upgrade -y --allow-downgrades
       apt-get autoremove -y --purge
 
-  - action: overlay
-    description: Install vendor overlays
-    source: overlays/{{ $soc_family }}
-    destination: /
-
   {{ else }}
 
   - action: recipe
@@ -151,6 +146,11 @@ actions:
   {{ end }}
 
 {{ end }}
+
+  - action: overlay
+    description: Install {{ $soc_family }} overlays
+    source: overlays/{{ $soc_family }}
+    destination: /
 
 {{ if eq $kernel_profile "" }}
 
