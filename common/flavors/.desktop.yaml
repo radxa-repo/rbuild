@@ -20,6 +20,7 @@ actions:
       - firefox
 {{ end }}
       - fonts-noto-cjk
+      - fprintd
       - fwupd
       - gstreamer1.0-gtk3
       - gstreamer1.0-libav
@@ -33,6 +34,7 @@ actions:
       - gvfs
       - gvfs-backends
       - gvfs-fuse
+      - maliit-keyboard
       - mesa-utils
       - mesa-va-drivers
       - plymouth
@@ -49,7 +51,7 @@ actions:
 {{ if eq $suite "bookworm" }}
 
   - action: apt
-    description: Install desktop utils
+    description: Install common Wayland packages
     packages:
       - wayland-utils
 

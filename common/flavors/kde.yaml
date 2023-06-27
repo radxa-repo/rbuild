@@ -29,14 +29,17 @@ actions:
       - accountwizard
       - bluedevil
       - dragonplayer
+      - kamera
       - kde-config-plymouth
       - kde-config-screenlocker
       - kde-config-sddm
+      - kdeconnect
       - khotkeys
       - kinfocenter
       - kio-extras
       - konqueror
       - kscreen
+      - kup-backup
       - kwin-x11
       - libkf5kdelibs4support5
       - libkf5kdelibs4support5-bin
@@ -45,9 +48,12 @@ actions:
       - plasma-discover
       - plasma-nm
       - powerdevil
+      - print-manager
       - qtvirtualkeyboard-plugin
       - qml-module-org-kde-newstuff
+      - qml-module-qt-labs-platform
       - sddm-theme-breeze
+      - sonnet-plugins
       - systemsettings
       - yakuake
       - xdg-desktop-portal-kde
