@@ -260,7 +260,7 @@ actions:
     description: Product specific setup
     chroot: true
     command: |
-      set -xe
+      set -e
       rsetup update_hostname {{ $board }}
       echo "RBUILD_BUILD_DATE='$(date -R)'" > /etc/radxa_image_fingerprint
       echo "RBUILD_REVISION='{{ $rbuild_rev }}'" >> /etc/radxa_image_fingerprint
