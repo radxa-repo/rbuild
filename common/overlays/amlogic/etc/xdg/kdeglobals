@@ -1,0 +1,5 @@
+[KDE]
+SingleClick=false
+
+[QtQuickRendererSettings]
+SceneGraphBackend=opengl
