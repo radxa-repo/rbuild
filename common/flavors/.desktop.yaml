@@ -14,9 +14,9 @@ actions:
       - breeze-cursor-theme
       - clinfo
       - desktop-base
-{{ if eq $distro "debian"}}
+{{ if eq $distro "debian" }}
       - firefox-esr
-{{ else if eq $distro "ubuntu"}}
+{{ else if eq $distro "ubuntu" }}
       - firefox
 {{ end }}
       - fonts-noto-cjk
@@ -34,7 +34,6 @@ actions:
       - gvfs
       - gvfs-backends
       - gvfs-fuse
-      - maliit-keyboard
       - mesa-utils
       - mesa-va-drivers
       - plymouth
@@ -47,6 +46,9 @@ actions:
       - xdg-user-dirs
       - xdg-user-dirs-gtk
       - xdg-utils
+{{ if eq $distro "debian" }}
+      - maliit-keyboard
+{{ end }}
 
 {{ if eq $suite "bookworm" }}
 
