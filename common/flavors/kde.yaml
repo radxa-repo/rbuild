@@ -62,6 +62,7 @@ actions:
 {{ end }}
 {{ if eq $suite "bookworm" }}
       - plasma-workspace-wayland
+      - qml-module-org-kde-pipewire
 {{ end }}
 
   - action: recipe
