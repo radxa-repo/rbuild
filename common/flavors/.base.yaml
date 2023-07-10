@@ -133,4 +133,5 @@ actions:
       - radxa-bootutils
       - radxa-firmware
       - radxa-otgutils
+      - radxa-udev
       - rsetup

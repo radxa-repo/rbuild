@@ -14,6 +14,10 @@ user_append_group radxa audio
 user_append_group radxa video
 user_append_group radxa plugdev
 user_append_group radxa render
+user_append_group radxa gpio
+user_append_group radxa i2c
+user_append_group radxa spidev
+user_append_group radxa pwm
 
 add_user rock rock
 user_append_group rock sudo
@@ -21,6 +25,10 @@ user_append_group rock audio
 user_append_group rock video
 user_append_group rock plugdev
 user_append_group rock render
+user_append_group rock gpio
+user_append_group rock i2c
+user_append_group rock spidev
+user_append_group rock pwm
 
 
 # Resize root partition at filesystem level
