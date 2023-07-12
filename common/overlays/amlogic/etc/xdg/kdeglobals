@@ -1,5 +1,15 @@
 [KDE]
 SingleClick=false
 
+# Fix User Avatar in System Settings
+# The point is to avoid software backend
+# https://doc.qt.io/qt-5/qtquick-visualcanvas-adaptations.html
 [QtQuickRendererSettings]
-SceneGraphBackend=opengl
+SceneGraphBackend=rhi
+
+# HOW: https://develop.kde.org/deploy/kiosk/introduction/
+# WHY: https://bugzilla.redhat.com/show_bug.cgi?id=1929643
+# FROM: https://unix.stackexchange.com/a/653947
+[KDE Action Restrictions]
+action/start_new_session=false
+action/switch_user=false
