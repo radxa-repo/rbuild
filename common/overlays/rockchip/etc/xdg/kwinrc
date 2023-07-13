@@ -1,4 +1,0 @@
-[Compositing]
-# With Rockchip packages, XRender is better than OpenGL
-# With upstream packages, OpenGL is better than XRender
-Backend=XRender
