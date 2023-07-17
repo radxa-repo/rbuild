@@ -152,6 +152,11 @@ actions:
     source: overlays/{{ $soc_family }}
     destination: /
 
+  - action: apt
+    description: Install radxa-system-config-{{ $soc_family }}
+    packages:
+      - radxa-system-config-{{ $soc_family }}
+
 {{ if eq $kernel_profile "" }}
 
   {{ if eq $firmware "" }}
