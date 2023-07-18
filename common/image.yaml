@@ -270,12 +270,14 @@ actions:
       echo "RBUILD_BUILD_DATE='$(date -R)'" > /etc/radxa_image_fingerprint
       echo "RBUILD_REVISION='{{ $rbuild_rev }}'" >> /etc/radxa_image_fingerprint
       echo "RBUILD_COMMAND='{{ $rbuild_cmd }}'" >> /etc/radxa_image_fingerprint
-      pkg_info="$(dpkg-query -f '${binary:Package} ${Version}\n' -W | grep -v -e {{ $board }} | grep linux-image)"
+      if ! pkg_info="$(dpkg-query -f '${binary:Package} ${Version}\n' -W | grep -v -e {{ $board }} | grep linux-image)"
+      then
+        pkg_info="$(dpkg-query -f '${binary:Package} ${Version}\n' -W | grep linux-image-{{ $board }})"
+      fi
       echo "RBUILD_KERNEL='$(echo $pkg_info | cut -d ' ' -f 1)'" >> /etc/radxa_image_fingerprint
       echo "RBUILD_KERNEL_VERSION='$(echo $pkg_info | cut -d ' ' -f 2)'" >> /etc/radxa_image_fingerprint
-      if apt list --installed u-boot-{{ $board }} | grep u-boot
+      if pkg_info="$(dpkg-query -f '${binary:Package} ${Version}\n' -W | grep -v -e {{ $board }} -e u-boot-menu -e u-boot-tools | grep u-boot)"
       then
-        pkg_info="$(dpkg-query -f '${binary:Package} ${Version}\n' -W | grep -v -e {{ $board }} -e u-boot-menu -e u-boot-tools | grep u-boot)"
         echo "RBUILD_UBOOT='$(echo $pkg_info | cut -d ' ' -f 1)'" >> /etc/radxa_image_fingerprint
         echo "RBUILD_UBOOT_VERSION='$(echo $pkg_info | cut -d ' ' -f 2)'" >> /etc/radxa_image_fingerprint
       else
