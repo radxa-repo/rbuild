@@ -96,7 +96,12 @@ actions:
       sed -i 's/\${_BOOT_DIRECTORY}\${U_BOOT_FDT_OVERLAYS_DIR}/\${U_BOOT_FDT_OVERLAYS_DIR}/g' /usr/sbin/u-boot-update
 
       systemctl enable haveged
-      update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
+
+      source /etc/os-release
+      if [ "$ID" = "debian"]
+      then
+        update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
+      fi
 
   - action: recipe
     description: Clean up rootfs
