@@ -96,7 +96,8 @@ actions:
       sed -i 's/\${_BOOT_DIRECTORY}\${U_BOOT_FDT_OVERLAYS_DIR}/\${U_BOOT_FDT_OVERLAYS_DIR}/g' /usr/sbin/u-boot-update
 
       systemctl enable haveged
-  
+      update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
+
   - action: recipe
     description: Clean up rootfs
     recipe: scripts/clean.yaml
