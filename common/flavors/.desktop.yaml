@@ -24,7 +24,6 @@ actions:
       - fwupd
       - gstreamer1.0-gtk3
       - gstreamer1.0-libav
-      - gstreamer1.0-pipewire
       - gstreamer1.0-plugins-bad
       - gstreamer1.0-plugins-base
       - gstreamer1.0-plugins-good
@@ -54,9 +53,10 @@ actions:
 {{ if eq $suite "bookworm" }}
 
   - action: apt
-    description: Install common Wayland packages
+    description: Install Debian 12 packages
     packages:
       - wayland-utils
+      - gstreamer1.0-pipewire
 
 {{ else }}
 
