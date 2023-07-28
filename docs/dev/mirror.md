@@ -7,7 +7,7 @@ Please be aware that the mirror will be used as image's apt repo as well, so it 
 Example below uses an internal mirror, that is not accessible to the public.
 
 ```bash
-$ cat .rbuild-config 
+$ cat ~/rbuild/.rbuild-config 
 RBUILD_DISTRO_MIRROR="http://apt.vamrs.com"
 RBUILD_RADXA_MIRROR="http://apt.vamrs.com/rbuild-"
 ```
