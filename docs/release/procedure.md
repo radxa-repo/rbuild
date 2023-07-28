@@ -19,11 +19,15 @@ Edit `debian/changlog` accordingly, then change `UNRELEASED` to `stable`. You sh
 
 It is recommended to run `make deb` after you commit your changelog edit, so the package can be tested by [`lintian`](https://lintian.debian.org/) for common pitfalls. We treat warning as error, so please fix them, instead of suppressing them.
 
-GitHub Workflows will then detect this new version, and create a new GitHub Release with the build artifacts.
+GitHub Workflows will then detect this new version, and create a new GitHub Release with the build artifacts. You can manually trigger the workflow [from the website](https://github.com/radxa-pkg/rsetup/actions/workflows/release.yml) or within project folder using following command:
+
+```bash
+make release
+```
 
 ---
 
-Kernel and U-Boot's package repo under `radxa-pkg` needs to be reworked to follow the above release method.
+Kernel and U-Boot's package repo under `radxa-pkg` needs to be reworked to follow the above release method. Currently the workflow will create a new release if [`VERSION`](https://github.com/radxa-pkg/linux-rockchip/commit/9dab83617d08c125745135250f60c09e863b0909) file is updated. You can also manually trigger the workflow as above.
 
 Before releasing the Kernel package, [`overlay.sh`](https://github.com/radxa-repo/bsp/blob/main/linux/.common/overlays.sh#L2) needs to be updated to pointing at the latest `overlays` commit. This is to pin `overlays` version with `bsp` version.
 
