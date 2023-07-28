@@ -17,4 +17,5 @@
 
 # Image Customization
 
-- [Reproduce released image](image/reproduce/index.md)
+- [Reproduce released image](image/reproduce/image.md)
+- [Create apt repo from scratch](image/reproduce/apt.md)

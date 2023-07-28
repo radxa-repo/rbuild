@@ -30,6 +30,8 @@ radxa@rock-3c:~$ cat /etc/radxa_apt_snapshot
 
 As shown in `RBUILD_COMMAND` above, our image is based on Debian Bullseye. We will have to create a custom apt repo for `rbuild` based on `radxa_apt_snapshot`, since the official Radxa apt repo is likely to have newer packages.
 
+In this article we will only fork the existing Radxa apt repo. If you want to create a apt repo from scrach, please check [Create apt repo from scratch](apt.md).
+
 First, make sure we have logged in with `gh`:
 
 ```bash
