@@ -1,11 +1,21 @@
 {{- $distro := .distro -}}
 {{- $suite := .suite -}}
 
+{{- $vscodium_mirror := or .radxa_mirror "https://download.vscodium.com/" -}}
+
 {{- $architecture := .architecture -}}
 
 architecture: {{ $architecture }}
 
 actions:
+  - action: recipe
+    description: Add vscodium Repo
+    recipe: ../scripts/add_repo.yaml
+    variables:
+      public_key: https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
+      base_url: {{ $vscodium_mirror }}debs
+      suite: vscodium
+
   - action: apt
     description: Install common desktop packages
     packages:
@@ -13,6 +23,7 @@ actions:
       - aha
       - breeze-cursor-theme
       - clinfo
+      - codium
       - desktop-base
 {{ if eq $distro "debian" }}
       - firefox-esr
