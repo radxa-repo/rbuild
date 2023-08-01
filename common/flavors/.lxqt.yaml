@@ -1,5 +1,6 @@
 {{- $distro := .distro -}}
 {{- $suite := .suite -}}
+{{- $radxa_mirror := .radxa_mirror -}}
 
 {{- $architecture := .architecture -}}
 
@@ -27,3 +28,4 @@ actions:
     variables:
       distro: {{ $distro }}
       suite: {{ $suite }}
+      radxa_mirror: {{ $radxa_mirror }}

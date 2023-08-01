@@ -2,6 +2,7 @@
 {{- $suite := .suite -}}
 {{- $flavor := .flavor -}}
 {{- $repo_prefix := .repo_prefix -}}
+{{- $radxa_mirror := .radxa_mirror -}}
 
 {{- $architecture := .architecture -}}
 
@@ -48,6 +49,7 @@ actions:
     variables:
       distro: {{ $distro }}
       suite: {{ $suite }}
+      radxa_mirror: {{ $radxa_mirror }}
 
   - action: overlay
     description: Install common system configs
