@@ -96,6 +96,7 @@ actions:
       echo 'QT_QUICK_BACKEND DEFAULT=software' >> /etc/security/pam_env.conf
 
       sed -i 's/\${_BOOT_DIRECTORY}\${U_BOOT_FDT_OVERLAYS_DIR}/\${U_BOOT_FDT_OVERLAYS_DIR}/g' /usr/sbin/u-boot-update
+      sed -i 's/^prompt.*$/prompt 1/' /usr/sbin/u-boot-update
 
       systemctl enable haveged
 
