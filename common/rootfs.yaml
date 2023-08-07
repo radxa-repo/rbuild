@@ -101,7 +101,7 @@ actions:
       systemctl enable haveged
 
       . /etc/os-release
-      if [ "$ID" = "debian"]
+      if [ "$ID" = "debian" ]
       then
         update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream
       fi
