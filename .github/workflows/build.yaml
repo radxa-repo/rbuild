@@ -1,9 +1,19 @@
 name: Build images
 on:
+  schedule:
+    - cron: '0 0 * * SUN'
   workflow_dispatch:
   push:
     branches:
       - main
+    paths-ignore:
+      - '**.md'
+      - .gitignore
+      - 'docs/**'
+      - 'theme/**'
+      - book.toml
+      - .github/workflows/docs.yaml
+  pull_request:
     paths-ignore:
       - '**.md'
       - .gitignore
