@@ -87,7 +87,7 @@ shrink-image() {
     then
         sudo e2fsck -yf "$ROOT_DEV"
         sudo resize2fs -M "$ROOT_DEV"
-        sync
+        sudo sync "$ROOT_DEV"
         TARGET_BLOCKS="$(sudo tune2fs -l "$ROOT_DEV" | grep '^Block count:' | tr -s ' ' | cut -d ' ' -f 3)"
         echo "Root filesystem has been shrinked to $TARGET_BLOCKS blocks."
     fi
@@ -304,7 +304,7 @@ write-image() {
         echo "Writting raw image..."
         sudo dd if=$IMAGE of=$BLOCKDEV bs=16M conv=fsync status=progress
     fi
-    sync
+    sudo sync "$BLOCKDEV"
 }
 
 debos() {
