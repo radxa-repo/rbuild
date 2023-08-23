@@ -1,6 +1,9 @@
 # ==============================
 # Radxa First Boot Configuration
 # ==============================
+
+# Allow config to continue even when some commands fail
+no_fail
 log "Running before.txt as first boot configuration"
 
 # Create default accounts
@@ -30,8 +33,7 @@ user_append_group rock i2c
 user_append_group rock spidev
 user_append_group rock pwm
 
-
-# Resize root partition at filesystem level
+# Resize root partition at the filesystem level
 #
 resize_root
 
