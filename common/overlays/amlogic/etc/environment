@@ -1,3 +1,0 @@
-# Show virtual keyboard even if no touch event
-# https://github.com/maliit/keyboard/issues/104#issuecomment-1180427822
-KWIN_IM_SHOW_ALWAYS=1
