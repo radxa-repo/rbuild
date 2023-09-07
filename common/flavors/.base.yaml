@@ -80,10 +80,10 @@ actions:
       - iptables
       - iputils-ping
       - iw
-      - iwd
       - network-manager
       - samba
       - wireless-regdb
+      - wpasupplicant
 
   - action: apt
     description: Install audio utilities
