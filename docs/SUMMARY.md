@@ -10,6 +10,7 @@
 - [Set some arguments as default on](dev/config.md)
 - [Use apt mirrors to speed up build](dev/mirror.md)
 - [Use locally built kernel and firmware](dev/bsp.md)
+- [About Ubuntu](dev/ubuntu.md)
 
 # Create Release
 

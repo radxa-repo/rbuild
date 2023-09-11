@@ -8,3 +8,10 @@ title = "rbuild"
 [output.html]
 git-repository-url = "https://github.com/radxa-repo/rbuild/tree/main"
 edit-url-template = "https://github.com/radxa-repo/rbuild/edit/main/{path}"
+additional-css = ["./theme/css/mdbook-admonish.css"]
+
+[preprocessor]
+
+[preprocessor.admonish]
+command = "mdbook-admonish"
+assets_version = "2.0.2" # do not edit: managed by `mdbook-admonish install`

@@ -2,7 +2,7 @@
 
 ## Install dependencies
 
-Currently, due to our dependency on [`debos`](https://github.com/go-debos/debos/issues/363), we can only run `rbuild` on x86 based system. If you are building in a virtual machine, we suggest you [enable nested virtualization](https://github.com/radxa-repo/rbuild/issues/16#issuecomment-1534176754).
+Currently, due to our dependency on [`debos`](https://github.com/go-debos/debos/issues/363), we can only run `rbuild` on x86 based system. If you are building in a virtual machine, you need to [enable nested virtualization](https://github.com/radxa-repo/rbuild/issues/16#issuecomment-1534176754), as KVM is required for building the image.
 
 ### Debian 12 / Ubuntu 22.04
 
@@ -17,9 +17,6 @@ sudo touch /etc/containers/nodocker
 #sudo apt install -y docker.io
 #sudo adduser $USER docker
 #sudo reboot
-
-# For Ubuntu user you can also install `debos` package for building Ubuntu image
-sudo apt install -y debos
 ```
 
 ## Check out the code
@@ -47,3 +44,9 @@ Most options listed in the help messages are targetting at developers. If you on
 ```
 
 Supported products, suites, and flavors are listed at the end of the help message.
+
+```admonish
+Radxa supports and recommends Debian on all Radxa products.
+
+Building Ubuntu requires [special instruction](dev/ubuntu.md).
+```
