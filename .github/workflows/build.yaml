@@ -62,6 +62,7 @@ jobs:
     needs: [ query, build-rootfs ]
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 10
       matrix:
         boards: ${{ fromJSON(needs.query.outputs.boards) }}
         suites: ${{ fromJSON(needs.query.outputs.suites )}}
