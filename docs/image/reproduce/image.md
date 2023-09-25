@@ -6,7 +6,9 @@ In this article we will show you how to reproduce [`rock-3c_debian_bullseye_xfce
 
 ## Get build time information from released image
 
-Every released `rbuild` images contains 2 files describing their build time environment. They are `/etc/radxa_image_fingerprint` for the build system, and `/etc/radxa_apt_snapshot` for the then-available packages on Radxa official APT repo:
+Every released `rbuild` images contains 2 files describing their build time environment. They are `/etc/radxa_image_fingerprint` for the build system, and `/etc/radxa_apt_snapshot` for the then-available packages on Radxa official APT repo.
+
+### Check the content from a running system
 
 ```bash
 radxa@rock-3c:~$ cat /etc/radxa_image_fingerprint
@@ -24,6 +26,22 @@ radxa@rock-3c:~$ cat /etc/radxa_apt_snapshot
   "rsetup": "0.3.13",
   ...
 }
+```
+
+### Check the content from a disk image
+
+You can use following commands to check the system info without a running device:
+
+```bash
+sudo apt update
+sudo apt install multipath-tools
+sudo kpartx -a system.img
+# Check with `lsblk` to find the last loop device partition
+# In this example we assume it is loop0p3
+sudo mount /dev/mapper/loop0p3 /mnt
+cat /mnt/etc/radxa_image_fingerprint
+sudo umount /mnt
+sudo kpartx -d system.img
 ```
 
 ## Create a custom apt repo
