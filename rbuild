@@ -296,6 +296,10 @@ write-image() {
     then
         echo "Writting 7-zip image..."
         7z e -so $IMAGE | sudo dd of=$BLOCKDEV bs=16M conv=fsync status=progress
+    elif file $IMAGE | grep -q "Zstandard compressed data"
+    then
+        echo "Writting Zstd image..."
+        zstdcat $IMAGE | sudo dd of=$BLOCKDEV bs=16M conv=fsync status=progress
     else
         if $RBUILD_SHRINK
         then
