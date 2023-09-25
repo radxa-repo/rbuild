@@ -98,9 +98,8 @@ actions:
     # u-boot-menu will add root= in append for us
     setup-kernel-cmdline: false
 
-{{ if and (ne $install_vendor_package "false") (ne $flavor "cli") (eq $distro "debian") }}
+{{ if and (ne $install_vendor_package "false") (eq $distro "debian") }}
 
-  {{ if eq $install_vendor_package "true" }}
 
   - action: recipe
     description: Add {{ $soc_family }}-{{ $suite }} Repo
@@ -110,7 +109,13 @@ actions:
       suite: {{ $soc_family }}-{{ $suite }}{{ $repo_prefix }}
       repo: {{ $suite }}{{ $repo_prefix }}
       radxa_mirror: {{ $radxa_mirror }}
+  {{ if and (eq $install_vendor_package "true") (ne $flavor "cli") }}
       priority: 1001
+  {{ else }}
+      priority: 100
+  {{ end }}
+
+  {{ if and (eq $install_vendor_package "true") (ne $flavor "cli") }}
 
   - action: apt
     description: Install task-{{ $board }} package
@@ -127,17 +132,7 @@ actions:
       apt-get full-upgrade -y --allow-downgrades
       apt-get autoremove -y --purge
 
-  {{ else }}
-
-  - action: recipe
-    description: Add {{ $soc_family }}-{{ $suite }} Repo
-    recipe: scripts/add_radxa_repo.yaml
-    variables:
-      origin: radxa-{{ $soc_family }}
-      suite: {{ $soc_family }}-{{ $suite }}{{ $repo_prefix }}
-      repo: {{ $suite }}{{ $repo_prefix }}
-      radxa_mirror: {{ $radxa_mirror }}
-      priority: 100
+  {{ else if ne $install_vendor_package "true" }}
 
   - action: apt
     description: Install {{ $install_vendor_package }} package
