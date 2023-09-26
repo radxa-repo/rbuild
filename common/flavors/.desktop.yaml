@@ -22,8 +22,10 @@ actions:
       - accountsservice
       - aha
       - breeze-cursor-theme
+      - bup
       - clinfo
       - codium
+      - cups
       - desktop-base
 {{ if eq $distro "debian" }}
       - firefox-esr
