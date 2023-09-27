@@ -136,3 +136,4 @@ actions:
       - radxa-otgutils
       - radxa-udev
       - rsetup
+      - rsetup-config-first-boot
