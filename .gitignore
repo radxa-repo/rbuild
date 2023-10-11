@@ -1,6 +1,7 @@
 *.img
 *.img.sha512
 *.img.xz
+*.img.gz
 *.deb
 .rootfs
 common/.packages
