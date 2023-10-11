@@ -28,6 +28,7 @@ actions:
   - action: apt
     description: Install system utilities
     packages:
+      - apt-listchanges
       - apt-utils
       - bash-completion
       - bc
