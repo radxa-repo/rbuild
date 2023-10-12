@@ -11,6 +11,7 @@ on:
       - .gitignore
       - 'docs/**'
       - 'theme/**'
+      - 'po/**'
       - book.toml
       - .github/workflows/docs.yaml
   pull_request:
@@ -19,6 +20,7 @@ on:
       - .gitignore
       - 'docs/**'
       - 'theme/**'
+      - 'po/**'
       - book.toml
       - .github/workflows/docs.yaml
 

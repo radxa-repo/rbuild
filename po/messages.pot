@@ -1,0 +1,744 @@
+
+msgid ""
+msgstr ""
+"Project-Id-Version: rbuild\n"
+"POT-Creation-Date: 2023-10-12T19:06:14+08:00\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: docs/SUMMARY.md:3
+msgid "Getting Started"
+msgstr ""
+
+#: docs/SUMMARY.md:5
+#: docs/first_image.md:1
+#: docs/first_image.md:28
+msgid "Build your first image"
+msgstr ""
+
+#: docs/SUMMARY.md:6
+msgid "Run from GitHub Workflows"
+msgstr ""
+
+#: docs/SUMMARY.md:8
+msgid "Development"
+msgstr ""
+
+#: docs/SUMMARY.md:10
+#: docs/dev/config.md:1
+msgid "Set some arguments as default on"
+msgstr ""
+
+#: docs/SUMMARY.md:11
+#: docs/dev/mirror.md:1
+msgid "Use apt mirrors to speed up build"
+msgstr ""
+
+#: docs/SUMMARY.md:12
+#: docs/dev/bsp.md:1
+msgid "Use locally built kernel and firmware"
+msgstr ""
+
+#: docs/SUMMARY.md:13
+#: docs/dev/ubuntu.md:1
+msgid "About Ubuntu"
+msgstr ""
+
+#: docs/SUMMARY.md:15
+msgid "Create Release"
+msgstr ""
+
+#: docs/SUMMARY.md:17
+msgid "General procedure"
+msgstr ""
+
+#: docs/SUMMARY.md:19
+msgid "Image Customization"
+msgstr ""
+
+#: docs/SUMMARY.md:21
+#: docs/image/reproduce/image.md:1
+msgid "Reproduce released image"
+msgstr ""
+
+#: docs/SUMMARY.md:22
+#: docs/image/reproduce/apt.md:1
+msgid "Create apt repo from scratch"
+msgstr ""
+
+#: docs/first_image.md:3
+msgid "Install dependencies"
+msgstr ""
+
+#: docs/first_image.md:5
+msgid ""
+"Currently, due to our dependency on "
+"[`debos`](https://github.com/go-debos/debos/issues/363), we can only run "
+"`rbuild` on x86 based system. If you are building in a virtual machine, you "
+"need to [enable nested "
+"virtualization](https://github.com/radxa-repo/rbuild/issues/16#issuecomment-1534176754), "
+"as KVM is required for building the image."
+msgstr ""
+
+#: docs/first_image.md:7
+msgid "Debian 12 / Ubuntu 22.04"
+msgstr ""
+
+#: docs/first_image.md:22
+msgid "Check out the code"
+msgstr ""
+
+#: docs/first_image.md:24
+msgid ""
+"```bash\n"
+"git clone https://github.com/radxa-repo/rbuild.git\n"
+"```"
+msgstr ""
+
+#: docs/first_image.md:30
+msgid ""
+"Once the repo is cloned on your machine, you can run `rbuild` without any "
+"arguments to check the help message:"
+msgstr ""
+
+#: docs/first_image.md:37
+msgid ""
+"Most options listed in the help messages are targetting at developers. If "
+"you only want to build an image locally, you can run `rbuild` with only the "
+"required arguments:"
+msgstr ""
+
+#: docs/first_image.md:46
+msgid ""
+"Supported products, suites, and flavors are listed at the end of the help "
+"message."
+msgstr ""
+
+#: docs/gh_workflows.md:1
+msgid "Running from GitHub Workflows"
+msgstr ""
+
+#: docs/gh_workflows.md:3
+msgid ""
+"Please check out our [GitHub "
+"workflows](https://github.com/radxa-repo/rbuild/tree/main/.github/workflows) "
+"as an example."
+msgstr ""
+
+#: docs/dev/config.md:3
+msgid ""
+"You can create `.rbuild-config` file under the project folder, which will be "
+"sourced by the shell before `rbuild` processes the command line arguments. "
+"This is a convenient place to override the default behavior of `rbuild` to "
+"better suit to a development workflow."
+msgstr ""
+
+#: docs/dev/config.md:5
+msgid "Below is an example used in our work environment:"
+msgstr ""
+
+#: docs/dev/config.md:7
+msgid ""
+"```bash\n"
+"CONTAINER_BACKEND=\"podman\"                          # podman allows "
+"multiple users\n"
+"                                                    # to run rbuild on the "
+"same build server\n"
+"REPO_PREFIX=\"-test\"                                 # Build against the "
+"latest code\n"
+"RBUILD_DISTRO_MIRROR=\"http://apt.vamrs.com\"         # Use internal apt "
+"mirror\n"
+"RBUILD_RADXA_MIRROR=\"http://apt.vamrs.com/rbuild-\"  # Use internal apt "
+"mirror\n"
+"```"
+msgstr ""
+
+#: docs/dev/mirror.md:3
+msgid ""
+"If you have set up an apt local mirror (for example, using "
+"[`AptCacheNG`](https://wiki.debian.org/AptCacherNg)), you can edit the "
+"config file to use those mirrors to build your image."
+msgstr ""
+
+#: docs/dev/mirror.md:5
+msgid ""
+"Please be aware that the mirror will be used as image's apt repo as well, so "
+"it should be used only for local development build."
+msgstr ""
+
+#: docs/dev/mirror.md:7
+msgid ""
+"Example below uses an internal mirror, that is not accessible to the public."
+msgstr ""
+
+#: docs/dev/mirror.md:9
+msgid ""
+"```bash\n"
+"$ cat ~/rbuild/.rbuild-config \n"
+"RBUILD_DISTRO_MIRROR=\"http://apt.vamrs.com\"\n"
+"RBUILD_RADXA_MIRROR=\"http://apt.vamrs.com/rbuild-\"\n"
+"```"
+msgstr ""
+
+#: docs/dev/mirror.md:15
+msgid ""
+"`rbuild` will automatically complete the mirror URL based on the build "
+"configurations."
+msgstr ""
+
+#: docs/dev/mirror.md:17
+msgid ""
+"You can also define them with the command line arguments `-m|--mirror` and "
+"`-M`."
+msgstr ""
+
+#: docs/dev/bsp.md:3
+msgid ""
+"It is very common during the bring-up stage that the kernel and the firmware "
+"are evolving rapidly. This makes fetching those packages from apt repo very "
+"cumbersome. `rbuild` tailors to this use case, and allow the use of locally "
+"built kernel and firmware Deb package."
+msgstr ""
+
+#: docs/dev/bsp.md:5
+msgid ""
+"One thing we specifically do not allow is to install arbitrary packages with "
+"command arguments. The reason is that this makes tracking the image's origin "
+"more difficult. Consider the options listed here as exceptions."
+msgstr ""
+
+#: docs/dev/bsp.md:7
+msgid ""
+"Proper way for adding product specific package should be either update yaml "
+"templates, or via "
+"[`radxa-profiles`](https://github.com/radxa-pkg/radxa-profiles) package."
+msgstr ""
+
+#: docs/dev/bsp.md:9
+msgid "`-c|--custom` flag"
+msgstr ""
+
+#: docs/dev/bsp.md:11
+msgid ""
+"Consider this: you build `linux-latest` and `u-boot-latest` packages with "
+"`bsp` and want to use them for your `rbuild` image. As long as `bsp` and "
+"`rbuild` are located under the same parent folder, you can use `-c` flag to "
+"consume both packages at once:"
+msgstr ""
+
+#: docs/dev/bsp.md:17
+msgid ""
+"When we say \"under the same parent folder\", we mean something like "
+"`/home/user/bsp` and `/home/user/rbuild`, where both are under the same "
+"`/home/user` folder. `-c` flag will search `bsp` repo with the same "
+"directory level. However, if you copied them to `rbuild` folder, it will "
+"also be searched."
+msgstr ""
+
+#: docs/dev/bsp.md:19
+msgid ""
+"`-c` flag's argument is the same `bsp` profile name, so in the above "
+"example, we are able to use one flag to match both kernel and firmware "
+"packages. However, `-c` flag will not complain if there is no matching "
+"package, so you don't have to build both the kernel _and_ firmware in order "
+"to use this flag."
+msgstr ""
+
+#: docs/dev/bsp.md:21
+msgid ""
+"You can even specify `-c` flag multiple times, if your kernel and firmware "
+"are using different profiles. For example, many Rockchip products uses "
+"`linux-rockchip` and `u-boot-latest`. You can simply run the following "
+"command for those products:"
+msgstr ""
+
+#: docs/dev/bsp.md:27
+msgid ""
+"However, there is an issue. What if we have both `linux-rockchip` and "
+"`linux-latest` packages built in `bsp`? Currently, the second `-c` flag will "
+"override the previous choice, so you end up with both `linux-latest` and "
+"`u-boot-latest` for image above."
+msgstr ""
+
+#: docs/dev/bsp.md:29
+msgid ""
+"If this is not intended, you can either delete unused packages from your "
+"`bsp` repo, or using the below flags to manually specify a package."
+msgstr ""
+
+#: docs/dev/bsp.md:31
+msgid "`-k|--kernel` and `-f|--firmware` flags"
+msgstr ""
+
+#: docs/dev/bsp.md:33
+msgid ""
+"Under the hood, `-c` flag calls the functionalilty of `-k` and `-f` flages. "
+"They take a path to a build Deb packages, so there is no second guessing."
+msgstr ""
+
+#: docs/dev/bsp.md:35
+msgid ""
+"Unlike `-c`, those flages will throw out error if the specified package does "
+"not exist, which is to be expected from a lower level feature."
+msgstr ""
+
+#: docs/dev/ubuntu.md:3
+msgid "Current status"
+msgstr ""
+
+#: docs/dev/ubuntu.md:5
+msgid ""
+"While Ubuntu is a build target for `rbuild`, it is not officially supported "
+"by Radxa for use on our products. The reason is multifold:"
+msgstr ""
+
+#: docs/dev/ubuntu.md:7
+msgid ""
+"Starting from Ubuntu 21.10, all of its packages are [compressed with "
+"Zstd](https://www.phoronix.com/news/Ubuntu-21.10-Zstd-Debs). We are "
+"currently using [the official Debos docker "
+"image](https://hub.docker.com/r/godebos/debos), which is based on Debian, "
+"and does not support Zstd compressed package. Attempts to create an Ubuntu "
+"based docker image are [getting](https://github.com/go-debos/debos/issues/9) "
+"[nowhere](https://github.com/go-debos/debos/issues/314), so currently one "
+"has to both use Ubuntu as the build host and disable the container build for "
+"`rbuild` to work, which greatly limits the developer's choice of OS and "
+"build reproducibility."
+msgstr ""
+
+#: docs/dev/ubuntu.md:9
+msgid ""
+"Rockchip only provides Debian SDK, and for some dependencies the package "
+"names and/or versions are different between Debian and Ubuntu, meaning they "
+"cannot be installed as-is. This cannot be simply fixed by changing the "
+"control file pointing to a different package, as packaged binaries are "
+"hardcoded to some specific version of dynamic libraries, and there might be "
+"incompatible ABI changes between the two OS. Recompilation and repackaging "
+"are required to properly fix this issue, but they can be time-consuming, and "
+"sometimes the necessary code for those is not available."
+msgstr ""
+
+#: docs/dev/ubuntu.md:11
+msgid ""
+"For those reasons, Radxa has historically only provided the Ubuntu CLI image "
+"with no vendor hardware enablement packages. With the release of `rbuild`, "
+"we now dropped Ubuntu CLI as an officially supported system entirely, and "
+"recommend our users to use Debian CLI instead. The only exception is that "
+"some users want to run ROS on our products, which requires Ubuntu."
+msgstr ""
+
+#: docs/dev/ubuntu.md:13
+msgid "Build Ubuntu"
+msgstr ""
+
+#: docs/dev/ubuntu.md:15
+msgid ""
+"To build Ubuntu, there are additional requirements beyond what was listed in "
+"[Build your first image](first_image.md):"
+msgstr ""
+
+#: docs/dev/ubuntu.md:17
+msgid "The host should run Ubuntu."
+msgstr ""
+
+#: docs/dev/ubuntu.md:18
+msgid ""
+"The host Ubuntu version should be greater or equal to the version you plan "
+"to build."
+msgstr ""
+
+#: docs/dev/ubuntu.md:19
+msgid ""
+"You should install `debos` on your system: `sudo apt-get update && sudo "
+"apt-get install -y debos`."
+msgstr ""
+
+#: docs/dev/ubuntu.md:20
+msgid ""
+"Replace any `./rbuild` command with `sudo ./rbuild --native-build` like what "
+"we did in our [GitHub "
+"Action](https://github.com/radxa-repo/rbuild/blob/main/action.yaml#L78) "
+"(which runs on Ubuntu runner)."
+msgstr ""
+
+#: docs/release/procedure.md:1
+msgid "General architecture"
+msgstr ""
+
+#: docs/release/procedure.md:3
+msgid ""
+"`rbuild` is the final stage of our image-building pipeline. However, before "
+"it can be triggered, many subcomponents and tasks have to be completed and "
+"released first."
+msgstr ""
+
+#: docs/release/procedure.md:5
+msgid "Submit code changes"
+msgstr ""
+
+#: docs/release/procedure.md:7
+msgid ""
+"The following repositories contain the source code, so the related commits "
+"should be pushed in the repo first before the planned release:"
+msgstr ""
+
+#: docs/release/procedure.md:9
+msgid "[Kernel](https://github.com/radxa/kernel/)"
+msgstr ""
+
+#: docs/release/procedure.md:10
+msgid "[U-Boot](https://github.com/radxa/u-boot/)"
+msgstr ""
+
+#: docs/release/procedure.md:11
+msgid "[Overlays](https://github.com/radxa/overlays/)"
+msgstr ""
+
+#: docs/release/procedure.md:12
+msgid ""
+"and any repositories that contain `Makefile` under "
+"[radxa-pkg](https://github.com/radxa-pkg)"
+msgstr ""
+
+#: docs/release/procedure.md:14
+msgid "Release Debian packages"
+msgstr ""
+
+#: docs/release/procedure.md:16
+msgid ""
+"For packages under [radxa-pkg](https://github.com/radxa-pkg), once changes "
+"are made, please run `make dch` command to create a new changelog entry."
+msgstr ""
+
+#: docs/release/procedure.md:18
+msgid ""
+"Edit `debian/changlog` accordingly, then change `UNRELEASED` to `stable`. "
+"You should then create a commit containing only this change, with the commit "
+"title `Release x.y.z`."
+msgstr ""
+
+#: docs/release/procedure.md:20
+msgid ""
+"It is recommended to run `make deb` after you commit your changelog edit, so "
+"the package can be tested by [`lintian`](https://lintian.debian.org/) for "
+"common pitfalls. We treat warning as error, so please fix them, instead of "
+"suppressing them."
+msgstr ""
+
+#: docs/release/procedure.md:22
+msgid ""
+"GitHub Workflows will then detect this new version, and create a new GitHub "
+"Release with the build artifacts. You can manually trigger the workflow "
+"[from the "
+"website](https://github.com/radxa-pkg/rsetup/actions/workflows/release.yml) "
+"or within project folder using following command:"
+msgstr ""
+
+#: docs/release/procedure.md:30
+msgid ""
+"Kernel and U-Boot's package repo under `radxa-pkg` needs to be reworked to "
+"follow the above release method. Currently the workflow will create a new "
+"release if "
+"[`VERSION`](https://github.com/radxa-pkg/linux-rockchip/commit/9dab83617d08c125745135250f60c09e863b0909) "
+"file is updated. You can also manually trigger the workflow as above."
+msgstr ""
+
+#: docs/release/procedure.md:32
+msgid ""
+"Before releasing the Kernel package, "
+"[`overlay.sh`](https://github.com/radxa-repo/bsp/blob/main/linux/.common/overlays.sh#L2) "
+"needs to be updated to pointing at the latest `overlays` commit. This is to "
+"pin `overlays` version with `bsp` version."
+msgstr ""
+
+#: docs/release/procedure.md:34
+msgid "Update apt repos"
+msgstr ""
+
+#: docs/release/procedure.md:36
+msgid ""
+"While testing repos will sync daily with the latest package releases, the "
+"production repos require manual updating, so unverified software will slip "
+"past testing. At least that's the plan. Currently, production repos also "
+"pull the latest packages."
+msgstr ""
+
+#: docs/release/procedure.md:38
+msgid ""
+"There are 2 workflows to update the apt repo. `update.yml` will fetch any "
+"new packages, and update the index files. There is no downtime during the "
+"update, so this should be preferred for updating small packages."
+msgstr ""
+
+#: docs/release/procedure.md:40
+msgid ""
+"The other workflow `reset.yml` will first clear the branch history, before "
+"pulling packages. This is because the normal `update.yml` won't delete old "
+"packages, and the naive approach is not suitable since some systems require "
+"an older version of the package (which should be added explicitly). This "
+"should be the one to use if there is a new kernel or U-Boot package."
+msgstr ""
+
+#: docs/release/procedure.md:42
+msgid "Below is an bash example to trigger apt repo update:"
+msgstr ""
+
+#: docs/release/procedure.md:52
+msgid ""
+"Depending on which workflow you use, you will see 1 or 2 completed `pages "
+"build and deployment` runs in Actions history, which indicates the apt repo "
+"has been updated."
+msgstr ""
+
+#: docs/release/procedure.md:54
+msgid "Trigger image build"
+msgstr ""
+
+#: docs/release/procedure.md:56
+msgid ""
+"Once apt repo is updated. We can trigger RC image build. This is also done "
+"using workflows:"
+msgstr ""
+
+#: docs/release/procedure.md:66
+msgid ""
+"By default, the release will be marked as `pre-release`. Once it passes the "
+"internal testing, it can be promoted as the latest official release."
+msgstr ""
+
+#: docs/image/reproduce/image.md:3
+msgid ""
+"While we recommend everyone keep their system up-to-date, sometimes, the "
+"customer develops their solution on one of our previously released images. "
+"Since they have validated the use case on that specific release, they want "
+"to reproduce images based on that specific release."
+msgstr ""
+
+#: docs/image/reproduce/image.md:5
+msgid ""
+"In this article we will show you how to reproduce "
+"[`rock-3c_debian_bullseye_xfce_b27.img.xz`](https://github.com/radxa-build/rock-3c/releases/tag/20230321-0636) "
+"as an example. Please also have `git` and [`gh`](https://cli.github.com/) "
+"installed on your system."
+msgstr ""
+
+#: docs/image/reproduce/image.md:7
+msgid "Get build time information from released image"
+msgstr ""
+
+#: docs/image/reproduce/image.md:9
+msgid ""
+"Every released `rbuild` images contains 2 files describing their build time "
+"environment. They are `/etc/radxa_image_fingerprint` for the build system, "
+"and `/etc/radxa_apt_snapshot` for the then-available packages on Radxa "
+"official APT repo."
+msgstr ""
+
+#: docs/image/reproduce/image.md:11
+msgid "Check the content from a running system"
+msgstr ""
+
+#: docs/image/reproduce/image.md:13
+msgid ""
+"```bash\n"
+"radxa@rock-3c:~$ cat /etc/radxa_image_fingerprint\n"
+"RBUILD_BUILD_DATE='Tue, 21 Mar 2023 07:06:37 +0000'\n"
+"RBUILD_REVISION='6d211a5998fdfc9f58fe7b9a2f507ec8c28199a2'\n"
+"RBUILD_COMMAND='./rbuild --timestamp=b27 --compress --native-build --shrink "
+"--root-override rock-3c bullseye xfce'\n"
+"RBUILD_KERNEL='linux-image-4.19.193-1-rk356x'\n"
+"RBUILD_KERNEL_VERSION='4.19.193-1-41024583a'\n"
+"RBUILD_UBOOT='u-boot-rk356x'\n"
+"RBUILD_UBOOT_VERSION='2017.09-1-15c53b0'\n"
+"radxa@rock-3c:~$ cat /etc/radxa_apt_snapshot \n"
+"{\n"
+"  \"libreelec-alsa-utils\": \"10.0.2-1\",\n"
+"  \"radxa-otgutils\": \"0.2.1\",\n"
+"  \"rsetup\": \"0.3.13\",\n"
+"  ...\n"
+"}\n"
+"```"
+msgstr ""
+
+#: docs/image/reproduce/image.md:31
+msgid "Check the content from a disk image"
+msgstr ""
+
+#: docs/image/reproduce/image.md:33
+msgid ""
+"You can use following commands to check the system info without a running "
+"device:"
+msgstr ""
+
+#: docs/image/reproduce/image.md:47
+msgid "Create a custom apt repo"
+msgstr ""
+
+#: docs/image/reproduce/image.md:49
+msgid ""
+"As shown in `RBUILD_COMMAND` above, our image is based on Debian Bullseye. "
+"We will have to create a custom apt repo for `rbuild` based on "
+"`radxa_apt_snapshot`, since the official Radxa apt repo is likely to have "
+"newer packages."
+msgstr ""
+
+#: docs/image/reproduce/image.md:51
+msgid ""
+"In this article we will only fork the existing Radxa apt repo. If you want "
+"to create a apt repo from scrach, please check [Create apt repo from "
+"scratch](apt.md)."
+msgstr ""
+
+#: docs/image/reproduce/image.md:53
+msgid "First, make sure we have logged in with `gh`:"
+msgstr ""
+
+#: docs/image/reproduce/image.md:62
+msgid ""
+"If the account is incorrect, we can use `gh auth logout; gh auth login` to "
+"authenticate with the desired account."
+msgstr ""
+
+#: docs/image/reproduce/image.md:64
+msgid ""
+"We can now create a fork of the apt repo. Recall we need one targetting "
+"`bullseye`:"
+msgstr ""
+
+#: docs/image/reproduce/image.md:66
+msgid ""
+"```bash\n"
+"RELEASE=bullseye\n"
+"GITHUB_NAMESPACE=your_account_or_orginazation\n"
+"gh repo fork radxa-repo/$RELEASE --default-branch-only <<< \"n\"\n"
+"gh repo clone $GITHUB_NAMESPACE/$RELEASE\n"
+"cd $RELEASE\n"
+"nano pkgs.lock # paste the content of /etc/radxa_apt_snapshot\n"
+"git add pkgs.lock\n"
+"git commit -m \"Add pkgs.lock\"\n"
+"```"
+msgstr ""
+
+#: docs/image/reproduce/image.md:77
+msgid ""
+"We now need to create a custom apt signing key. Proper key management is "
+"beyond the scope of this article, so we will create "
+msgstr ""
+
+#: docs/image/reproduce/image.md:79
+msgid ""
+"```bash\n"
+"GPG_KEY_EMAIL=testing@repo.com\n"
+"sed -i \"s/dev@radxa.com/$GPG_KEY_EMAIL/\" .freight.conf\n"
+"git add .freight.conf\n"
+"git commit -m \"Update signing key\"\n"
+"# Below key is for testing only, please follow Debian keyring policy for "
+"production usage\n"
+"gpg --batch --quick-gen-key --passphrase \"\" $GPG_KEY_EMAIL\n"
+"gpg --armor --export-secret-keys $GPG_KEY_EMAIL | gh secret set --repo "
+"$GITHUB_NAMESPACE/$RELEASE GPG_KEY\n"
+"```"
+msgstr ""
+
+#: docs/image/reproduce/image.md:89
+msgid "We can finally start populating our apt repo:"
+msgstr ""
+
+#: docs/image/reproduce/image.md:99
+msgid ""
+"We can check the workflow status with `gh run list`. After a while, we "
+"should see 2 successful runs for `pages-build-deployment` workflow:"
+msgstr ""
+
+#: docs/image/reproduce/image.md:115
+msgid ""
+"The first run is created when we pushed `gh-pages` branch (which also "
+"enabled workflow on forked repo). The second run is triggered after packages "
+"has been fetched, and it is this one that makes our apt repo functioning."
+msgstr ""
+
+#: docs/image/reproduce/image.md:117
+msgid "Prepare `rbuild` for reproducing released image"
+msgstr ""
+
+#: docs/image/reproduce/image.md:119
+msgid ""
+"Recall `rbuild` commit ID was saved in `/etc/radxa_image_fingerprint`, we "
+"will checkout at this exact commit:"
+msgstr ""
+
+#: docs/image/reproduce/image.md:129
+msgid ""
+"We also need to edit `common/scripts/add_radxa_repo.yaml` to switch the "
+"default repo URL and fetch keyring from apt repo:"
+msgstr ""
+
+#: docs/image/reproduce/image.md:131
+msgid ""
+"```bash\n"
+"[excalibur@yuntian rbuild]$ git diff common/scripts/add_radxa_repo.yaml\n"
+"diff --git a/common/scripts/add_radxa_repo.yaml "
+"b/common/scripts/add_radxa_repo.yaml\n"
+"index 448857c..f25a10a 100644\n"
+"--- a/common/scripts/add_radxa_repo.yaml\n"
+"+++ b/common/scripts/add_radxa_repo.yaml\n"
+"@@ -1,4 +1,4 @@\n"
+"-{{- $radxa_mirror := \"https://radxa-repo.github.io/\" -}}\n"
+"+{{- $radxa_mirror := \"https://radxayuntian.github.io/\" -}}\n"
+" \n"
+" {{- $origin := .origin -}}\n"
+" {{- $suite := .suite -}}\n"
+"@@ -6,7 +6,7 @@\n"
+" {{- $priority := or .priority \"\" -}}\n"
+" {{- $area := \"main\" -}}\n"
+" \n"
+"-{{- $managed_keyring := \"true\" -}}\n"
+"+{{- $managed_keyring := \"false\" -}}\n"
+" {{- $managed_keyring_repo := \"radxa-pkg/radxa-archive-keyring\" -}}\n"
+" \n"
+" {{- $architecture := .architecture -}}\n"
+"```"
+msgstr ""
+
+#: docs/image/reproduce/image.md:154
+msgid ""
+"If the checked-out `rbuild` does not contain `managed_keyring` option, we "
+"need to include the following patch before making changes:"
+msgstr ""
+
+#: docs/image/reproduce/image.md:156
+msgid ""
+"```bash\n"
+"git reset --hard $RBUILD_REVISION\n"
+"git am --abort\n"
+"curl -L "
+"https://github.com/radxa-repo/rbuild/commit/2a861f6fbc2c1d081d5d83aabfc99bda4abd38d3.patch "
+"| git am\n"
+"```"
+msgstr ""
+
+#: docs/image/reproduce/image.md:162
+msgid ""
+"We can then use `RBUILD_COMMAND` as a reference to reproduce the image. The "
+"exact command listed in `/etc/radxa_image_fingerprint` was meant to be run "
+"on GitHub's Ubuntu runner as root."
+msgstr ""
+
+#: docs/image/reproduce/apt.md:3
+msgid ""
+"To recreate Radxa apt repo from scratch, you will need to fork all related "
+"repos."
+msgstr ""
+
+#: docs/image/reproduce/apt.md:5
+msgid ""
+"Even though they can be all forked under the same account, we recommend you "
+"create 1 organization specifically to host \\[`radxa-pkg`\\] repos."
+msgstr ""
+
