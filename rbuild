@@ -697,7 +697,7 @@ main() {
         -t image:"$IMAGE" -t efi_end:"$EFI_END" -t partition_type:"$PARTITION_TYPE" \
         -t kernel:"$RBUILD_KERNEL" -t kernel_dbg:"$RBUILD_KERNEL_DBG" -t header:"$RBUILD_HEADER" -t firmware:"$RBUILD_FIRMWARE" \
         -t install_vendor_package:"$INSTALL_VENDOR_PACKAGE" -t overlay:"$RBUILD_OVERLAY" \
-        -t dkms:"${BOARD_DKMS:-}" -t kernel_profile:"${KERNEL_PROFILE:-}"\
+        -t kernel_profile:"${KERNEL_PROFILE:-}"\
         -t distro_mirror:"$RBUILD_DISTRO_MIRROR" -t radxa_mirror:"$RBUILD_RADXA_MIRROR" \
         -t rbuild_rev:"$(git rev-parse HEAD)$(git diff --quiet || echo '-dirty')" -t rbuild_cmd:"./rbuild ${ARGV[*]}"
 

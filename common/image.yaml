@@ -20,7 +20,6 @@
 
 {{- $rbuild_rev := .rbuild_rev -}}
 {{- $rbuild_cmd := .rbuild_cmd -}}
-{{- $dkms := .dkms -}}
 {{- $kernel_profile := .kernel_profile -}}
 
 {{- $architecture := .architecture -}}
@@ -228,16 +227,6 @@ actions:
     recipe: scripts/hack_install_deb.yaml
     variables:
       name: {{ $header }}
-
-{{ end }}
-
-{{ if ne $dkms "" }}
-
-  - action: recipe
-    description: Install dkms packages
-    recipe: scripts/dkms.yaml
-    variables:
-      dkms: {{ $dkms }}
 
 {{ end }}
 
