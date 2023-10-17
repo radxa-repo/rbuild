@@ -51,11 +51,6 @@ actions:
       suite: {{ $suite }}
       radxa_mirror: {{ $radxa_mirror }}
 
-  - action: overlay
-    description: Install common system configs
-    source: overlays/common
-    destination: /
-
   - action: run
     description: OEM system setup
     chroot: true

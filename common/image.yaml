@@ -100,7 +100,6 @@ actions:
 
 {{ if and (ne $install_vendor_package "false") (eq $distro "debian") }}
 
-
   - action: recipe
     description: Add {{ $soc_family }}-{{ $suite }} Repo
     recipe: scripts/add_radxa_repo.yaml
@@ -142,11 +141,6 @@ actions:
   {{ end }}
 
 {{ end }}
-
-  - action: overlay
-    description: Install {{ $soc_family }} overlays
-    source: overlays/{{ $soc_family }}
-    destination: /
 
   - action: apt
     description: Install radxa-system-config-{{ $soc_family }}
