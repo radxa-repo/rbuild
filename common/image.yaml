@@ -107,11 +107,6 @@ actions:
       suite: {{ $soc_family }}-{{ $suite }}{{ $repo_prefix }}
       repo: {{ $suite }}{{ $repo_prefix }}
       radxa_mirror: {{ $radxa_mirror }}
-  {{ if and (eq $install_vendor_package "true") (ne $flavor "cli") }}
-      priority: 1001
-  {{ else }}
-      priority: 100
-  {{ end }}
 
   {{ if and (eq $install_vendor_package "true") (ne $flavor "cli") }}
 
