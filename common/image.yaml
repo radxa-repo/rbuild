@@ -97,6 +97,11 @@ actions:
     # u-boot-menu will add root= in append for us
     setup-kernel-cmdline: false
 
+  - action: apt
+    description: Install radxa-system-config
+    packages:
+      - radxa-system-config
+
 {{ if and (ne $install_vendor_package "false") (eq $distro "debian") }}
 
   - action: recipe
@@ -115,16 +120,6 @@ actions:
     packages:
       - task-{{ $board }}
 
-  - action: run
-    description: Downgrade to vendor packages
-    chroot: true
-    command: |
-      set -e
-      apt-get update
-      apt-get full-upgrade -y --allow-downgrades
-      apt-get full-upgrade -y --allow-downgrades
-      apt-get autoremove -y --purge
-
   {{ else if ne $install_vendor_package "true" }}
 
   - action: apt
@@ -135,6 +130,16 @@ actions:
   {{ end }}
 
 {{ end }}
+
+  - action: run
+    description: Upgrade stale rootfs
+    chroot: true
+    command: |
+      set -e
+      apt-get update
+      apt-get full-upgrade -y --allow-downgrades
+      apt-get full-upgrade -y --allow-downgrades
+      apt-get autoremove -y --purge
 
 {{ if eq $kernel_profile "" }}
 
