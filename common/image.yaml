@@ -173,6 +173,27 @@ actions:
 
 {{ end }}
 
+{{ if eq $header "" }}
+
+  - action: apt
+    description: Install Radxa kernel header
+    packages:
+  {{ if eq $kernel_profile "" }}
+      - linux-headers-{{ $board }}
+  {{ else }}
+      - linux-headers-{{ $kernel_profile }}
+  {{ end }}
+
+{{ else }}
+
+  - action: recipe
+    description: Install custom kernel header
+    recipe: scripts/hack_install_deb.yaml
+    variables:
+      name: {{ $header }}
+
+{{ end }}
+
 {{ if eq $kernel "" }}
 
   - action: apt
@@ -201,27 +222,6 @@ actions:
     recipe: scripts/hack_install_deb.yaml
     variables:
       name: {{ $kernel_dbg }}
-
-{{ end }}
-
-{{ if eq $header "" }}
-
-  - action: apt
-    description: Install Radxa kernel header
-    packages:
-  {{ if eq $kernel_profile "" }}
-      - linux-headers-{{ $board }}
-  {{ else }}
-      - linux-headers-{{ $kernel_profile }}
-  {{ end }}
-
-{{ else }}
-
-  - action: recipe
-    description: Install custom kernel header
-    recipe: scripts/hack_install_deb.yaml
-    variables:
-      name: {{ $header }}
 
 {{ end }}
 
