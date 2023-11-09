@@ -18,7 +18,6 @@ actions:
 
   - action: apt
     description: Install common desktop packages
-    update: false
     packages:
       - accountsservice
       - aha
