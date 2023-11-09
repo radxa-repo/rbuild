@@ -123,6 +123,7 @@ actions:
 
   - action: apt
     description: Install vendor packages
+    update: false
     recommends: true
     packages:
       - task-{{ $board }}
@@ -131,6 +132,7 @@ actions:
 
   - action: apt
     description: Install {{ $install_vendor_package }} package
+    update: false
     packages:
       - {{ $install_vendor_package }}
 
@@ -154,6 +156,7 @@ actions:
 
   - action: apt
     description: Install Radxa firmware
+    update: false
     packages:
       - u-boot-{{ $board }}
 
@@ -184,6 +187,7 @@ actions:
 
   - action: apt
     description: Install Radxa kernel header
+    update: false
     packages:
   {{ if eq $kernel_profile "" }}
       - linux-headers-{{ $board }}
@@ -205,6 +209,7 @@ actions:
 
   - action: apt
     description: Install Radxa kernel
+    update: false
     packages:
   {{ if eq $kernel_profile "" }}
       - linux-image-{{ $board }}

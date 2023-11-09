@@ -18,6 +18,7 @@ actions:
 
   - action: apt
     description: Install common desktop packages
+    update: false
     packages:
       - accountsservice
       - aha
@@ -69,6 +70,7 @@ actions:
 
   - action: apt
     description: Install Debian 12 packages
+    update: false
     packages:
       - wayland-utils
       - gstreamer1.0-pipewire
@@ -77,6 +79,7 @@ actions:
 
   - action: apt
     description: Install common X.Org packages
+    update: false
     packages:
       - xiccd
 
