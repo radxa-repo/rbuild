@@ -98,9 +98,9 @@ actions:
     setup-kernel-cmdline: false
 
   - action: apt
-    description: Install radxa-system-config
+    description: Install task-{{ $board }} package
     packages:
-      - radxa-system-config
+      - task-{{ $board }}
 
 {{ if and (ne $install_vendor_package "false") (eq $distro "debian") }}
 
@@ -115,8 +115,15 @@ actions:
 
   {{ if and (eq $install_vendor_package "true") (ne $flavor "cli") }}
 
+  - action: run
+    description: Temporarily remove task-{{ $board }}
+    chroot: true
+    command: |
+      dpkg --remove --force-depends task-{{ $board }}
+
   - action: apt
-    description: Install task-{{ $board }} package
+    description: Install vendor packages
+    recommends: true
     packages:
       - task-{{ $board }}
 
