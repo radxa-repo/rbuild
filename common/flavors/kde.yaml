@@ -17,7 +17,6 @@ actions:
 
   - action: apt
     description: Install KDE
-    update: false
     packages:
 {{ if eq $distro "debian" }}
       - task-kde-desktop
@@ -27,7 +26,6 @@ actions:
 
   - action: apt
     description: Install additional KDE packages
-    update: false
     packages:
       - accountwizard
       - bluedevil

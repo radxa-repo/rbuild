@@ -15,7 +15,6 @@ actions:
 
   - action: apt
     description: Install firmwares
-    update: false
     packages:
 {{ if eq $distro "debian" }}
       - firmware-brcm80211
@@ -28,7 +27,6 @@ actions:
   
   - action: apt
     description: Install system utilities
-    update: false
     packages:
       - apt-listchanges
       - apt-utils
@@ -72,7 +70,6 @@ actions:
 
   - action: apt
     description: Install network utilities
-    update: false
     packages:
       - avahi-daemon
       - bluetooth
@@ -91,7 +88,6 @@ actions:
 
   - action: apt
     description: Install audio utilities
-    update: false
     packages:
       - alsa-utils
 {{ if eq $suite "bookworm" }}
@@ -106,7 +102,6 @@ actions:
 
   - action: apt
     description: Install hardware utilities
-    update: false
     packages:
       - gpiod
       - hdparm
@@ -129,13 +124,11 @@ actions:
 
   - action: apt
     description: Install Radxa backported packages
-    update: false
     packages:
       - u-boot-menu
 
   - action: apt
     description: Install Radxa packages
-    update: false
     packages:
       - android-tools-adbd
       - libreelec-alsa-utils
