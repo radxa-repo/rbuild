@@ -116,16 +116,12 @@ actions:
   {{ if and (eq $install_vendor_package "true") (ne $flavor "cli") }}
 
   - action: run
-    description: Temporarily remove task-{{ $board }}
+    description: Install task-{{ $board }} with vendor packages
     chroot: true
     command: |
       dpkg --remove --force-depends task-{{ $board }}
-
-  - action: apt
-    description: Install vendor packages
-    recommends: true
-    packages:
-      - task-{{ $board }}
+      apt-get update
+      apt-get install -o Dpkg::Options::="--force-confnew" -y --install-recommends task-{{ $board }}
 
   {{ else if ne $install_vendor_package "true" }}
 
