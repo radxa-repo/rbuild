@@ -82,13 +82,13 @@ runs:
         fi
     - name: Upload image artifacts
       if: inputs.artifacts == 'true' && inputs.board != 'rootfs'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.board }}_${{ env.suite }}_${{ inputs.flavor }}
         path: .output
     - name: Upload rootfs artifacts
       if: inputs.artifacts == 'true' && inputs.board == 'rootfs'
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.board }}_${{ env.suite }}_${{ inputs.flavor }}
         path: .rootfs
