@@ -78,9 +78,6 @@ actions:
         # SYSTEMD_RELAX_ESP_CHECKS=1 SYSTEMD_ESP_PATH=/boot/efi bootctl install --entry-token=os-id --make-entry-directory=yes
       fi
 
-      sed -i 's/\${_BOOT_DIRECTORY}\${U_BOOT_FDT_OVERLAYS_DIR}/\${U_BOOT_FDT_OVERLAYS_DIR}/g' /usr/sbin/u-boot-update
-      sed -i 's/^prompt.*$/prompt 1/' /usr/sbin/u-boot-update
-
       systemctl enable haveged
 
       . /etc/os-release
