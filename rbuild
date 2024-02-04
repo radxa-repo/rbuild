@@ -209,7 +209,7 @@ get_supported_suites() {
         shift
     done
 
-    local SUITES=("bullseye" "jammy")
+    local SUITES=("bullseye")
     echo "${SUITES[@]}"
 }
 
@@ -571,7 +571,7 @@ main() {
         i="$(basename "$i")"
         BOARDS+=("${i%.conf}")
     done
-    SUITES+=("focal" "buster" "bookworm")
+    SUITES+=("focal" "jammy" "buster" "bookworm")
     for i in "$SCRIPT_DIR"/common/flavors/.*.yaml
     do
         i="$(basename "$i")"
