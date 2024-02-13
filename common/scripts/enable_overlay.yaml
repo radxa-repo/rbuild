@@ -9,5 +9,7 @@ actions:
     chroot: true
     command: |
       set -e
-      mv /boot/dtbo/{{ $overlay }}.dtbo.disabled /boot/dtbo/{{ $overlay }}.dtbo
+      for overlay in $(echo {{ $overlay }} | sed "s/,/ /g"); do
+        mv /boot/dtbo/$overlay.dtbo.disabled /boot/dtbo/$overlay.dtbo
+      done
       u-boot-update
