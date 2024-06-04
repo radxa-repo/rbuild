@@ -1,7 +1,7 @@
 {{- $distro := .distro -}}
 {{- $suite := .suite -}}
 
-{{- $vscodium_mirror := or .radxa_mirror "https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/" -}}
+{{- $vscodium_mirror := or .radxa_mirror "https://download.vscodium.com/" -}}
 
 {{- $architecture := .architecture -}}
 
