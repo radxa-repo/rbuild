@@ -741,7 +741,7 @@ fi
 
 SECONDS=0
 RBUILD_SHOW_EXECUTION_TIME="true"
-RBUILD_STARTING_TIME="$(date --iso-8601=m | tr -d :)"
+RBUILD_STARTING_TIME="$(date -Iminutes | tr -d :)"
 
 main "$@"
 
