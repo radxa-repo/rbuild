@@ -2,12 +2,11 @@
 
 [![Build](https://github.com/radxa-repo/rbuild/actions/workflows/build.yaml/badge.svg?branch=main)](https://github.com/radxa-repo/rbuild/actions/workflows/build.yaml)
 
-`rbuild` is our latest system image generator, which will replace our existing system build tool [`debos-radxa`](https://github.com/radxa/debos-radxa) soon.
-While both tools uses [`debos`](https://github.com/go-debos/debos) underneath, `rbuild` aims to fix many issues that was in `debos-radxa`:
-* Unable to generate custom image with different options due to hardcoded config files
-* Many duplicated/similar files in board support packages
-* Uses in-repo packages instead from an online APT repo
-* Confusing per-board package selection
+After more than 2 years of development, we have grown beyond what `rbuild`'s underlying dependencies are capable of.
+We have switched to a [lower-level tool](https://github.com/bdrung/bdebstrap) and completely restructured the project.
+
+Please use [`rsdk`](https://github.com/RadxaOS-SDK/rsdk) for the new project, which is meant to be compatible with
+existing `rbuild` systems. `rbuild` is now in maintenance mode.
 
 ## Usage
 

@@ -1,5 +1,13 @@
 # Build your first image
 
+## Migration notice
+
+After more than 2 years of development, we have grown beyond what `rbuild`'s underlying dependencies are capable of.
+We have switched to a [lower-level tool](https://github.com/bdrung/bdebstrap) and completely restructured the project.
+
+Please use [`rsdk`](https://github.com/RadxaOS-SDK/rsdk) for the new project, which is meant to be compatible with
+existing `rbuild` systems. `rbuild` is now in maintenance mode.
+
 ## Install dependencies
 
 Currently, due to our dependency on [`debos`](https://github.com/go-debos/debos/issues/363), we can only run `rbuild` on x86 based system. If you are building in a virtual machine, you need to [enable nested virtualization](https://github.com/radxa-repo/rbuild/issues/16#issuecomment-1534176754), as KVM is required for building the image.
